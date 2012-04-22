@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using ClojureExtension.Editor.InputHandling;
+using Clojure.Parsing;
 using ClojureExtension.Editor.TextBuffer;
-using ClojureExtension.Parsing;
 using ClojureExtension.Utilities;
 using Microsoft.ClojureExtension.Editor.BraceMatching;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

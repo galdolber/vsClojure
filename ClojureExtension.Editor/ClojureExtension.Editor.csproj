@@ -93,9 +93,9 @@
     <Compile Include="TokenizedBufferBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClojureExtension.Parsing\ClojureExtension.Parsing.csproj">
-      <Project>{6A42095C-CC50-4E3E-9672-6185A6F7A8A7}</Project>
-      <Name>ClojureExtension.Parsing</Name>
+    <ProjectReference Include="..\Clojure.Code\Clojure.Code.csproj">
+      <Project>{7D8A24DE-8AC0-4ACC-8F29-C48F7061CCB0}</Project>
+      <Name>Clojure.Code</Name>
     </ProjectReference>
     <ProjectReference Include="..\ClojureExtension.Utilities\ClojureExtension.Utilities.csproj">
       <Project>{360503CC-98C5-4C00-9934-55519FFC5C26}</Project>

@@ -2,7 +2,7 @@
 using System.IO;
 using ClojureExtension.Editor.InputHandling;
 using ClojureExtension.Editor.TextBuffer;
-using ClojureExtension.Parsing;
+using Clojure.Parsing;
 using ClojureExtension.Utilities;
 using Microsoft.ClojureExtension.Editor.AutoFormat;
 using Microsoft.ClojureExtension.Editor.AutoIndent;

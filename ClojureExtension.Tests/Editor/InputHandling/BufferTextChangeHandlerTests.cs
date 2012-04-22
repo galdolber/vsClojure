@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ClojureExtension.Editor.InputHandling;
 using ClojureExtension.Editor.TextBuffer;
-using ClojureExtension.Parsing;
+using Clojure.Parsing;
 using ClojureExtension.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;

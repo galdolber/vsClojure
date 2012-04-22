@@ -1,4 +1,4 @@
-﻿using ClojureExtension.Parsing;
+﻿using Clojure.Parsing;
 
 namespace Microsoft.ClojureExtension.Editor.BraceMatching
 {

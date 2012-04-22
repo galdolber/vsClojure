@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using ClojureExtension.Editor.TextBuffer;
-using ClojureExtension.Parsing;
+using Clojure.Parsing;
 using ClojureExtension.Utilities;
 
 namespace ClojureExtension.Editor.InputHandling

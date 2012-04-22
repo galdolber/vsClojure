@@ -1,5 +1,5 @@
 ﻿using System;
-using ClojureExtension.Parsing;
+using Clojure.Parsing;
 
 namespace ClojureExtension.Editor.InputHandling
 {

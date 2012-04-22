@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using ClojureExtension.Parsing;
+using Clojure.Parsing;
 using ClojureExtension.Utilities;
 using Microsoft.ClojureExtension.Editor;
 using Microsoft.VisualStudio.Language.Intellisense;

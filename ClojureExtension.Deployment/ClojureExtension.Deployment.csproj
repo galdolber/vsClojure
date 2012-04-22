@@ -93,15 +93,15 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Clojure.Code\Clojure.Code.csproj">
+      <Project>{7D8A24DE-8AC0-4ACC-8F29-C48F7061CCB0}</Project>
+      <Name>Clojure.Code</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ClojureExtension.Editor\ClojureExtension.Editor.csproj">
       <Project>{4B160925-5079-4B41-BE21-458EBB74C9AB}</Project>
       <Name>ClojureExtension.Editor</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
-    </ProjectReference>
-    <ProjectReference Include="..\ClojureExtension.Parsing\ClojureExtension.Parsing.csproj">
-      <Project>{6A42095C-CC50-4E3E-9672-6185A6F7A8A7}</Project>
-      <Name>ClojureExtension.Parsing</Name>
     </ProjectReference>
     <ProjectReference Include="..\ClojureExtension.Project\ClojureExtension.Project.csproj">
       <Project>{653A74C1-81F5-4B49-ACFA-BE99B5ADEFF6}</Project>

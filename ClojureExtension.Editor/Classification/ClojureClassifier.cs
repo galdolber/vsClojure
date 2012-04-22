@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ClojureExtension.Parsing;
+using Clojure.Parsing;
 using Microsoft.ClojureExtension.Editor.Tagger;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;

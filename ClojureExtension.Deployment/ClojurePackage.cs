@@ -23,7 +23,7 @@ using System.Windows.Forms;
 using ClojureExtension.Deployment.Configuration;
 using ClojureExtension.Editor.Commenting;
 using ClojureExtension.Editor.TextBuffer;
-using ClojureExtension.Parsing;
+using Clojure.Parsing;
 using ClojureExtension.Project.Launching;
 using ClojureExtension.Repl;
 using ClojureExtension.Repl.Operations;

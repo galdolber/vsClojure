@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ClojureExtension.Parsing;
+using Clojure.Parsing;
 using ClojureExtension.Utilities;
 using Microsoft.ClojureExtension.Editor.Options;
 

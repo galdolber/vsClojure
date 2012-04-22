@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using ClojureExtension.Editor.TextBuffer;
-using ClojureExtension.Parsing;
+using Clojure.Parsing;
 
 namespace ClojureExtension.Editor.Commenting
 {
