@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Windows.Controls;
+using Clojure.Code.State;
 using Clojure.Parsing;
 using ClojureExtension.Repl.Operations;
 using ClojureExtension.Utilities;

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Threading;
+using Clojure.Code.State;
 using ClojureExtension.Utilities;
 
 namespace ClojureExtension.Repl

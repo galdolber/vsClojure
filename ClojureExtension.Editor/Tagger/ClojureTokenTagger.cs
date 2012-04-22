@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Clojure.Code.State;
 using ClojureExtension.Editor.InputHandling;
 using Clojure.Parsing;
 using ClojureExtension.Utilities;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Clojure.Code.State;
 using Clojure.Parsing;
 using ClojureExtension.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
