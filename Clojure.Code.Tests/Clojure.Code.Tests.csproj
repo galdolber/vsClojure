@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Editing\BraceMatching\MatchingBraceFinderTests.cs" />
     <Compile Include="Editing\Formatting\AutoFormatterTests.cs" />
     <Compile Include="Editing\Indenting\ClojureSmartIndentTests.cs" />
     <Compile Include="Parsing\LexerTests.cs" />

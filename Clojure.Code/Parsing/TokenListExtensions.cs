@@ -1,9 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Clojure.Code.Parsing
 {
 	public static class TokenListExtensions
 	{
+		public static int Length(this LinkedList<Token> list)
+		{
+			return list.Select(t => t.Length).Sum();
+		}
+
 		public static IndexTokenNode FindTokenAtIndex(this LinkedList<Token> list, int index)
 		{
 			if (list.Count == 0) return null;

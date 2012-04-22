@@ -65,8 +65,6 @@
     <Compile Include="BraceMatching\BraceMatchingFormatDefinitions.cs" />
     <Compile Include="BraceMatching\BraceMatchingTagger.cs" />
     <Compile Include="BraceMatching\BraceMatchingTaggerProvider.cs" />
-    <Compile Include="BraceMatching\MatchingBraceFinder.cs" />
-    <Compile Include="BraceMatching\MatchingBracePair.cs" />
     <Compile Include="Classification\ClassificationFormat.cs" />
     <Compile Include="Classification\ClassificationType.cs" />
     <Compile Include="Classification\ClojureClassifier.cs" />

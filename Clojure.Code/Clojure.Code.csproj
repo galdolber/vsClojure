@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Editing\BraceMatching\MatchingBraceFinder.cs" />
+    <Compile Include="Editing\BraceMatching\MatchingBracePair.cs" />
     <Compile Include="Editing\Formatting\AutoFormat.cs" />
     <Compile Include="Editing\Indenting\ClojureSmartIndent.cs" />
     <Compile Include="Parsing\IndexToken.cs" />

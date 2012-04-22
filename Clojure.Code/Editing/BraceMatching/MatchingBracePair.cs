@@ -1,6 +1,6 @@
 ﻿using Clojure.Code.Parsing;
 
-namespace Microsoft.ClojureExtension.Editor.BraceMatching
+namespace Clojure.Code.Editing.BraceMatching
 {
 	public class MatchingBracePair
 	{
