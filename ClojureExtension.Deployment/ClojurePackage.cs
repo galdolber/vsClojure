@@ -153,8 +153,8 @@ namespace ClojureExtension.Deployment
 					var editorOptionsBuilder = new EditorOptionsBuilder(componentModel.GetService<IEditorOptionsFactoryService>().GetOptions(e.TextView));
 					var tokenizedBuffer = TokenizedBufferBuilder.TokenizedBuffers[e.TextView.TextBuffer];
 					var formatter = new AutoFormatter(new TextBufferAdapter(e.TextView), tokenizedBuffer);
-					var blockComment = new BlockComment(new TextBufferAdapter(e.TextView));
-					var blockUncomment = new BlockUncomment(new TextBufferAdapter(e.TextView));
+					var blockComment = new BlockCommentAdapter(new TextBufferAdapter(e.TextView));
+					var blockUncomment = new BlockUncommentAdapter(new TextBufferAdapter(e.TextView));
 					_thirdPartyEditorCommands.AddCommand(new MenuCommand((commandSender, commandArgs) => formatter.Format(editorOptionsBuilder.Get()), CommandIDs.FormatDocument));
 					_thirdPartyEditorCommands.AddCommand(new MenuCommand((commandSender, commandArgs) => blockComment.Execute(), CommandIDs.BlockComment));
 					_thirdPartyEditorCommands.AddCommand(new MenuCommand((commandSender, commandArgs) => blockUncomment.Execute(), CommandIDs.BlockUncomment));

@@ -47,8 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Editor\Commenting\BlockCommentTests.cs" />
-    <Compile Include="Editor\Commenting\BlockUncommentTests.cs" />
     <Compile Include="Editor\InputHandling\BufferTextChangeHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
