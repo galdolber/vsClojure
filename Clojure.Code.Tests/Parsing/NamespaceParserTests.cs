@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Clojure.Code.Parsing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ClojureExtension.Tests.Parsing
+namespace Clojure.Code.Tests.Parsing
 {
 	[TestClass]
 	public class NamespaceParserTests
