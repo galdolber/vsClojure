@@ -20,7 +20,7 @@ namespace Microsoft.ClojureExtension.Editor.AutoFormat
 
 		public void Format(EditorOptions editorOptions)
 		{
-			var autoFormatter = new Clojure.Code.Editing.AutoFormat();
+			var autoFormatter = new Clojure.Code.Editing.Formatting.AutoFormat();
 			var formattedBuffer = autoFormatter.Format(_tokenizedBuffer.CurrentState, editorOptions.IndentSize);
 			_textBuffer.SetText(formattedBuffer);
 		}

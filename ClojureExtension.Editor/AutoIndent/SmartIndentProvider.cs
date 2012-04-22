@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.Composition;
+using Clojure.Code.Editing.Indenting;
 using Microsoft.ClojureExtension.Editor.Options;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
@@ -15,7 +16,7 @@ namespace Microsoft.ClojureExtension.Editor.AutoIndent
 		public ISmartIndent CreateSmartIndent(ITextView textView)
 		{
 			return new SmartIndentAdapter(
-				new ClojureSmartIndent(TokenizedBufferBuilder.TokenizedBuffers[textView.TextBuffer]),
+				TokenizedBufferBuilder.TokenizedBuffers[textView.TextBuffer],
 				new EditorOptionsBuilder(EditorOptionsFactoryService.GetOptions(textView)));
 		}
 	}

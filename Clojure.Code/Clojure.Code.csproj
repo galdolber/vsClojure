@@ -46,7 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Editing\AutoFormat.cs" />
+    <Compile Include="Editing\Formatting\AutoFormat.cs" />
+    <Compile Include="Editing\Indenting\ClojureSmartIndent.cs" />
     <Compile Include="Parsing\IndexToken.cs" />
     <Compile Include="Parsing\IndexTokenNode.cs" />
     <Compile Include="Parsing\Lexer.cs" />

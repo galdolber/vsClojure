@@ -3,7 +3,7 @@ using System.Text;
 using Clojure.Code.Parsing;
 using Clojure.Code.String;
 
-namespace Clojure.Code.Editing
+namespace Clojure.Code.Editing.Formatting
 {
 	public class AutoFormat
 	{

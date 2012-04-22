@@ -60,7 +60,6 @@
   <ItemGroup>
     <Compile Include="ActiveTextBufferStateProvider.cs" />
     <Compile Include="AutoFormat\AutoFormatter.cs" />
-    <Compile Include="AutoIndent\ClojureSmartIndent.cs" />
     <Compile Include="AutoIndent\SmartIndentAdapter.cs" />
     <Compile Include="AutoIndent\SmartIndentProvider.cs" />
     <Compile Include="BraceMatching\BraceMatchingFormatDefinitions.cs" />
