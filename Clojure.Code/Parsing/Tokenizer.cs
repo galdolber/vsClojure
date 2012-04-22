@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Clojure.Parsing
+namespace Clojure.Code.Parsing
 {
 	public class Tokenizer
 	{

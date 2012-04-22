@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using Clojure.Code.Parsing;
 using Clojure.Code.State;
-using Clojure.Parsing;
 using ClojureExtension.Utilities;
 using Microsoft.VisualStudio.Text;
 

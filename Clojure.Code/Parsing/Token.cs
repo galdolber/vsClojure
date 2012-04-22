@@ -1,4 +1,4 @@
-﻿namespace Clojure.Parsing
+﻿namespace Clojure.Code.Parsing
 {
 	public class Token
 	{

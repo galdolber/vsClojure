@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Clojure.Parsing
+namespace Clojure.Code.Parsing
 {
 	public class Lexer
 	{

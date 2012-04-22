@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Clojure.Parsing;
+using Clojure.Code.Parsing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ClojureExtension.Tests.Parsing

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Clojure.Parsing
+namespace Clojure.Code.Parsing
 {
 	public class IndexTokenNode
 	{

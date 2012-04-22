@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Clojure.Parsing
+namespace Clojure.Code.Parsing
 {
 	public class Parser
 	{

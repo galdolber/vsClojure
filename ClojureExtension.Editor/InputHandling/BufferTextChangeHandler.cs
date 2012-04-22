@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Clojure.Code.Parsing;
 using Clojure.Code.State;
 using ClojureExtension.Editor.TextBuffer;
-using Clojure.Parsing;
 using ClojureExtension.Utilities;
 
 namespace ClojureExtension.Editor.InputHandling
