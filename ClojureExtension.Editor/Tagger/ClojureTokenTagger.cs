@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Clojure.Code.Editing.PartialUpdate;
 using Clojure.Code.Parsing;
 using Clojure.Code.State;
-using ClojureExtension.Editor.InputHandling;
-using ClojureExtension.Utilities;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 

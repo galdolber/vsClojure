@@ -8,8 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		README.txt = README.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClojureExtension.Tests", "ClojureExtension.Tests\ClojureExtension.Tests.csproj", "{F417C00C-CE80-4E74-A611-8EC6CC04F37E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClojureExtension.Project", "ClojureExtension.Project\ClojureExtension.Project.csproj", "{653A74C1-81F5-4B49-ACFA-BE99B5ADEFF6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClojureExtension.Utilities", "ClojureExtension.Utilities\ClojureExtension.Utilities.csproj", "{360503CC-98C5-4C00-9934-55519FFC5C26}"
@@ -34,16 +32,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F417C00C-CE80-4E74-A611-8EC6CC04F37E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F417C00C-CE80-4E74-A611-8EC6CC04F37E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F417C00C-CE80-4E74-A611-8EC6CC04F37E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F417C00C-CE80-4E74-A611-8EC6CC04F37E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F417C00C-CE80-4E74-A611-8EC6CC04F37E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F417C00C-CE80-4E74-A611-8EC6CC04F37E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F417C00C-CE80-4E74-A611-8EC6CC04F37E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F417C00C-CE80-4E74-A611-8EC6CC04F37E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F417C00C-CE80-4E74-A611-8EC6CC04F37E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F417C00C-CE80-4E74-A611-8EC6CC04F37E}.Release|x86.ActiveCfg = Release|Any CPU
 		{653A74C1-81F5-4B49-ACFA-BE99B5ADEFF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{653A74C1-81F5-4B49-ACFA-BE99B5ADEFF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{653A74C1-81F5-4B49-ACFA-BE99B5ADEFF6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

@@ -1,5 +1,5 @@
 ﻿using Clojure.Code.Editing.Commenting;
-using ClojureExtension.Editor.TextBuffer;
+using Clojure.Code.Editing.TextBuffer;
 
 namespace ClojureExtension.Editor.Commenting
 {

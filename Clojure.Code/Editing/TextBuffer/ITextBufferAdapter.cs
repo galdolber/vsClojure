@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ClojureExtension.Editor.TextBuffer
+namespace Clojure.Code.Editing.TextBuffer
 {
 	public interface ITextBufferAdapter
 	{

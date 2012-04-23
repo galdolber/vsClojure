@@ -1,7 +1,7 @@
 ﻿using System;
 using Clojure.Code.Parsing;
 
-namespace ClojureExtension.Editor.InputHandling
+namespace Clojure.Code.Editing.PartialUpdate
 {
 	public class TokenChangedEventArgs : EventArgs
 	{

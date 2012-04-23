@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClojureExtension.Editor.InputHandling
+namespace Clojure.Code.Editing.PartialUpdate
 {
 	public class TextChangeData
 	{

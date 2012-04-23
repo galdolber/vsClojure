@@ -50,6 +50,7 @@
     <Compile Include="Editing\Commenting\BlockUncommentTests.cs" />
     <Compile Include="Editing\Formatting\AutoFormatterTests.cs" />
     <Compile Include="Editing\Indenting\ClojureSmartIndentTests.cs" />
+    <Compile Include="Editing\PartialUpdate\BufferTextChangeHandlerTests.cs" />
     <Compile Include="Parsing\LexerTests.cs" />
     <Compile Include="Parsing\NamespaceParserTests.cs" />
     <Compile Include="Parsing\TokenListTests.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Clojure.Code.Editing.PartialUpdate;
 using Microsoft.VisualStudio.Text;
 
 namespace ClojureExtension.Editor.InputHandling
