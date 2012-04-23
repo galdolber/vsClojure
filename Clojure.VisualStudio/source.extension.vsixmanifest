@@ -24,7 +24,7 @@
 	</Identifier>
 	<References />
 	<Content>
-		<MefComponent>|ClojureExtension.Editor|</MefComponent>
 		<VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
+		<MefComponent>|%CurrentProject%|</MefComponent>
 	</Content>
 </Vsix>

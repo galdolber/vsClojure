@@ -45,10 +45,86 @@
     <Compile Include="ClojurePackage.cs" />
     <Compile Include="CommandIds.cs" />
     <Compile Include="Configuration\GeneralPropertyPageAdapter.cs" />
+    <Compile Include="Editor\ActiveTextBufferStateProvider.cs" />
+    <Compile Include="Editor\AutoFormat\AutoFormatter.cs" />
+    <Compile Include="Editor\AutoIndent\SmartIndentAdapter.cs" />
+    <Compile Include="Editor\AutoIndent\SmartIndentProvider.cs" />
+    <Compile Include="Editor\BraceMatching\BraceMatchingFormatDefinitions.cs" />
+    <Compile Include="Editor\BraceMatching\BraceMatchingTagger.cs" />
+    <Compile Include="Editor\BraceMatching\BraceMatchingTaggerProvider.cs" />
+    <Compile Include="Editor\Classification\ClassificationFormat.cs" />
+    <Compile Include="Editor\Classification\ClassificationType.cs" />
+    <Compile Include="Editor\Classification\ClojureClassifier.cs" />
+    <Compile Include="Editor\Classification\ClojureClassifierProvider.cs" />
+    <Compile Include="Editor\Commenting\BlockCommentAdapter.cs" />
+    <Compile Include="Editor\Commenting\BlockUncommentAdapter.cs" />
+    <Compile Include="Editor\InputHandling\TextChangeAdapter.cs" />
+    <Compile Include="Editor\Intellisense\HippieCompletionSource.cs" />
+    <Compile Include="Editor\Intellisense\HippieCompletionSourceProvider.cs" />
+    <Compile Include="Editor\Intellisense\IntellisenseCommandFilter.cs" />
+    <Compile Include="Editor\Intellisense\IntellisenseCommandFilterFactory.cs" />
+    <Compile Include="Editor\Options\EditorOptions.cs" />
+    <Compile Include="Editor\Options\EditorOptionsBuilder.cs" />
+    <Compile Include="Editor\Tagger\ClojureTagProvider.cs" />
+    <Compile Include="Editor\Tagger\ClojureTokenTag.cs" />
+    <Compile Include="Editor\Tagger\ClojureTokenTagger.cs" />
+    <Compile Include="Editor\TextBuffer\TextBufferAdapter.cs" />
+    <Compile Include="Editor\TokenizedBufferBuilder.cs" />
+    <Compile Include="Project\ClojureConfigProvider.cs" />
+    <Compile Include="Project\ClojureProjectConfig.cs" />
+    <Compile Include="Project\ClojureProjectFactory.cs" />
+    <Compile Include="Project\ClojureProjectFileNode.cs" />
+    <Compile Include="Project\ClojureProjectNode.cs" />
+    <Compile Include="Project\Configuration\GeneralPropertyPage.cs" />
+    <Compile Include="Project\Configuration\SettingsStore.cs" />
+    <Compile Include="Project\Configuration\SettingsStoreProvider.cs" />
+    <Compile Include="Project\Hierarchy\ProjectFilesProvider.cs" />
+    <Compile Include="Project\Hierarchy\SelectedFilesProvider.cs" />
+    <Compile Include="Project\Hierarchy\SelectedProjectProvider.cs" />
+    <Compile Include="Project\Launching\LaunchParameters.cs" />
+    <Compile Include="Project\Launching\LaunchParametersBuilder.cs" />
+    <Compile Include="Project\Launching\LaunchParametersValidator.cs" />
+    <Compile Include="Project\Launching\ProjectLauncher.cs" />
+    <Compile Include="Project\Launching\StartupFileType.cs" />
+    <Compile Include="Project\OAClojureProject.cs" />
+    <Compile Include="Project\OAClojureProjectFileItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repl\History.cs" />
+    <Compile Include="Repl\InputKeyHandler.cs" />
+    <Compile Include="Repl\Operations\ActiveFileProvider.cs" />
+    <Compile Include="Repl\Operations\ChangeReplNamespace.cs" />
+    <Compile Include="Repl\Operations\LoadFilesIntoRepl.cs" />
+    <Compile Include="Repl\Operations\StartReplUsingProjectVersion.cs" />
+    <Compile Include="Repl\ProcessOutputReader.cs" />
+    <Compile Include="Repl\ReplFactory.cs" />
+    <Compile Include="Repl\ReplState.cs" />
+    <Compile Include="Repl\ReplToolWindow.cs" />
+    <Compile Include="Repl\ReplUserInterfaceFactory.cs" />
+    <Compile Include="Repl\ReplWriter.cs" />
+    <Compile Include="Repl\TextBoxWriter.cs" />
+    <Compile Include="Utilities\Guids.cs" />
+    <Compile Include="Utilities\IO\Compression\CompressionExtensions.cs" />
+    <Compile Include="Utilities\IO\FileSystem\FileSystemExtensions.cs" />
+    <Compile Include="Utilities\IO\FileSystem\IFileSystemWriter.cs" />
+    <Compile Include="Utilities\IO\FileSystem\RelativePathFileSystemWriter.cs" />
+    <Compile Include="Utilities\IO\Streams\StreamExtensions.cs" />
+    <Compile Include="Utilities\IProvider.cs" />
+    <Compile Include="Utilities\KeyboardExaminer.cs" />
+    <Compile Include="Utilities\MenuCommandListHider.cs" />
+    <Compile Include="Utilities\MenuCommandListWirer.cs" />
+    <Compile Include="Utilities\StreamBuffer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Project\Resources\Project.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Key.snk" />
+    <EmbeddedResource Include="Project\Resources\ClojureImageList.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project\Resources\Package.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="Runtimes\1.3.0.zip">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -97,24 +173,6 @@
       <Project>{7D8A24DE-8AC0-4ACC-8F29-C48F7061CCB0}</Project>
       <Name>Clojure.Code</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ClojureExtension.Editor\ClojureExtension.Editor.csproj">
-      <Project>{4B160925-5079-4B41-BE21-458EBB74C9AB}</Project>
-      <Name>ClojureExtension.Editor</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3b</IncludeOutputGroupsInVSIX>
-      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
-    </ProjectReference>
-    <ProjectReference Include="..\ClojureExtension.Project\ClojureExtension.Project.csproj">
-      <Project>{653A74C1-81F5-4B49-ACFA-BE99B5ADEFF6}</Project>
-      <Name>ClojureExtension.Project</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ClojureExtension.Repl\ClojureExtension.Repl.csproj">
-      <Project>{C9104D7A-6125-4E79-9AC1-1490D6DFA57C}</Project>
-      <Name>ClojureExtension.Repl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ClojureExtension.Utilities\ClojureExtension.Utilities.csproj">
-      <Project>{360503CC-98C5-4C00-9934-55519FFC5C26}</Project>
-      <Name>ClojureExtension.Utilities</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -130,6 +188,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.ComponentModelHost, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Editor, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Language.Intellisense, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Project, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b7ed17bb64a9597f, processorArchitecture=MSIL">
       <HintPath>..\Dependencies\Microsoft.VisualStudio.Project.dll</HintPath>
@@ -146,10 +206,13 @@
     <Reference Include="Microsoft.VisualStudio.Text.Logic, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Text.UI, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Text.UI.Wpf, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
