@@ -21,9 +21,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Clojure.Code.Parsing;
-using ClojureExtension.Deployment.Configuration;
 using ClojureExtension.Editor.Commenting;
 using ClojureExtension.Editor.TextBuffer;
+using ClojureExtension.Project.Configuration;
 using ClojureExtension.Project.Launching;
 using ClojureExtension.Repl;
 using ClojureExtension.Repl.Operations;
@@ -53,9 +53,9 @@ namespace ClojureExtension.Deployment
 	[Guid(PackageGuid)]
 	[PackageRegistration(UseManagedResourcesOnly = true)]
 	[DefaultRegistryRoot("Software\\Microsoft\\VisualStudio\\10.0")]
-	[ProvideObject(typeof (GeneralPropertyPageAdapter))]
-	[ProvideProjectFactory(typeof (ClojureProjectFactory), "Clojure", "Clojure Project Files (*.cljproj);*.cljproj", "cljproj", "cljproj", @"Templates\Projects\Clojure", LanguageVsTemplate = "Clojure", NewProjectRequireNewFolderVsTemplate = false)]
-	[ProvideProjectItem(typeof (ClojureProjectFactory), "Clojure Items", @"Templates\ProjectItems\Clojure", 500)]
+	[ProvideObject(typeof (GeneralPropertyPage))]
+	[ProvideProjectFactory(typeof (ClojureProjectFactory), "Clojure", "Clojure Project Files (*.cljproj);*.cljproj", "cljproj", "cljproj", @"Project\Templates\Projects\Clojure", LanguageVsTemplate = "Clojure", NewProjectRequireNewFolderVsTemplate = false)]
+	[ProvideProjectItem(typeof (ClojureProjectFactory), "Clojure Items", @"Project\Templates\ProjectItems\Clojure", 500)]
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[ProvideToolWindow(typeof (ReplToolWindow))]
 	[ProvideAutoLoad(UIContextGuids80.NoSolution)]

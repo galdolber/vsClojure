@@ -41,10 +41,9 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ClearableMenuCommandService.cs" />
+    <Compile Include="Menus\ClearableMenuCommandService.cs" />
     <Compile Include="ClojurePackage.cs" />
     <Compile Include="CommandIds.cs" />
-    <Compile Include="Configuration\GeneralPropertyPageAdapter.cs" />
     <Compile Include="Editor\ActiveTextBufferStateProvider.cs" />
     <Compile Include="Editor\AutoFormat\AutoFormatter.cs" />
     <Compile Include="Editor\AutoIndent\SmartIndentAdapter.cs" />
@@ -95,24 +94,24 @@
     <Compile Include="Repl\Operations\ChangeReplNamespace.cs" />
     <Compile Include="Repl\Operations\LoadFilesIntoRepl.cs" />
     <Compile Include="Repl\Operations\StartReplUsingProjectVersion.cs" />
-    <Compile Include="Repl\ProcessOutputReader.cs" />
+    <Compile Include="IO\Process\ProcessOutputReader.cs" />
     <Compile Include="Repl\ReplFactory.cs" />
     <Compile Include="Repl\ReplState.cs" />
     <Compile Include="Repl\ReplToolWindow.cs" />
     <Compile Include="Repl\ReplUserInterfaceFactory.cs" />
     <Compile Include="Repl\ReplWriter.cs" />
     <Compile Include="Repl\TextBoxWriter.cs" />
-    <Compile Include="Utilities\Guids.cs" />
-    <Compile Include="Utilities\IO\Compression\CompressionExtensions.cs" />
-    <Compile Include="Utilities\IO\FileSystem\FileSystemExtensions.cs" />
-    <Compile Include="Utilities\IO\FileSystem\IFileSystemWriter.cs" />
-    <Compile Include="Utilities\IO\FileSystem\RelativePathFileSystemWriter.cs" />
-    <Compile Include="Utilities\IO\Streams\StreamExtensions.cs" />
+    <Compile Include="Guids.cs" />
+    <Compile Include="IO\Compression\CompressionExtensions.cs" />
+    <Compile Include="IO\FileSystem\FileSystemExtensions.cs" />
+    <Compile Include="IO\FileSystem\IFileSystemWriter.cs" />
+    <Compile Include="IO\FileSystem\RelativePathFileSystemWriter.cs" />
+    <Compile Include="IO\Streams\StreamExtensions.cs" />
     <Compile Include="Utilities\IProvider.cs" />
-    <Compile Include="Utilities\KeyboardExaminer.cs" />
-    <Compile Include="Utilities\MenuCommandListHider.cs" />
-    <Compile Include="Utilities\MenuCommandListWirer.cs" />
-    <Compile Include="Utilities\StreamBuffer.cs" />
+    <Compile Include="IO\Keyboard\KeyboardExaminer.cs" />
+    <Compile Include="Menus\MenuCommandListHider.cs" />
+    <Compile Include="Menus\MenuCommandListWirer.cs" />
+    <Compile Include="IO\Streams\StreamBuffer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Project\Resources\Project.resx">
@@ -134,14 +133,14 @@
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Templates\ProjectItems\Clojure\Clojure File.clj">
+    <Content Include="Project\Templates\ProjectItems\Clojure\Clojure File.clj">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Templates\Projects\Clojure\Clojure.cljproj">
+    <Content Include="Project\Templates\Projects\Clojure\Clojure.cljproj">
       <SubType>Designer</SubType>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Templates\Projects\Clojure\program.clj">
+    <Content Include="Project\Templates\Projects\Clojure\program.clj">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
@@ -156,7 +155,7 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Templates\Projects\Clojure\Clojure.ico">
+    <Content Include="Project\Templates\Projects\Clojure\Clojure.ico">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="VSIXIcon.png">
