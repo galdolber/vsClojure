@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClojureExtension.Project", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClojureExtension.Utilities", "ClojureExtension.Utilities\ClojureExtension.Utilities.csproj", "{360503CC-98C5-4C00-9934-55519FFC5C26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClojureExtension.Deployment", "ClojureExtension.Deployment\ClojureExtension.Deployment.csproj", "{39B60EDA-8630-44BE-9DEA-4AE8AF2A20E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clojure.VisualStudio", "Clojure.VisualStudio\Clojure.VisualStudio.csproj", "{39B60EDA-8630-44BE-9DEA-4AE8AF2A20E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClojureExtension.Editor", "ClojureExtension.Editor\ClojureExtension.Editor.csproj", "{4B160925-5079-4B41-BE21-458EBB74C9AB}"
 EndProject
