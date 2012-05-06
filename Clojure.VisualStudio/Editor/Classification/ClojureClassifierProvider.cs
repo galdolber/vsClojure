@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.Composition;
-using Microsoft.ClojureExtension.Editor.Tagger;
+using Clojure.VisualStudio.Editor.Tagger;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Microsoft.ClojureExtension.Editor.Classification
+namespace Clojure.VisualStudio.Editor.Classification
 {
 	[Export(typeof (IViewTaggerProvider))]
 	[ContentType("Clojure")]

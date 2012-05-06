@@ -1,8 +1,8 @@
 ﻿using System;
-using ClojureExtension.Utilities;
+using Clojure.VisualStudio.Utilities;
 using EnvDTE;
 
-namespace Microsoft.ClojureExtension.Project.Hierarchy
+namespace Clojure.VisualStudio.Project.Hierarchy
 {
     public class SelectedProjectProvider : IProvider<EnvDTE.Project>
     {

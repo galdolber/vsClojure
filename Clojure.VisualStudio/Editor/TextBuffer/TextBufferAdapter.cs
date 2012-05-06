@@ -5,7 +5,7 @@ using Clojure.Code.Editing.TextBuffer;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 
-namespace ClojureExtension.Editor.TextBuffer
+namespace Clojure.VisualStudio.Editor.TextBuffer
 {
 	public class TextBufferAdapter : ITextBufferAdapter
 	{

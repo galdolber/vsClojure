@@ -1,7 +1,8 @@
 ﻿using System.Threading;
-using ClojureExtension.Utilities;
+using Clojure.VisualStudio.IO.Streams;
+using Clojure.VisualStudio.Repl;
 
-namespace ClojureExtension.Repl
+namespace Clojure.VisualStudio.IO.Process
 {
 	public class ProcessOutputReader
 	{

@@ -10,10 +10,9 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ***************************************************************************/
 
 using System.Runtime.InteropServices;
-using ClojureExtension.Project;
 using Microsoft.VisualStudio.Project.Automation;
 
-namespace Microsoft.ClojureExtension.Project
+namespace Clojure.VisualStudio.Project
 {
     [ComVisible(true)]
     public class OAClojureProject : OAProject

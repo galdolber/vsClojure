@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace ClojureExtension.Repl
+namespace Clojure.VisualStudio.Repl
 {
 	public class ReplWriter
 	{

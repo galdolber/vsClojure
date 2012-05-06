@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
-namespace ClojureExtension.Utilities
+namespace Clojure.VisualStudio.IO.Streams
 {
 	public class StreamBuffer
 	{

@@ -14,18 +14,14 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using ClojureExtension.Project.Configuration;
-using ClojureExtension.Utilities;
+using Clojure.VisualStudio.Project.Configuration;
 using EnvDTE;
-using Microsoft.ClojureExtension;
-using Microsoft.ClojureExtension.Configuration;
-using Microsoft.ClojureExtension.Project;
 using Microsoft.VisualStudio.Project;
 using Microsoft.VisualStudio.Project.Automation;
 using Microsoft.VisualStudio.Shell;
 using VSLangProj;
 
-namespace ClojureExtension.Project
+namespace Clojure.VisualStudio.Project
 {
     /// <summary>
     ///   This class extends the ProjectNode in order to represent our project 

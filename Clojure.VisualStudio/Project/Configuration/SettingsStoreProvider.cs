@@ -1,4 +1,4 @@
-﻿namespace Microsoft.ClojureExtension.Configuration
+﻿namespace Clojure.VisualStudio.Project.Configuration
 {
     public class SettingsStoreProvider
     {

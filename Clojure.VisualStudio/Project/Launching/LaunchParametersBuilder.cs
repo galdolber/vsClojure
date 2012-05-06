@@ -1,9 +1,9 @@
 ﻿using System;
-using ClojureExtension.Utilities;
+using Clojure.VisualStudio.Utilities;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Project;
 
-namespace ClojureExtension.Project.Launching
+namespace Clojure.VisualStudio.Project.Launching
 {
 	public class LaunchParametersBuilder : IProvider<LaunchParameters>
 	{

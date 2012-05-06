@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ClojureExtension.Utilities;
+using Clojure.VisualStudio.Utilities;
 using EnvDTE80;
 
-namespace ClojureExtension.Repl.Operations
+namespace Clojure.VisualStudio.Repl.Operations
 {
     public class ActiveFileProvider : IProvider<List<string>>
     {

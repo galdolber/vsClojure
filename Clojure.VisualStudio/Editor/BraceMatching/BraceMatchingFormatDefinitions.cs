@@ -3,7 +3,7 @@ using System.Windows.Media;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Microsoft.ClojureExtension.Editor.BraceMatching
+namespace Clojure.VisualStudio.Editor.BraceMatching
 {
     [Export(typeof (EditorFormatDefinition))]
     [Name("ClojureBraceNotFound")]

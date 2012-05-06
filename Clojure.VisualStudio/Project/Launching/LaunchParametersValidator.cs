@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClojureExtension.Project.Launching
+namespace Clojure.VisualStudio.Project.Launching
 {
 	public class LaunchParametersValidator
 	{

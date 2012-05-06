@@ -1,4 +1,4 @@
-﻿namespace Microsoft.ClojureExtension.Editor.Options
+﻿namespace Clojure.VisualStudio.Editor.Options
 {
 	public class EditorOptions
 	{

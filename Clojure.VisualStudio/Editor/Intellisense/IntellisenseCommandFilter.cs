@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 
-namespace ClojureExtension.Editor.Intellisense
+namespace Clojure.VisualStudio.Editor.Intellisense
 {
 	public class IntellisenseCommandFilter : IOleCommandTarget
 	{

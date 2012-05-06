@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
 
-namespace ClojureExtension.Editor.Intellisense
+namespace Clojure.VisualStudio.Editor.Intellisense
 {
 	[Export(typeof (IVsTextViewCreationListener))]
 	[ContentType("Clojure")]

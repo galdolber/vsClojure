@@ -10,35 +10,31 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ***************************************************************************/
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Clojure.Code.Parsing;
-using ClojureExtension.Editor.Commenting;
-using ClojureExtension.Editor.TextBuffer;
-using ClojureExtension.Project.Configuration;
-using ClojureExtension.Project.Launching;
-using ClojureExtension.Repl;
-using ClojureExtension.Repl.Operations;
-using ClojureExtension.Utilities;
-using ClojureExtension.Utilities.IO;
-using ClojureExtension.Utilities.IO.Compression;
-using ClojureExtension.Utilities.IO.FileSystem;
+using Clojure.VisualStudio.Editor;
+using Clojure.VisualStudio.Editor.AutoFormat;
+using Clojure.VisualStudio.Editor.Commenting;
+using Clojure.VisualStudio.Editor.Options;
+using Clojure.VisualStudio.Editor.TextBuffer;
+using Clojure.VisualStudio.IO.Compression;
+using Clojure.VisualStudio.Menus;
+using Clojure.VisualStudio.Project;
+using Clojure.VisualStudio.Project.Configuration;
+using Clojure.VisualStudio.Project.Hierarchy;
+using Clojure.VisualStudio.Project.Launching;
+using Clojure.VisualStudio.Repl;
+using Clojure.VisualStudio.Repl.Operations;
+using Clojure.VisualStudio.Utilities;
 using EnvDTE;
 using EnvDTE80;
-using ICSharpCode.SharpZipLib.Zip;
-using Microsoft.ClojureExtension.Editor;
-using Microsoft.ClojureExtension.Editor.AutoFormat;
-using Microsoft.ClojureExtension.Editor.Options;
-using Microsoft.ClojureExtension.Project;
-using Microsoft.ClojureExtension.Project.Hierarchy;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Project;
 using Microsoft.VisualStudio.Shell;
@@ -46,9 +42,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Win32;
-using VSLangProj;
 
-namespace ClojureExtension.Deployment
+namespace Clojure.VisualStudio
 {
 	[Guid(PackageGuid)]
 	[PackageRegistration(UseManagedResourcesOnly = true)]

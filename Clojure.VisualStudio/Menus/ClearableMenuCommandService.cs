@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
 
-namespace ClojureExtension.Deployment
+namespace Clojure.VisualStudio.Menus
 {
 	public class ClearableMenuCommandService : OleMenuCommandService
 	{

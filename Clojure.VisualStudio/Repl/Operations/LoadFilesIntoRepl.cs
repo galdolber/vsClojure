@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ClojureExtension.Utilities;
+using Clojure.VisualStudio.Utilities;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace ClojureExtension.Repl.Operations
+namespace Clojure.VisualStudio.Repl.Operations
 {
     internal class LoadFilesIntoRepl
     {

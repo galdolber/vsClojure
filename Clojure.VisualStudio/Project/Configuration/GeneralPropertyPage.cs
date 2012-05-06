@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Project;
 
-namespace ClojureExtension.Project.Configuration
+namespace Clojure.VisualStudio.Project.Configuration
 {
 	[ComVisible(true)]
 	[Guid("EBAF977F-39E1-481D-BFB8-13C960B55D6E")]

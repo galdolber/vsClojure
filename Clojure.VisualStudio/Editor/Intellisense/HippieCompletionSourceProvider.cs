@@ -2,13 +2,11 @@
 using System.ComponentModel.Composition;
 using Clojure.Code.Parsing;
 using Clojure.Code.State;
-using ClojureExtension.Utilities;
-using Microsoft.ClojureExtension.Editor;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
 
-namespace ClojureExtension.Editor.Intellisense
+namespace Clojure.VisualStudio.Editor.Intellisense
 {
 	[Export(typeof (ICompletionSourceProvider))]
 	[ContentType("Clojure")]

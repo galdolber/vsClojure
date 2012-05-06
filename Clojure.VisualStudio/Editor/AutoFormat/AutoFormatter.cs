@@ -2,9 +2,9 @@
 using Clojure.Code.Editing.TextBuffer;
 using Clojure.Code.Parsing;
 using Clojure.Code.State;
-using Microsoft.ClojureExtension.Editor.Options;
+using Clojure.VisualStudio.Editor.Options;
 
-namespace Microsoft.ClojureExtension.Editor.AutoFormat
+namespace Clojure.VisualStudio.Editor.AutoFormat
 {
 	public class AutoFormatter
 	{

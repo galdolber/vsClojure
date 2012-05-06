@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Clojure.Code.Parsing;
 using Clojure.Code.State;
-using ClojureExtension.Utilities;
 using Microsoft.VisualStudio.Text;
 
-namespace Microsoft.ClojureExtension.Editor
+namespace Clojure.VisualStudio.Editor
 {
 	public class TokenizedBufferBuilder
 	{

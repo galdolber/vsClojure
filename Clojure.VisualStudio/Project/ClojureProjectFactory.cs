@@ -10,12 +10,11 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ***************************************************************************/
 
 using System.Runtime.InteropServices;
-using ClojureExtension.Project;
+using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Project;
 using Microsoft.VisualStudio.Shell;
-using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
-namespace Microsoft.ClojureExtension.Project
+namespace Clojure.VisualStudio.Project
 {
 	/// <summary>
 	/// Represent the methods for creating projects within the solution.

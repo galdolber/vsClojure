@@ -11,11 +11,10 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 using System;
 using System.Drawing;
-using ClojureExtension.Project;
 using Microsoft.VisualStudio.Project;
 using Microsoft.VisualStudio.Project.Automation;
 
-namespace Microsoft.ClojureExtension.Project
+namespace Clojure.VisualStudio.Project
 {
 	/// <summary>
 	/// This class extends the FileNode in order to represent a file 

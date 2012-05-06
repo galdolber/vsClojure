@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Microsoft.ClojureExtension.Editor.Classification
+namespace Clojure.VisualStudio.Editor.Classification
 {
     internal static class OrdinaryClassificationDefinition
     {

@@ -3,7 +3,7 @@ using System.Windows.Media;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Microsoft.ClojureExtension.Editor.Classification
+namespace Clojure.VisualStudio.Editor.Classification
 {
     [Export(typeof (EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = "ClojureSymbol")]

@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using Clojure.Code.Parsing;
 using Clojure.Code.State;
-using ClojureExtension.Utilities;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 
-namespace ClojureExtension.Editor.Intellisense
+namespace Clojure.VisualStudio.Editor.Intellisense
 {
 	public class HippieCompletionSource : ICompletionSource
 	{

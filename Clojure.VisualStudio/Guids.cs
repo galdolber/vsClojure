@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClojureExtension.Utilities
+namespace Clojure.VisualStudio
 {
 	public static class Guids
 	{

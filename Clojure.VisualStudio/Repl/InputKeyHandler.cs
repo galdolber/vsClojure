@@ -1,9 +1,9 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
 using Clojure.Code.State;
-using ClojureExtension.Utilities;
+using Clojure.VisualStudio.IO.Keyboard;
 
-namespace ClojureExtension.Repl
+namespace Clojure.VisualStudio.Repl
 {
 	public class InputKeyHandler
 	{

@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.Composition;
-using Clojure.Code.Editing.Indenting;
-using Microsoft.ClojureExtension.Editor.Options;
+using Clojure.VisualStudio.Editor.Options;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Microsoft.ClojureExtension.Editor.AutoIndent
+namespace Clojure.VisualStudio.Editor.AutoIndent
 {
 	[Export(typeof (ISmartIndentProvider))]
 	[ContentType("Clojure")]

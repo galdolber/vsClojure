@@ -1,4 +1,4 @@
-﻿namespace ClojureExtension.Project.Launching
+﻿namespace Clojure.VisualStudio.Project.Launching
 {
 	public enum StartupFileType
 	{

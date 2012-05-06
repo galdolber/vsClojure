@@ -1,8 +1,8 @@
-﻿using ClojureExtension.Project.Launching;
+﻿using Clojure.VisualStudio.Project.Launching;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Project;
 
-namespace ClojureExtension.Project
+namespace Clojure.VisualStudio.Project
 {
     public class ClojureProjectConfig : ProjectConfig
     {

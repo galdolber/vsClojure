@@ -2,12 +2,12 @@
 using Clojure.Code.Editing.Indenting;
 using Clojure.Code.Parsing;
 using Clojure.Code.State;
-using ClojureExtension.Utilities;
-using Microsoft.ClojureExtension.Editor.Options;
+using Clojure.VisualStudio.Editor.Options;
+using Clojure.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 
-namespace Microsoft.ClojureExtension.Editor.AutoIndent
+namespace Clojure.VisualStudio.Editor.AutoIndent
 {
 	public class SmartIndentAdapter : ISmartIndent
 	{

@@ -5,13 +5,15 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using Clojure.Code.Parsing;
 using Clojure.Code.State;
-using ClojureExtension.Repl.Operations;
-using ClojureExtension.Utilities;
+using Clojure.VisualStudio.Editor;
+using Clojure.VisualStudio.IO.Keyboard;
+using Clojure.VisualStudio.IO.Process;
+using Clojure.VisualStudio.IO.Streams;
+using Clojure.VisualStudio.Menus;
+using Clojure.VisualStudio.Project.Hierarchy;
+using Clojure.VisualStudio.Repl.Operations;
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.ClojureExtension;
-using Microsoft.ClojureExtension.Editor;
-using Microsoft.ClojureExtension.Project.Hierarchy;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
@@ -20,7 +22,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Process = System.Diagnostics.Process;
 using Thread = System.Threading.Thread;
 
-namespace ClojureExtension.Repl
+namespace Clojure.VisualStudio.Repl
 {
 	public class ReplFactory
 	{

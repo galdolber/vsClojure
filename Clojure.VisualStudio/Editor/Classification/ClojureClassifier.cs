@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Clojure.Code.Parsing;
-using Microsoft.ClojureExtension.Editor.Tagger;
+using Clojure.VisualStudio.Editor.Tagger;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
 
-namespace Microsoft.ClojureExtension.Editor.Classification
+namespace Clojure.VisualStudio.Editor.Classification
 {
 	public class ClojureClassifier : ITagger<ClassificationTag>
 	{

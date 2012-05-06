@@ -1,17 +1,17 @@
 ﻿using System.Windows.Input;
 
-namespace ClojureExtension.Utilities
+namespace Clojure.VisualStudio.IO.Keyboard
 {
 	public class KeyboardExaminer
 	{
 		public bool IsShiftDown()
 		{
-			return Keyboard.IsKeyDown(Key.LeftShift) | Keyboard.IsKeyDown(Key.RightShift);
+			return System.Windows.Input.Keyboard.IsKeyDown(Key.LeftShift) | System.Windows.Input.Keyboard.IsKeyDown(Key.RightShift);
 		}
 
 		public bool ControlIsDown()
 		{
-			return Keyboard.IsKeyDown(Key.LeftCtrl) | Keyboard.IsKeyDown(Key.RightCtrl);
+			return System.Windows.Input.Keyboard.IsKeyDown(Key.LeftCtrl) | System.Windows.Input.Keyboard.IsKeyDown(Key.RightCtrl);
 		}
 
 		public bool IsArrowKey(Key key)

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Controls;
-using ClojureExtension.Utilities;
+using Clojure.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace ClojureExtension.Repl.Operations
+namespace Clojure.VisualStudio.Repl.Operations
 {
 	public class StartReplUsingProjectVersion
 	{

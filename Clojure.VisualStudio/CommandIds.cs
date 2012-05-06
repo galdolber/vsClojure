@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel.Design;
+﻿using System.ComponentModel.Design;
 using Microsoft.VisualStudio;
 
-namespace ClojureExtension.Deployment
+namespace Clojure.VisualStudio
 {
 	public class CommandIDs
 	{

@@ -6,7 +6,7 @@ using Clojure.Code.State;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 
-namespace Microsoft.ClojureExtension.Editor.Tagger
+namespace Clojure.VisualStudio.Editor.Tagger
 {
 	public class ClojureTokenTagger : ITagger<ClojureTokenTag>
 	{

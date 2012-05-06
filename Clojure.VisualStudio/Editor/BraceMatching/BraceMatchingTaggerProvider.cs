@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Clojure.Code.Editing.BraceMatching;
 using Clojure.Code.Parsing;
 using Clojure.Code.State;
-using ClojureExtension.Editor.InputHandling;
-using ClojureExtension.Editor.TextBuffer;
-using ClojureExtension.Utilities;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Microsoft.ClojureExtension.Editor.BraceMatching
+namespace Clojure.VisualStudio.Editor.BraceMatching
 {
 	[Export(typeof (IViewTaggerProvider))]
 	[ContentType("Clojure")]

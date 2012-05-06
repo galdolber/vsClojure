@@ -1,7 +1,7 @@
 ﻿using Clojure.Code.Parsing;
 using Microsoft.VisualStudio.Text.Tagging;
 
-namespace Microsoft.ClojureExtension.Editor.Tagger
+namespace Clojure.VisualStudio.Editor.Tagger
 {
     public class ClojureTokenTag : ITag
     {

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace Microsoft.ClojureExtension.Configuration
+namespace Clojure.VisualStudio.Project.Configuration
 {
     public class SettingsStore
     {

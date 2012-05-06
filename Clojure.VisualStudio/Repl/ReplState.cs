@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ClojureExtension.Repl
+namespace Clojure.VisualStudio.Repl
 {
 	public class ReplState
 	{

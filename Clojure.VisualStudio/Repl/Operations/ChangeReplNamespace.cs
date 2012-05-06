@@ -1,4 +1,4 @@
-﻿namespace ClojureExtension.Repl.Operations
+﻿namespace Clojure.VisualStudio.Repl.Operations
 {
 	public class ChangeReplNamespace
 	{

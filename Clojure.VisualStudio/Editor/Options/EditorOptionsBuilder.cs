@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ClojureExtension.Utilities;
+﻿using Clojure.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Text.Editor;
 
-namespace Microsoft.ClojureExtension.Editor.Options
+namespace Clojure.VisualStudio.Editor.Options
 {
 	public class EditorOptionsBuilder : IProvider<EditorOptions>
 	{

@@ -1,7 +1,7 @@
 ﻿using Clojure.Code.Editing.Commenting;
 using Clojure.Code.Editing.TextBuffer;
 
-namespace ClojureExtension.Editor.Commenting
+namespace Clojure.VisualStudio.Editor.Commenting
 {
 	public class BlockUncommentAdapter
 	{

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace ClojureExtension.Utilities.IO.FileSystem
+namespace Clojure.VisualStudio.IO.FileSystem
 {
 	public class FileSystemExtensions
 	{

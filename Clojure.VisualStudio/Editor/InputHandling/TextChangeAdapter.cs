@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Clojure.Code.Editing.PartialUpdate;
 using Microsoft.VisualStudio.Text;
 
-namespace ClojureExtension.Editor.InputHandling
+namespace Clojure.VisualStudio.Editor.InputHandling
 {
 	public class TextChangeAdapter
 	{

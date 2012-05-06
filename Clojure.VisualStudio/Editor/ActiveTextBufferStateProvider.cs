@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Clojure.Code.Parsing;
-using ClojureExtension.Utilities;
+using Clojure.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 
-namespace Microsoft.ClojureExtension.Editor
+namespace Clojure.VisualStudio.Editor
 {
 	public class ActiveTextBufferStateProvider : IProvider<LinkedList<Token>>
 	{

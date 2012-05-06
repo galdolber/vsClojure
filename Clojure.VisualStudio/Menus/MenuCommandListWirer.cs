@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 
-namespace ClojureExtension.Utilities
+namespace Clojure.VisualStudio.Menus
 {
 	public class MenuCommandListWirer
 	{
