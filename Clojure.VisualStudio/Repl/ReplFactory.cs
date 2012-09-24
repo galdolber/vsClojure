@@ -79,7 +79,7 @@ namespace Clojure.VisualStudio.Repl
 
 		private static void WireUpTheTextBoxInputToTheReplProcess(TextBox replTextBox, Process replProcess, Entity<ReplState> replEntity)
 		{
-			var inputKeyHandler = new InputKeyHandler(new KeyboardExaminer(), replEntity, replTextBox, new ReplWriter(replProcess, new TextBoxWriter(replTextBox, replEntity)));
+			var inputKeyHandler = new InputKeyHandler(new KeyboardExaminer(), replEntity, replTextBox, new Repl(replProcess, new TextBoxWriter(replTextBox, replEntity)));
 			var history = new History(new KeyboardExaminer(), replEntity, replTextBox);
 
 			replTextBox.PreviewKeyDown += history.PreviewKeyDown;
@@ -119,27 +119,17 @@ namespace Clojure.VisualStudio.Repl
 		private List<MenuCommand> CreateMenuCommands(Process replProcess, TextBox interactiveText, Entity<ReplState> replEntity)
 		{
 			var dte = (DTE2) _serviceProvider.GetService(typeof (DTE));
-			var replWriter = new ReplWriter(replProcess, new TextBoxWriter(interactiveText, replEntity));
-			replWriter.OnInvisibleWrite += () => _replToolWindow.ShowNoActivate();
+			var repl = new Repl(replProcess, new TextBoxWriter(interactiveText, replEntity));
+			repl.OnInvisibleWrite += () => _replToolWindow.ShowNoActivate();
 
 			Action loadSelectedFilesIntoRepl =
-				() => dte.ToolWindows.SolutionExplorer.GetSelectedFiles()
-				      	.FindAllClojureFiles()
-				      	.CreateScriptToLoadFilesIntoRepl()
-				      	.WriteInvisiblyTo(replWriter);
+				() => dte.ToolWindows.SolutionExplorer.GetSelectedFiles().LoadFilesInto(repl);
 
 			Action loadSelectedProjectIntoRepl =
-				() => dte.ToolWindows.SolutionExplorer.GetSelectedProject()
-					.GetAllFiles()
-					.FindAllClojureFiles()
-					.CreateScriptToLoadFilesIntoRepl()
-					.WriteInvisiblyTo(replWriter);
+				() => dte.ToolWindows.SolutionExplorer.GetSelectedProject().GetAllFiles().LoadFilesInto(repl);
 
 			Action loadActiveFileIntoRepl =
-				() => dte.ActiveDocument.FullName.SingletonAsList()
-						.FindAllClojureFiles()
-				      	.CreateScriptToLoadFilesIntoRepl()
-				      	.WriteInvisiblyTo(replWriter);
+				() => dte.ActiveDocument.FullName.SingletonAsList().LoadFilesInto(repl);
 
 			var componentModel = (IComponentModel) _serviceProvider.GetService(typeof (SComponentModel));
 			var namespaceParser = new NamespaceParser(NamespaceParser.NamespaceSymbols);
@@ -149,15 +139,12 @@ namespace Clojure.VisualStudio.Repl
 					componentModel.GetService<IVsEditorAdaptersFactoryService>(),
 					(IVsTextManager) _serviceProvider.GetService(typeof (SVsTextManager)));
 
-			var changeReplNamespace =
-				new ChangeReplNamespace(new ReplWriter(replProcess, new TextBoxWriter(interactiveText, replEntity)));
-
 			var menuCommands = new List<MenuCommand>();
 			menuCommands.Add(new MenuCommand((sender, args) => loadSelectedProjectIntoRepl(), new CommandID(Guids.GuidClojureExtensionCmdSet, 11)));
 			menuCommands.Add(new MenuCommand((sender, args) => loadSelectedFilesIntoRepl(), new CommandID(Guids.GuidClojureExtensionCmdSet, 12)));
 			menuCommands.Add(new MenuCommand((sender, args) => loadActiveFileIntoRepl(), new CommandID(Guids.GuidClojureExtensionCmdSet, 13)));
-			menuCommands.Add(new MenuCommand((sender, args) => changeReplNamespace.Execute(namespaceParser.Execute(activeTextBufferStateProvider.Get())), new CommandID(Guids.GuidClojureExtensionCmdSet, 14)));
-			menuCommands.Add(new MenuCommand((sender, args) => new ReplWriter(replProcess, new TextBoxWriter(interactiveText, replEntity)).WriteBehindTheSceneExpressionToRepl((string)dte.ActiveDocument.Selection), new CommandID(Guids.GuidClojureExtensionCmdSet, 15)));
+			menuCommands.Add(new MenuCommand((sender, args) => repl.ChangeNamespace(namespaceParser.Execute(activeTextBufferStateProvider.Get())), new CommandID(Guids.GuidClojureExtensionCmdSet, 14)));
+			menuCommands.Add(new MenuCommand((sender, args) => repl.WriteInvisibly((string)dte.ActiveDocument.Selection), new CommandID(Guids.GuidClojureExtensionCmdSet, 15)));
 			return menuCommands;
 		}
 

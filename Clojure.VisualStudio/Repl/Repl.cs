@@ -1,21 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using Clojure.VisualStudio.Repl.Operations;
 
 namespace Clojure.VisualStudio.Repl
 {
-	public class ReplWriter
+	public class Repl
 	{
 		private readonly Process _process;
 		private readonly TextBoxWriter _textBoxWriter;
 		public event Action OnInvisibleWrite;
 
-		public ReplWriter(Process process, TextBoxWriter textBoxWriter)
+		public Repl(Process process, TextBoxWriter textBoxWriter)
 		{
 			_process = process;
 			_textBoxWriter = textBoxWriter;
 		}
 
-		public void WriteBehindTheSceneExpressionToRepl(string expression)
+		public void WriteInvisibly(string expression)
 		{
 			WriteExpressionToRepl(expression);
 			_textBoxWriter.WriteToTextBox("\r\n");
@@ -25,6 +27,18 @@ namespace Clojure.VisualStudio.Repl
 		public void WriteExpressionToRepl(string expression)
 		{
 			_process.StandardInput.WriteLine(expression);
+		}
+
+		public void LoadFiles(List<string> fileList)
+		{
+			WriteInvisibly(fileList
+				.FindAllClojureFiles()
+				.CreateScriptToLoadFilesIntoRepl());
+		}
+
+		public void ChangeNamespace(string newNamespace)
+		{
+			WriteInvisibly("(in-ns '" + newNamespace + ")");
 		}
 	}
 }

@@ -88,7 +88,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repl\History.cs" />
     <Compile Include="Repl\InputKeyHandler.cs" />
-    <Compile Include="Repl\Operations\ChangeReplNamespace.cs" />
     <Compile Include="Repl\Operations\ReplExtensions.cs" />
     <Compile Include="Repl\Operations\StartReplUsingProjectVersion.cs" />
     <Compile Include="IO\Process\ProcessOutputReader.cs" />
@@ -96,7 +95,7 @@
     <Compile Include="Repl\ReplState.cs" />
     <Compile Include="Repl\ReplToolWindow.cs" />
     <Compile Include="Repl\ReplUserInterfaceFactory.cs" />
-    <Compile Include="Repl\ReplWriter.cs" />
+    <Compile Include="Repl\Repl.cs" />
     <Compile Include="Repl\TextBoxWriter.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="IO\Compression\CompressionExtensions.cs" />

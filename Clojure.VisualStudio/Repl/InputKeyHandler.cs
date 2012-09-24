@@ -10,13 +10,13 @@ namespace Clojure.VisualStudio.Repl
 		private readonly TextBox _interactiveTextBox;
 		private readonly KeyboardExaminer _keyboardExaminer;
 		private readonly Entity<ReplState> _replEntity;
-		private readonly ReplWriter _replWriter;
+		private readonly Repl _repl;
 
-		public InputKeyHandler(KeyboardExaminer keyboardExaminer, Entity<ReplState> replEntity, TextBox interactiveTextBox, ReplWriter replWriter)
+		public InputKeyHandler(KeyboardExaminer keyboardExaminer, Entity<ReplState> replEntity, TextBox interactiveTextBox, Repl repl)
 		{
 			_keyboardExaminer = keyboardExaminer;
 			_replEntity = replEntity;
-			_replWriter = replWriter;
+			_repl = repl;
 			_interactiveTextBox = interactiveTextBox;
 		}
 
@@ -30,7 +30,7 @@ namespace Clojure.VisualStudio.Repl
 			if (e.Key == Key.Enter && !_keyboardExaminer.IsShiftDown() && _interactiveTextBox.CaretIndex >= _replEntity.CurrentState.PromptPosition)
 			{
 				string userInput = _interactiveTextBox.Text.Substring(_replEntity.CurrentState.PromptPosition);
-				_replWriter.WriteExpressionToRepl(userInput);
+				_repl.WriteExpressionToRepl(userInput);
 				return;
 			}
 

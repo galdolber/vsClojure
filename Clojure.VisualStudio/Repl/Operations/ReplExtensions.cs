@@ -23,9 +23,14 @@ namespace Clojure.VisualStudio.Repl.Operations
 			return fileList.Where(p => p.ToLower().EndsWith(".clj"));
 		}
 
-		public static void WriteInvisiblyTo(this string expresion, ReplWriter writer)
+		public static void WriteInvisiblyTo(this string expresion, Repl repl)
 		{
-			writer.WriteBehindTheSceneExpressionToRepl(expresion);
+			repl.WriteInvisibly(expresion);
+		}
+
+		public static void LoadFilesInto(this List<string> fileList, Repl repl)
+		{
+			repl.LoadFiles(fileList);
 		}
 	}
 }
