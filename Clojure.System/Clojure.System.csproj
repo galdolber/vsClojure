@@ -57,6 +57,7 @@
     <Compile Include="IO\FileSystem\IFileSystemWriter.cs" />
     <Compile Include="IO\FileSystem\RelativePathFileSystemWriter.cs" />
     <Compile Include="IO\Keyboard\KeyboardExaminer.cs" />
+    <Compile Include="IO\Streams\AsynchronousAggregateStreamReader.cs" />
     <Compile Include="IO\Streams\StreamBuffer.cs" />
     <Compile Include="IO\Streams\StreamExtensions.cs" />
     <Compile Include="IProvider.cs" />

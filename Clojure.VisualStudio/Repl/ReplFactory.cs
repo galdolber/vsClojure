@@ -9,7 +9,6 @@ using Clojure.System.IO.Keyboard;
 using Clojure.System.IO.Streams;
 using Clojure.System.State;
 using Clojure.VisualStudio.Editor;
-using Clojure.VisualStudio.IO.Process;
 using Clojure.VisualStudio.Menus;
 using Clojure.VisualStudio.Repl.Operations;
 using EnvDTE;
@@ -91,8 +90,12 @@ namespace Clojure.VisualStudio.Repl
 		{
 			var standardOutputStream = new StreamBuffer();
 			var standardErrorStream = new StreamBuffer();
-			var processOutputReader = new ProcessOutputReader(new TextBoxWriter(replTextBox, replEntity), standardOutputStream, standardErrorStream);
-			var outputReaderThread = new Thread(processOutputReader.StartMarshallingTextFromReplToTextBox);
+			var textboxWriter = new TextBoxWriter(replTextBox, replEntity);
+
+			var processStreamReader = new AsynchronousAggregateStreamReader(standardOutputStream, standardErrorStream);
+			processStreamReader.DataReceived += textboxWriter.WriteToTextBox;
+
+			var outputReaderThread = new Thread(processStreamReader.StartReading);
 			var outputBufferStreamThread = new Thread(() => standardOutputStream.ReadStream(replProcess.StandardOutput.BaseStream));
 			var errorBufferStreamThread = new Thread(() => standardOutputStream.ReadStream(replProcess.StandardError.BaseStream));
 
