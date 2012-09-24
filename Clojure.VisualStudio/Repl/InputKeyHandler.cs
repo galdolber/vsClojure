@@ -30,7 +30,7 @@ namespace Clojure.VisualStudio.Repl
 			if (e.Key == Key.Enter && !_keyboardExaminer.IsShiftDown() && _interactiveTextBox.CaretIndex >= _replEntity.CurrentState.PromptPosition)
 			{
 				string userInput = _interactiveTextBox.Text.Substring(_replEntity.CurrentState.PromptPosition);
-				_repl.WriteExpressionToRepl(userInput);
+				_repl.Write(userInput);
 				return;
 			}
 

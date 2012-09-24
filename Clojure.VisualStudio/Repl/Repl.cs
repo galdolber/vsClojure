@@ -19,12 +19,12 @@ namespace Clojure.VisualStudio.Repl
 
 		public void WriteInvisibly(string expression)
 		{
-			WriteExpressionToRepl(expression);
+			Write(expression);
 			_textBoxWriter.WriteToTextBox("\r\n");
 			if (OnInvisibleWrite != null) OnInvisibleWrite();
 		}
 
-		public void WriteExpressionToRepl(string expression)
+		public void Write(string expression)
 		{
 			_process.StandardInput.WriteLine(expression);
 		}
