@@ -68,14 +68,18 @@
     <Compile Include="Parsing\TokenType.cs" />
     <Compile Include="Parsing\TokenTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="State\Entity.cs" />
-    <Compile Include="String\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repl\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Clojure.System\Clojure.System.csproj">
+      <Project>{FF930F13-4053-42BC-AB5B-D38D76723068}</Project>
+      <Name>Clojure.System</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

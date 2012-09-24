@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Clojure.Code.Editing.PartialUpdate;
 using Clojure.Code.Editing.TextBuffer;
 using Clojure.Code.Parsing;
-using Clojure.Code.State;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
+using Clojure.System.State;
 
 namespace Clojure.Code.Tests.Editing.PartialUpdate
 {

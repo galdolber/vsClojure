@@ -88,9 +88,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repl\History.cs" />
     <Compile Include="Repl\InputKeyHandler.cs" />
-    <Compile Include="Repl\Operations\ReplExtensions.cs" />
+    <Compile Include="Repl\ProcessOutputReader.cs" />
+    <Compile Include="Repl\ReplExtensions.cs" />
     <Compile Include="Repl\Operations\StartReplUsingProjectVersion.cs" />
-    <Compile Include="IO\Process\ProcessOutputReader.cs" />
     <Compile Include="Repl\ReplFactory.cs" />
     <Compile Include="Repl\ReplState.cs" />
     <Compile Include="Repl\ReplToolWindow.cs" />
@@ -98,17 +98,8 @@
     <Compile Include="Repl\Repl.cs" />
     <Compile Include="Repl\TextBoxWriter.cs" />
     <Compile Include="Guids.cs" />
-    <Compile Include="IO\Compression\CompressionExtensions.cs" />
-    <Compile Include="IO\FileSystem\FileSystemExtensions.cs" />
-    <Compile Include="IO\FileSystem\IFileSystemWriter.cs" />
-    <Compile Include="IO\FileSystem\RelativePathFileSystemWriter.cs" />
-    <Compile Include="IO\Streams\StreamExtensions.cs" />
-    <Compile Include="Utilities\IProvider.cs" />
-    <Compile Include="IO\Keyboard\KeyboardExaminer.cs" />
     <Compile Include="Menus\MenuCommandListHider.cs" />
     <Compile Include="Menus\MenuCommandListWirer.cs" />
-    <Compile Include="IO\Streams\StreamBuffer.cs" />
-    <Compile Include="Utilities\ListExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Project\Resources\Project.resx">
@@ -168,6 +159,10 @@
     <ProjectReference Include="..\Clojure.Code\Clojure.Code.csproj">
       <Project>{7D8A24DE-8AC0-4ACC-8F29-C48F7061CCB0}</Project>
       <Name>Clojure.Code</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Clojure.System\Clojure.System.csproj">
+      <Project>{FF930F13-4053-42BC-AB5B-D38D76723068}</Project>
+      <Name>Clojure.System</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

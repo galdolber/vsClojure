@@ -4,11 +4,12 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Windows.Controls;
 using Clojure.Code.Parsing;
-using Clojure.Code.State;
+using Clojure.System.Collections;
+using Clojure.System.IO.Keyboard;
+using Clojure.System.IO.Streams;
+using Clojure.System.State;
 using Clojure.VisualStudio.Editor;
-using Clojure.VisualStudio.IO.Keyboard;
 using Clojure.VisualStudio.IO.Process;
-using Clojure.VisualStudio.IO.Streams;
 using Clojure.VisualStudio.Menus;
 using Clojure.VisualStudio.Repl.Operations;
 using EnvDTE;
@@ -21,7 +22,6 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Process = System.Diagnostics.Process;
 using Thread = System.Threading.Thread;
 using Clojure.VisualStudio.Project.FileSystem;
-using Clojure.VisualStudio.Utilities;
 
 namespace Clojure.VisualStudio.Repl
 {

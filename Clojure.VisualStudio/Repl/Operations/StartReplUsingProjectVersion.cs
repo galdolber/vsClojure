@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Clojure.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Clojure.VisualStudio.Repl.Operations

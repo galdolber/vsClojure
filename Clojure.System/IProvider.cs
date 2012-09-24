@@ -1,4 +1,4 @@
-﻿namespace Clojure.VisualStudio.Utilities
+﻿namespace Clojure.System
 {
 	public interface IProvider<T>
 	{

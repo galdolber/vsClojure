@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using Clojure.VisualStudio.IO.Streams;
+using Clojure.System.IO.Streams;
 using Clojure.VisualStudio.Repl;
 
 namespace Clojure.VisualStudio.IO.Process

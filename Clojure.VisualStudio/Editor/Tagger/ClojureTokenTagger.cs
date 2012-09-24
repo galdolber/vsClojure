@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Clojure.Code.Editing.PartialUpdate;
 using Clojure.Code.Parsing;
-using Clojure.Code.State;
+using Clojure.System.State;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 

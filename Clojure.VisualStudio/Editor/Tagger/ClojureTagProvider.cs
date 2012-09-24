@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using Clojure.Code.Editing.PartialUpdate;
 using Clojure.Code.Parsing;
-using Clojure.Code.State;
+using Clojure.System.State;
 using Clojure.VisualStudio.Editor.InputHandling;
 using Clojure.VisualStudio.Editor.TextBuffer;
 using Microsoft.VisualStudio.Text;

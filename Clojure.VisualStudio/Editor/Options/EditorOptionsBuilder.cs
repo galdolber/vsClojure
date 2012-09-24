@@ -1,4 +1,4 @@
-﻿using Clojure.VisualStudio.Utilities;
+﻿using Clojure.System;
 using Microsoft.VisualStudio.Text.Editor;
 
 namespace Clojure.VisualStudio.Editor.Options

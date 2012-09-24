@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Threading;
-using Clojure.Code.State;
+using Clojure.System.State;
 
 namespace Clojure.VisualStudio.Repl
 {

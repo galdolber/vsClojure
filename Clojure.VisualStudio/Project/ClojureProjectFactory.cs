@@ -45,8 +45,10 @@ namespace Clojure.VisualStudio.Project
 		/// <returns></returns>
 		protected override ProjectNode CreateProject()
 		{
-			ClojureProjectNode project = new ClojureProjectNode(this.package);
-			project.SetSite((IServiceProvider)((System.IServiceProvider)this.package).GetService(typeof(IServiceProvider)));
+			var project = new ClojureProjectNode(this.package);
+			var packageServiceProvider = (global::System.IServiceProvider) package;
+			var provider = packageServiceProvider.GetService(typeof (IServiceProvider)) as IServiceProvider;
+			project.SetSite(provider);
 			return project;
 		}
 		#endregion

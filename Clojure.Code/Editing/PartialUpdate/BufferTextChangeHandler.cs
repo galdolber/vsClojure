@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Clojure.Code.Editing.TextBuffer;
 using Clojure.Code.Parsing;
-using Clojure.Code.State;
+using Clojure.System.State;
 
 namespace Clojure.Code.Editing.PartialUpdate
 {

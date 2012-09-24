@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Clojure.Code.State;
-using Clojure.VisualStudio.IO.Keyboard;
+using Clojure.System.IO.Keyboard;
+using Clojure.System.State;
 
 namespace Clojure.VisualStudio.Repl
 {

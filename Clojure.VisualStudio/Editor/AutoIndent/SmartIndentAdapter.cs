@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Clojure.Code.Editing.Indenting;
 using Clojure.Code.Parsing;
-using Clojure.Code.State;
+using Clojure.System;
+using Clojure.System.State;
 using Clojure.VisualStudio.Editor.Options;
-using Clojure.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 

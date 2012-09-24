@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Clojure.VisualStudio.IO.Streams
+namespace Clojure.System.IO.Streams
 {
 	public static class StreamExtensions
 	{

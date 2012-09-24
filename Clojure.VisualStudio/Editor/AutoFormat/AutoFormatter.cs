@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Clojure.Code.Editing.TextBuffer;
 using Clojure.Code.Parsing;
-using Clojure.Code.State;
+using Clojure.System.State;
 using Clojure.VisualStudio.Editor.Options;
 
 namespace Clojure.VisualStudio.Editor.AutoFormat

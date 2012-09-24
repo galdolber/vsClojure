@@ -1,4 +1,4 @@
-﻿namespace Clojure.Code.String
+﻿namespace Clojure.System.String
 {
 	public static class StringExtensions
 	{

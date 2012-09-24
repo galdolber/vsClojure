@@ -1,4 +1,4 @@
-﻿namespace Clojure.Code.State
+﻿namespace Clojure.System.State
 {
 	public class Entity<T>
 	{
