@@ -10,7 +10,6 @@ using Clojure.VisualStudio.IO.Keyboard;
 using Clojure.VisualStudio.IO.Process;
 using Clojure.VisualStudio.IO.Streams;
 using Clojure.VisualStudio.Menus;
-using Clojure.VisualStudio.Project.Hierarchy;
 using Clojure.VisualStudio.Repl.Operations;
 using EnvDTE;
 using EnvDTE80;
@@ -21,6 +20,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Process = System.Diagnostics.Process;
 using Thread = System.Threading.Thread;
+using Clojure.VisualStudio.Project.FileSystem;
+using Clojure.VisualStudio.Utilities;
 
 namespace Clojure.VisualStudio.Repl
 {
@@ -118,28 +119,29 @@ namespace Clojure.VisualStudio.Repl
 		private List<MenuCommand> CreateMenuCommands(Process replProcess, TextBox interactiveText, Entity<ReplState> replEntity)
 		{
 			var dte = (DTE2) _serviceProvider.GetService(typeof (DTE));
+			var replWriter = new ReplWriter(replProcess, new TextBoxWriter(interactiveText, replEntity));
+			replWriter.OnInvisibleWrite += () => _replToolWindow.ShowNoActivate();
 
-			var loadSelectedFilesIntoRepl =
-				new LoadFilesIntoRepl(
-					new ReplWriter(replProcess, new TextBoxWriter(interactiveText, replEntity)),
-					new SelectedFilesProvider(dte.ToolWindows.SolutionExplorer),
-					_replToolWindow);
+			Action loadSelectedFilesIntoRepl =
+				() => dte.ToolWindows.SolutionExplorer.GetSelectedFiles()
+				      	.FindAllClojureFiles()
+				      	.CreateScriptToLoadFilesIntoRepl()
+				      	.WriteInvisiblyTo(replWriter);
 
-			var loadSelectedProjectIntoRepl =
-				new LoadFilesIntoRepl(
-					new ReplWriter(replProcess, new TextBoxWriter(interactiveText, replEntity)),
-					new ProjectFilesProvider(
-						new SelectedProjectProvider(dte.Solution, dte.ToolWindows.SolutionExplorer)),
-					_replToolWindow);
+			Action loadSelectedProjectIntoRepl =
+				() => dte.ToolWindows.SolutionExplorer.GetSelectedProject()
+					.GetAllFiles()
+					.FindAllClojureFiles()
+					.CreateScriptToLoadFilesIntoRepl()
+					.WriteInvisiblyTo(replWriter);
 
-			var loadActiveFileIntoRepl =
-				new LoadFilesIntoRepl(
-					new ReplWriter(replProcess, new TextBoxWriter(interactiveText, replEntity)),
-					new ActiveFileProvider(dte),
-					_replToolWindow);
+			Action loadActiveFileIntoRepl =
+				() => dte.ActiveDocument.FullName.SingletonAsList()
+						.FindAllClojureFiles()
+				      	.CreateScriptToLoadFilesIntoRepl()
+				      	.WriteInvisiblyTo(replWriter);
 
 			var componentModel = (IComponentModel) _serviceProvider.GetService(typeof (SComponentModel));
-
 			var namespaceParser = new NamespaceParser(NamespaceParser.NamespaceSymbols);
 
 			var activeTextBufferStateProvider =
@@ -151,9 +153,9 @@ namespace Clojure.VisualStudio.Repl
 				new ChangeReplNamespace(new ReplWriter(replProcess, new TextBoxWriter(interactiveText, replEntity)));
 
 			var menuCommands = new List<MenuCommand>();
-			menuCommands.Add(new MenuCommand((sender, args) => loadSelectedProjectIntoRepl.Execute(), new CommandID(Guids.GuidClojureExtensionCmdSet, 11)));
-			menuCommands.Add(new MenuCommand((sender, args) => loadSelectedFilesIntoRepl.Execute(), new CommandID(Guids.GuidClojureExtensionCmdSet, 12)));
-			menuCommands.Add(new MenuCommand((sender, args) => loadActiveFileIntoRepl.Execute(), new CommandID(Guids.GuidClojureExtensionCmdSet, 13)));
+			menuCommands.Add(new MenuCommand((sender, args) => loadSelectedProjectIntoRepl(), new CommandID(Guids.GuidClojureExtensionCmdSet, 11)));
+			menuCommands.Add(new MenuCommand((sender, args) => loadSelectedFilesIntoRepl(), new CommandID(Guids.GuidClojureExtensionCmdSet, 12)));
+			menuCommands.Add(new MenuCommand((sender, args) => loadActiveFileIntoRepl(), new CommandID(Guids.GuidClojureExtensionCmdSet, 13)));
 			menuCommands.Add(new MenuCommand((sender, args) => changeReplNamespace.Execute(namespaceParser.Execute(activeTextBufferStateProvider.Get())), new CommandID(Guids.GuidClojureExtensionCmdSet, 14)));
 			menuCommands.Add(new MenuCommand((sender, args) => new ReplWriter(replProcess, new TextBoxWriter(interactiveText, replEntity)).WriteBehindTheSceneExpressionToRepl((string)dte.ActiveDocument.Selection), new CommandID(Guids.GuidClojureExtensionCmdSet, 15)));
 			return menuCommands;

@@ -28,7 +28,6 @@ using Clojure.VisualStudio.IO.Compression;
 using Clojure.VisualStudio.Menus;
 using Clojure.VisualStudio.Project;
 using Clojure.VisualStudio.Project.Configuration;
-using Clojure.VisualStudio.Project.Hierarchy;
 using Clojure.VisualStudio.Project.Launching;
 using Clojure.VisualStudio.Repl;
 using Clojure.VisualStudio.Repl.Operations;
@@ -42,6 +41,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Win32;
+using Clojure.VisualStudio.Project.FileSystem;
 
 namespace Clojure.VisualStudio
 {
@@ -191,7 +191,7 @@ namespace Clojure.VisualStudio
 			ReplToolWindow replToolWindow = (ReplToolWindow) FindToolWindow(typeof (ReplToolWindow), 0, true);
 			IVsWindowFrame replToolWindowFrame = (IVsWindowFrame) replToolWindow.Frame;
 			DTE2 dte = (DTE2) GetService(typeof (DTE));
-			IProvider<EnvDTE.Project> projectProvider = new SelectedProjectProvider(dte.Solution, dte.ToolWindows.SolutionExplorer);
+			Func<EnvDTE.Project> getSelectedProjectFunc = () => dte.ToolWindows.SolutionExplorer.GetSelectedProject();
 
 			menuCommandService.AddCommand(
 				new MenuCommand(
@@ -199,8 +199,8 @@ namespace Clojure.VisualStudio
 						new StartReplUsingProjectVersion(
 							new ReplFactory(replToolWindow.TabControl, replToolWindowFrame, this),
 							replToolWindowFrame,
-							() => new LaunchParametersBuilder((ProjectNode) projectProvider.Get().Object).Get().FrameworkPath,
-							new SelectedProjectProvider(dte.Solution, dte.ToolWindows.SolutionExplorer)).Execute(),
+							() => new LaunchParametersBuilder((ProjectNode)getSelectedProjectFunc().Object).Get().FrameworkPath,
+							getSelectedProjectFunc).Execute(),
 					new CommandID(Guids.GuidClojureExtensionCmdSet, 10)));
 		}
 

@@ -77,9 +77,7 @@
     <Compile Include="Project\Configuration\GeneralPropertyPage.cs" />
     <Compile Include="Project\Configuration\SettingsStore.cs" />
     <Compile Include="Project\Configuration\SettingsStoreProvider.cs" />
-    <Compile Include="Project\Hierarchy\ProjectFilesProvider.cs" />
-    <Compile Include="Project\Hierarchy\SelectedFilesProvider.cs" />
-    <Compile Include="Project\Hierarchy\SelectedProjectProvider.cs" />
+    <Compile Include="Project\FileSystem\UIHierarchyExtensions.cs" />
     <Compile Include="Project\Launching\LaunchParameters.cs" />
     <Compile Include="Project\Launching\LaunchParametersBuilder.cs" />
     <Compile Include="Project\Launching\LaunchParametersValidator.cs" />
@@ -90,9 +88,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repl\History.cs" />
     <Compile Include="Repl\InputKeyHandler.cs" />
-    <Compile Include="Repl\Operations\ActiveFileProvider.cs" />
     <Compile Include="Repl\Operations\ChangeReplNamespace.cs" />
-    <Compile Include="Repl\Operations\LoadFilesIntoRepl.cs" />
+    <Compile Include="Repl\Operations\ReplExtensions.cs" />
     <Compile Include="Repl\Operations\StartReplUsingProjectVersion.cs" />
     <Compile Include="IO\Process\ProcessOutputReader.cs" />
     <Compile Include="Repl\ReplFactory.cs" />
@@ -112,6 +109,7 @@
     <Compile Include="Menus\MenuCommandListHider.cs" />
     <Compile Include="Menus\MenuCommandListWirer.cs" />
     <Compile Include="IO\Streams\StreamBuffer.cs" />
+    <Compile Include="Utilities\ListExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Project\Resources\Project.resx">

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Clojure.VisualStudio.Repl
 {
@@ -6,6 +7,7 @@ namespace Clojure.VisualStudio.Repl
 	{
 		private readonly Process _process;
 		private readonly TextBoxWriter _textBoxWriter;
+		public event Action OnInvisibleWrite;
 
 		public ReplWriter(Process process, TextBoxWriter textBoxWriter)
 		{
@@ -17,6 +19,7 @@ namespace Clojure.VisualStudio.Repl
 		{
 			WriteExpressionToRepl(expression);
 			_textBoxWriter.WriteToTextBox("\r\n");
+			if (OnInvisibleWrite != null) OnInvisibleWrite();
 		}
 
 		public void WriteExpressionToRepl(string expression)

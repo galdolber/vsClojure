@@ -10,13 +10,13 @@ namespace Clojure.VisualStudio.Repl.Operations
 		private readonly ReplFactory _replFactory;
 		private readonly IVsWindowFrame _toolWindowFrame;
 		private readonly Func<string> _frameworkProvider;
-		private readonly IProvider<EnvDTE.Project> _selectedProjectProvider;
+		private readonly Func<EnvDTE.Project> _selectedProjectProvider;
 
 		public StartReplUsingProjectVersion(
 			ReplFactory replFactory,
 			IVsWindowFrame toolWindowFrame,
 			Func<string> frameworkProvider,
-			IProvider<EnvDTE.Project> selectedProjectProvider)
+			Func<EnvDTE.Project> selectedProjectProvider)
 		{
 			_frameworkProvider = frameworkProvider;
 			_selectedProjectProvider = selectedProjectProvider;
@@ -26,7 +26,7 @@ namespace Clojure.VisualStudio.Repl.Operations
 
 		public void Execute()
 		{
-			_replFactory.CreateRepl(_frameworkProvider(), Path.GetDirectoryName(_selectedProjectProvider.Get().FullName));
+			_replFactory.CreateRepl(_frameworkProvider(), Path.GetDirectoryName(_selectedProjectProvider().FullName));
 			_toolWindowFrame.Show();
 		}
 	}
