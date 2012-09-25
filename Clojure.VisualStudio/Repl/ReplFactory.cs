@@ -47,10 +47,11 @@ namespace Clojure.VisualStudio.Repl
 			var tabItem = ReplUserInterfaceFactory.CreateTabItem(headerPanel, grid);
 			var replProcess = CreateReplProcess(replPath, projectPath);
 			var replEntity = new Entity<ReplState> {CurrentState = new ReplState()};
+			var repl = new Repl(replProcess, new TextBoxWriter(interactiveText, replEntity));
 
-			WireUpTheTextBoxInputToTheReplProcess(interactiveText, replProcess, replEntity);
+			WireUpTheTextBoxInputToTheReplProcess(repl, interactiveText, replEntity);
 			WireUpTheOutputOfTheReplProcessToTheTextBox(interactiveText, replProcess, replEntity);
-			WireUpTheReplEditorCommandsToTheEditor(interactiveText, replProcess, replEntity, tabItem);
+			WireUpTheReplEditorCommandsToTheEditor(repl, tabItem);
 
 			closeButton.Click +=
 				(o, e) =>
@@ -63,22 +64,22 @@ namespace Clojure.VisualStudio.Repl
 			_replManager.SelectedItem = tabItem;
 		}
 
-		private void WireUpTheReplEditorCommandsToTheEditor(TextBox replTextBox, Process replProcess, Entity<ReplState> replEntity, TabItem tabItem)
+		private void WireUpTheReplEditorCommandsToTheEditor(Repl repl, TabItem tabItem)
 		{
 			var dte = (DTE2)_serviceProvider.GetService(typeof(DTE));
 
 			var menuCommandListWirer = new MenuCommandListWirer(
 				(OleMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService)),
-				CreateMenuCommands(replProcess, replTextBox, replEntity),
+				CreateMenuCommands(repl),
 				() => dte.ActiveDocument != null && dte.ActiveDocument.FullName.ToLower().EndsWith(".clj") && _replManager.SelectedItem == tabItem);
 
 			dte.Events.WindowEvents.WindowActivated += (o, e) => menuCommandListWirer.TryToShowMenuCommands();
 			_replManager.SelectionChanged += (sender, eventData) => menuCommandListWirer.TryToShowMenuCommands();
 		}
 
-		private static void WireUpTheTextBoxInputToTheReplProcess(TextBox replTextBox, Process replProcess, Entity<ReplState> replEntity)
+		private static void WireUpTheTextBoxInputToTheReplProcess(Repl repl, TextBox replTextBox, Entity<ReplState> replEntity)
 		{
-			var inputKeyHandler = new InputKeyHandler(new KeyboardExaminer(), replEntity, replTextBox, new Repl(replProcess, new TextBoxWriter(replTextBox, replEntity)));
+			var inputKeyHandler = new InputKeyHandler(new KeyboardExaminer(), replEntity, replTextBox, repl);
 			var history = new History(new KeyboardExaminer(), replEntity, replTextBox);
 
 			replTextBox.PreviewKeyDown += history.PreviewKeyDown;
@@ -119,10 +120,9 @@ namespace Clojure.VisualStudio.Repl
 				};
 		}
 
-		private List<MenuCommand> CreateMenuCommands(Process replProcess, TextBox interactiveText, Entity<ReplState> replEntity)
+		private List<MenuCommand> CreateMenuCommands(Repl repl)
 		{
 			var dte = (DTE2) _serviceProvider.GetService(typeof (DTE));
-			var repl = new Repl(replProcess, new TextBoxWriter(interactiveText, replEntity));
 			repl.OnInvisibleWrite += () => _replToolWindow.ShowNoActivate();
 
 			Action loadSelectedFilesIntoRepl =
