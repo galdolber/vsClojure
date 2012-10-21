@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace Clojure.System.IO.Keyboard
 {
@@ -16,7 +17,9 @@ namespace Clojure.System.IO.Keyboard
 
 		public bool IsArrowKey(Key key)
 		{
-			return key == Key.Up || key == Key.Down || key == Key.Left || key == Key.Right;
+			return ArrowKeys.Contains(key);
 		}
+
+		public static readonly List<Key> ArrowKeys = new List<Key>() { Key.Up, Key.Down, Key.Left, Key.Right };
 	}
 }

@@ -1,32 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Clojure.VisualStudio.Repl.Operations;
+using Clojure.System.CommandWindow;
+using Clojure.System.Diagnostics;
 
-namespace Clojure.VisualStudio.Repl
+namespace Clojure.Code.Repl
 {
-	public class Repl
+	public class ExternalProcessRepl : IRepl
 	{
-		private readonly Process _process;
-		private readonly TextBoxWriter _textBoxWriter;
+		private readonly IProcess _process;
+		private readonly ICommandWindow _commandWindow;
 		public event Action OnInvisibleWrite;
 
-		public Repl(Process process, TextBoxWriter textBoxWriter)
+		public ExternalProcessRepl(IProcess process, ICommandWindow commandWindow)
 		{
 			_process = process;
-			_textBoxWriter = textBoxWriter;
+			_commandWindow = commandWindow;
+			_process.TextReceived += commandWindow.Write;
 		}
 
 		public void WriteInvisibly(string expression)
 		{
 			Write(expression);
-			_textBoxWriter.WriteToTextBox("\r\n");
+			_commandWindow.WriteLine();
 			if (OnInvisibleWrite != null) OnInvisibleWrite();
 		}
 
 		public void Write(string expression)
 		{
-			_process.StandardInput.WriteLine(expression);
+			_process.Write(expression);
 		}
 
 		public void LoadFiles(List<string> fileList)
@@ -39,6 +40,11 @@ namespace Clojure.VisualStudio.Repl
 		public void ChangeNamespace(string newNamespace)
 		{
 			WriteInvisibly("(in-ns '" + newNamespace + ")");
+		}
+
+		public void Stop()
+		{
+			_process.Kill();
 		}
 	}
 }

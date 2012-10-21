@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Clojure.System.Diagnostics;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Clojure.VisualStudio.Repl.Operations
@@ -25,7 +26,11 @@ namespace Clojure.VisualStudio.Repl.Operations
 
 		public void Execute()
 		{
-			_replFactory.CreateRepl(_frameworkProvider(), Path.GetDirectoryName(_selectedProjectProvider().FullName));
+			var process = new ConsoleProcess(
+				_frameworkProvider(),
+				Path.GetDirectoryName(_selectedProjectProvider().FullName));
+
+			_replFactory.CreateRepl(process);
 			_toolWindowFrame.Show();
 		}
 	}

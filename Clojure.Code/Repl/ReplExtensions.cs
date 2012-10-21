@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Clojure.System.CommandWindow;
+using Clojure.System.CommandWindow.EventHandlers;
 
-namespace Clojure.VisualStudio.Repl
+namespace Clojure.Code.Repl
 {
 	public static class ReplExtensions
 	{
@@ -23,12 +25,12 @@ namespace Clojure.VisualStudio.Repl
 			return fileList.Where(p => p.ToLower().EndsWith(".clj"));
 		}
 
-		public static void WriteInvisiblyTo(this string expresion, Repl repl)
+		public static void WriteInvisiblyTo(this string expresion, IRepl repl)
 		{
 			repl.WriteInvisibly(expresion);
 		}
 
-		public static void LoadFilesInto(this List<string> fileList, Repl repl)
+		public static void LoadFilesInto(this List<string> fileList, IRepl repl)
 		{
 			repl.LoadFiles(fileList);
 		}
