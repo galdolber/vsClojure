@@ -7,6 +7,8 @@ using Clojure.Code.Parsing;
 using Clojure.Code.Repl;
 using Clojure.System.Collections;
 using Clojure.System.CommandWindow;
+using Clojure.System.CommandWindow.EventHandlers;
+using Clojure.System.CommandWindow.Presentation;
 using Clojure.System.Diagnostics;
 using Clojure.VisualStudio.Editor;
 using Clojure.VisualStudio.Menus;
@@ -42,8 +44,17 @@ namespace Clojure.VisualStudio.Repl
 			var grid = ReplUserInterfaceFactory.CreateTextBoxGrid(interactiveText);
 			var headerPanel = ReplUserInterfaceFactory.CreateHeaderPanel(name, closeButton);
 			var tabItem = ReplUserInterfaceFactory.CreateTabItem(headerPanel, grid);
-			var commandWindow = new CommandTextBox(interactiveText, new List<IKeyEventHandler>());
-			var repl = new ExternalProcessRepl(replProcess, commandWindow);
+
+			var keyEventHandlers = new List<IKeyEventHandler>();
+			var commandWindow = new CommandTextBox(interactiveText, keyEventHandlers);
+			keyEventHandlers.PreventEditingBeforePrompt();
+			commandWindow.AddHistoryKeyHandlers(keyEventHandlers);
+			commandWindow.AddTextEditingKeyHandlers(keyEventHandlers);
+			commandWindow.AddSubmitKeyHandlers(keyEventHandlers);
+			replProcess.TextReceived += commandWindow.Write;
+
+			var repl = new ExternalProcessRepl(replProcess);
+			repl.AddSubmitKeyHandlers(keyEventHandlers);
 
 			WireUpTheReplEditorCommandsToTheEditor(repl, tabItem);
 
@@ -52,6 +63,7 @@ namespace Clojure.VisualStudio.Repl
 
 			_replManager.Items.Add(tabItem);
 			_replManager.SelectedItem = tabItem;
+			repl.Start();
 		}
 
 		private void WireUpTheReplEditorCommandsToTheEditor(IRepl repl, TabItem tabItem)
@@ -71,7 +83,7 @@ namespace Clojure.VisualStudio.Repl
 		private List<MenuCommand> CreateMenuCommands(IRepl repl)
 		{
 			var dte = (DTE2) _serviceProvider.GetService(typeof (DTE));
-			repl.OnInvisibleWrite += () => _replToolWindow.ShowNoActivate();
+			repl.OnClientWrite += () => _replToolWindow.ShowNoActivate();
 
 			Action loadSelectedFilesIntoRepl =
 				() => dte.ToolWindows.SolutionExplorer.GetSelectedFiles().LoadFilesInto(repl);
@@ -95,7 +107,7 @@ namespace Clojure.VisualStudio.Repl
 			menuCommands.Add(new MenuCommand((sender, args) => loadSelectedFilesIntoRepl(), new CommandID(Guids.GuidClojureExtensionCmdSet, 12)));
 			menuCommands.Add(new MenuCommand((sender, args) => loadActiveFileIntoRepl(), new CommandID(Guids.GuidClojureExtensionCmdSet, 13)));
 			menuCommands.Add(new MenuCommand((sender, args) => repl.ChangeNamespace(namespaceParser.Execute(activeTextBufferStateProvider.Get())), new CommandID(Guids.GuidClojureExtensionCmdSet, 14)));
-			menuCommands.Add(new MenuCommand((sender, args) => repl.WriteInvisibly((string) dte.ActiveDocument.Selection), new CommandID(Guids.GuidClojureExtensionCmdSet, 15)));
+			menuCommands.Add(new MenuCommand((sender, args) => repl.Write((string) dte.ActiveDocument.Selection), new CommandID(Guids.GuidClojureExtensionCmdSet, 15)));
 			return menuCommands;
 		}
 	}

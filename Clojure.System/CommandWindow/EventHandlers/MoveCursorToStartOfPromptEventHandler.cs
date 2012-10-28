@@ -4,11 +4,11 @@ namespace Clojure.System.CommandWindow.EventHandlers
 {
 	public class MoveCursorToStartOfPromptEventHandler : IKeyEventHandler
 	{
-		private readonly ICommandWindow _commandWindow;
+		private readonly ITextCommandListener _textCommandListener;
 
-		public MoveCursorToStartOfPromptEventHandler(ICommandWindow commandWindow)
+		public MoveCursorToStartOfPromptEventHandler(ITextCommandListener textCommandListener)
 		{
-			_commandWindow = commandWindow;
+			_textCommandListener = textCommandListener;
 		}
 
 		public bool CanHandle(CommandWindowUserEvent commandWindowUserEvent)
@@ -19,7 +19,7 @@ namespace Clojure.System.CommandWindow.EventHandlers
 
 		public void Handle(CommandWindowUserEvent commandWindowUserEvent)
 		{
-			_commandWindow.MoveCursorToStartOfPrompt();
+			_textCommandListener.MoveCursorToStartOfPrompt();
 		}
 	}
 }

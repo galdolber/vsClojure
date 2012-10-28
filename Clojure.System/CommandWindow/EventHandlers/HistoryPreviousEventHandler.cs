@@ -5,21 +5,21 @@ namespace Clojure.System.CommandWindow.EventHandlers
 {
 	public class HistoryPreviousEventHandler : IKeyEventHandler
 	{
-		private readonly List<IHistoryCommandListener> _historyCommandListeners;
+		private readonly IHistoryCommandListener _historyCommandListener;
 
-		public HistoryPreviousEventHandler(List<IHistoryCommandListener> historyCommandListeners)
+		public HistoryPreviousEventHandler(IHistoryCommandListener historyCommandListener)
 		{
-			_historyCommandListeners = historyCommandListeners;
+			_historyCommandListener = historyCommandListener;
 		}
 
 		public bool CanHandle(CommandWindowUserEvent commandWindowUserEvent)
 		{
-			return commandWindowUserEvent.IsCursortAtOrAfterPrompt() && commandWindowUserEvent.KeyPressed == Key.Up && commandWindowUserEvent.ControlDown;
+			return commandWindowUserEvent.IsCursortAtOrAfterPrompt() && commandWindowUserEvent.KeyPressed == Key.Down && commandWindowUserEvent.ControlDown;
 		}
 
 		public void Handle(CommandWindowUserEvent commandWindowUserEvent)
 		{
-			_historyCommandListeners.ForEach(l => l.Previous());
+			_historyCommandListener.Previous();
 		}
 	}
 }

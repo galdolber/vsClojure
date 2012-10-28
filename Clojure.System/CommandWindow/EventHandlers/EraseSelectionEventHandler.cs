@@ -4,11 +4,11 @@ namespace Clojure.System.CommandWindow.EventHandlers
 {
 	public class EraseSelectionEventHandler : IKeyEventHandler
 	{
-		private readonly ICommandWindow _commandWindow;
+		private readonly ITextCommandListener _textCommandListener;
 
-		public EraseSelectionEventHandler(ICommandWindow commandWindow)
+		public EraseSelectionEventHandler(ITextCommandListener textCommandListener)
 		{
-			_commandWindow = commandWindow;
+			_textCommandListener = textCommandListener;
 		}
 
 		public bool CanHandle(CommandWindowUserEvent commandWindowUserEvent)
@@ -18,7 +18,7 @@ namespace Clojure.System.CommandWindow.EventHandlers
 
 		public void Handle(CommandWindowUserEvent commandWindowUserEvent)
 		{
-			_commandWindow.EraseSelection();
+			_textCommandListener.EraseSelection();
 		}
 	}
 }

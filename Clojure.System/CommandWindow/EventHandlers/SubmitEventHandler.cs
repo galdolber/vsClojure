@@ -5,11 +5,11 @@ namespace Clojure.System.CommandWindow.EventHandlers
 {
 	public class SubmitEventHandler : IKeyEventHandler
 	{
-		private readonly List<ISubmitCommandListener> _submitCommandListeners;
+		private readonly ISubmitCommandListener _submitCommandListener;
 
-		public SubmitEventHandler(List<ISubmitCommandListener> submitCommandListeners)
+		public SubmitEventHandler(ISubmitCommandListener submitCommandListener)
 		{
-			_submitCommandListeners = submitCommandListeners;
+			_submitCommandListener = submitCommandListener;
 		}
 
 		public bool CanHandle(CommandWindowUserEvent commandWindowUserEvent)
@@ -19,7 +19,7 @@ namespace Clojure.System.CommandWindow.EventHandlers
 
 		public void Handle(CommandWindowUserEvent commandWindowUserEvent)
 		{
-			_submitCommandListeners.ForEach(l => l.Submit(commandWindowUserEvent.Expression));
+			_submitCommandListener.Submit(commandWindowUserEvent.Expression);
 		}
 	}
 }

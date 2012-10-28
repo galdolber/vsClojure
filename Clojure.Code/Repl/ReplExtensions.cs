@@ -27,7 +27,7 @@ namespace Clojure.Code.Repl
 
 		public static void WriteInvisiblyTo(this string expresion, IRepl repl)
 		{
-			repl.WriteInvisibly(expresion);
+			repl.Write(expresion);
 		}
 
 		public static void LoadFilesInto(this List<string> fileList, IRepl repl)

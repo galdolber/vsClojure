@@ -55,16 +55,18 @@ namespace Clojure.VisualStudio
 	[ProvideAutoLoad(UIContextGuids80.NoSolution)]
 	public sealed class ClojurePackage : ProjectPackage
 	{
-      public const string PackageGuid = "7712178c-977f-45ec-adf6-e38108cc7739";
+        public const string PackageGuid = "7712178c-977f-45ec-adf6-e38108cc7739";
 
 		private ClearableMenuCommandService _thirdPartyEditorCommands;
+	    private DTEEvents _dteEvents;
 
 		protected override void Initialize()
 		{
 			base.Initialize();
 			var dte = (DTE2) GetService(typeof (DTE));
+		    _dteEvents = dte.Events.DTEEvents;
 
-			dte.Events.DTEEvents.OnStartupComplete +=
+            _dteEvents.OnStartupComplete +=
 				() =>
 				{
 					AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainAssemblyResolve;

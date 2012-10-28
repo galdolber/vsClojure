@@ -56,14 +56,15 @@
   <ItemGroup>
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="CommandWindow\EventHandlers\BeforePromptEventHandler.cs" />
-    <Compile Include="CommandWindow\CommandTextBox.cs" />
+    <Compile Include="CommandWindow\Presentation\CommandTextBox.cs" />
     <Compile Include="CommandWindow\CommandWindowUserEvent.cs" />
     <Compile Include="CommandWindow\EventHandlers\EraseSelectionEventHandler.cs" />
+    <Compile Include="CommandWindow\IHistoryEventListener.cs" />
+    <Compile Include="CommandWindow\ITextCommandListener.cs" />
     <Compile Include="CommandWindow\History.cs" />
     <Compile Include="CommandWindow\EventHandlers\HistoryPreviousEventHandler.cs" />
     <Compile Include="CommandWindow\EventHandlers\HistoryNextEventHandler.cs" />
-    <Compile Include="CommandWindow\ICommandWindow.cs" />
-    <Compile Include="CommandWindow\ICommandWindowExtensions.cs" />
+    <Compile Include="CommandWindow\DefaultKeyHandlers.cs" />
     <Compile Include="CommandWindow\IHistoryCommandListener.cs" />
     <Compile Include="CommandWindow\IKeyEventHandler.cs" />
     <Compile Include="CommandWindow\ISubmitCommandListener.cs" />

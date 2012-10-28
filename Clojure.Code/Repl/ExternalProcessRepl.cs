@@ -5,46 +5,47 @@ using Clojure.System.Diagnostics;
 
 namespace Clojure.Code.Repl
 {
-	public class ExternalProcessRepl : IRepl
+	public class ExternalProcessRepl : IRepl, ISubmitCommandListener
 	{
 		private readonly IProcess _process;
-		private readonly ICommandWindow _commandWindow;
-		public event Action OnInvisibleWrite;
+		public event Action OnClientWrite;
 
-		public ExternalProcessRepl(IProcess process, ICommandWindow commandWindow)
+		public ExternalProcessRepl(IProcess process)
 		{
 			_process = process;
-			_commandWindow = commandWindow;
-			_process.TextReceived += commandWindow.Write;
-		}
-
-		public void WriteInvisibly(string expression)
-		{
-			Write(expression);
-			_commandWindow.WriteLine();
-			if (OnInvisibleWrite != null) OnInvisibleWrite();
 		}
 
 		public void Write(string expression)
 		{
 			_process.Write(expression);
+			if (OnClientWrite != null) OnClientWrite();
 		}
 
 		public void LoadFiles(List<string> fileList)
 		{
-			WriteInvisibly(fileList
+			Write(fileList
 				.FindAllClojureFiles()
 				.CreateScriptToLoadFilesIntoRepl());
 		}
 
 		public void ChangeNamespace(string newNamespace)
 		{
-			WriteInvisibly("(in-ns '" + newNamespace + ")");
+			Write("(in-ns '" + newNamespace + ")");
 		}
 
 		public void Stop()
 		{
 			_process.Kill();
+		}
+
+		public void Start()
+		{
+			_process.Start();
+		}
+
+		public void Submit(string expression)
+		{
+			Write(expression + "\r\n");
 		}
 	}
 }

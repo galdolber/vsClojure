@@ -5,8 +5,7 @@ namespace Clojure.Code.Repl
 {
 	public interface IRepl
 	{
-		event Action OnInvisibleWrite;
-		void WriteInvisibly(string expression);
+		event Action OnClientWrite;
 		void Write(string expression);
 		void LoadFiles(List<string> fileList);
 		void ChangeNamespace(string newNamespace);

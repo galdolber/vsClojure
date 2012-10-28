@@ -6,53 +6,44 @@ namespace Clojure.System.CommandWindow
 	{
 		private LinkedListNode<string> _currentlySelectedHistoryItem;
 		private readonly LinkedList<string> _history;
-		private readonly ICommandWindow _commandWindow;
+		private readonly IHistoryEventListener _historyEventListener;
 
-		public History(ICommandWindow commandWindow)
+		public History(IHistoryEventListener historyEventListener)
 		{
 			_history = new LinkedList<string>();
-			_history.AddLast("");
-			_currentlySelectedHistoryItem = _history.First;
-			_commandWindow = commandWindow;
+			_historyEventListener = historyEventListener;
 		}
 
 		public void Submit(string expression)
 		{
-			// If user has something selected in history and they submit it, move it to the front?
-			// Don't submit empty expressions.
-			// Should an empty string always be in the history?
-			// Can I use an empty as the default history item selection?
+            if (!IsFirstInHistory(expression) && !string.IsNullOrEmpty(expression.Trim()))
+			{
+                _history.AddFirst(expression);
+			}
 
-			if (!string.IsNullOrEmpty(expression.Trim()))
-			{
-				_history.AddFirst(expression);
-			}
-			if (_currentlySelectedHistoryItem.Value == expression)
-			{
-				_history.Remove(_currentlySelectedHistoryItem);
-				_history.AddFirst(_currentlySelectedHistoryItem.Value);
-				_currentlySelectedHistoryItem = _history.First;
-			}
+			_currentlySelectedHistoryItem = null;
 		}
+
+        private bool IsFirstInHistory(string expression)
+        {
+            return _history.Count > 0 && _history.First.Value == expression;
+        }
 
 		public void Next()
 		{
-			if (_currentlySelectedHistoryItem.Next != null)
-			{
-				_currentlySelectedHistoryItem = _currentlySelectedHistoryItem.Next;
-			}
-
-			_commandWindow.ReplaceCurrentExpressionWith(_currentlySelectedHistoryItem.Value);
+            if (_history.Count == 0) return;
+			if (_currentlySelectedHistoryItem == null) _currentlySelectedHistoryItem = _history.First;
+			else if (_currentlySelectedHistoryItem.Next == null) return;
+            else _currentlySelectedHistoryItem = _currentlySelectedHistoryItem.Next;
+			_historyEventListener.HistoryItemSelected(_currentlySelectedHistoryItem.Value);
 		}
 
 		public void Previous()
 		{
-			if (_currentlySelectedHistoryItem.Previous != null)
-			{
-				_currentlySelectedHistoryItem = _currentlySelectedHistoryItem.Previous;
-			}
-
-			_commandWindow.ReplaceCurrentExpressionWith(_currentlySelectedHistoryItem.Value);
+			if (_currentlySelectedHistoryItem == null) return;
+			if (_currentlySelectedHistoryItem.Previous == null) return;
+			_currentlySelectedHistoryItem = _currentlySelectedHistoryItem.Previous;
+			_historyEventListener.HistoryItemSelected(_currentlySelectedHistoryItem.Value);
 		}
 	}
 }

@@ -10,7 +10,7 @@ namespace Clojure.System.CommandWindow.EventHandlers
 
 		public bool CanHandle(CommandWindowUserEvent commandWindowUserEvent)
 		{
-			return !commandWindowUserEvent.IsCursortAtOrAfterPrompt() && AllowableNonPromptKeys.Contains(commandWindowUserEvent.KeyPressed);
+			return !commandWindowUserEvent.IsCursortAtOrAfterPrompt() && !AllowableNonPromptKeys.Contains(commandWindowUserEvent.KeyPressed);
 		}
 
 		public void Handle(CommandWindowUserEvent commandWindowUserEvent)
