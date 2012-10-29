@@ -7,8 +7,6 @@ namespace Clojure.Code.Repl
 	{
 		event Action OnClientWrite;
 		void Write(string expression);
-		void LoadFiles(List<string> fileList);
-		void ChangeNamespace(string newNamespace);
 		void Stop();
 	}
 }

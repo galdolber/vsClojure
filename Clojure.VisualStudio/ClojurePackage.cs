@@ -189,20 +189,18 @@ namespace Clojure.VisualStudio
 		private void ShowClojureProjectMenuCommands()
 		{
 			OleMenuCommandService menuCommandService = (OleMenuCommandService) GetService(typeof (IMenuCommandService));
-			ReplToolWindow replToolWindow = (ReplToolWindow) FindToolWindow(typeof (ReplToolWindow), 0, true);
+			ReplToolWindow replToolWindow = (ReplToolWindow) FindToolWindow(typeof (ReplToolWindow), 0, true); 
 			IVsWindowFrame replToolWindowFrame = (IVsWindowFrame) replToolWindow.Frame;
 			DTE2 dte = (DTE2) GetService(typeof (DTE));
 			Func<EnvDTE.Project> getSelectedProjectFunc = () => dte.ToolWindows.SolutionExplorer.GetSelectedProject();
 
-			menuCommandService.AddCommand(
-				new MenuCommand(
-					(sender, args) =>
-						new StartReplUsingProjectVersion(
-							new ReplFactory(replToolWindow.TabControl, replToolWindowFrame, this),
-							replToolWindowFrame,
-							() => new LaunchParametersBuilder((ProjectNode)getSelectedProjectFunc().Object).Get().FrameworkPath,
-							getSelectedProjectFunc).Execute(),
-					new CommandID(Guids.GuidClojureExtensionCmdSet, 10)));
+		    var replStarter = new StartReplUsingProjectVersion(
+		        new ReplFactory(replToolWindow.TabControl, replToolWindowFrame, this),
+		        replToolWindowFrame,
+		        () => new LaunchParametersBuilder((ProjectNode) getSelectedProjectFunc().Object).Get().FrameworkPath,
+		        getSelectedProjectFunc);
+
+			menuCommandService.AddCommand(new MenuCommand((sender, args) => replStarter.Execute(), new CommandID(Guids.GuidClojureExtensionCmdSet, 10)));
 		}
 
 		public override string ProductUserContext

@@ -9,7 +9,7 @@ namespace Clojure.Code.Repl
 {
 	public static class ReplExtensions
 	{
-		public static string CreateScriptToLoadFilesIntoRepl(this IEnumerable<string> filesToLoad)
+        private static string CreateScriptToLoadFilesIntoRepl(this IEnumerable<string> filesToLoad)
 		{
 			if (filesToLoad.Count() == 0) throw new Exception("No files to load.");
 
@@ -20,19 +20,24 @@ namespace Clojure.Code.Repl
 			return loadFileExpression.ToString();
 		}
 
-		public static IEnumerable<string> FindAllClojureFiles(this List<string> fileList)
+		private static IEnumerable<string> FindAllClojureFiles(this List<string> fileList)
 		{
 			return fileList.Where(p => p.ToLower().EndsWith(".clj"));
 		}
 
-		public static void WriteInvisiblyTo(this string expresion, IRepl repl)
-		{
-			repl.Write(expresion);
-		}
+        private static string ConvertToClojureNamespaceExpression(this string namespaceName)
+        {
+            return "(in-ns '" + namespaceName + ")";
+        }
 
-		public static void LoadFilesInto(this List<string> fileList, IRepl repl)
-		{
-			repl.LoadFiles(fileList);
-		}
+        public static void LoadFiles(this IRepl repl, List<string> fileList)
+        {
+			repl.Write(fileList.FindAllClojureFiles().CreateScriptToLoadFilesIntoRepl());
+        }
+
+        public static void ChangeNamespace(this IRepl repl, string newNamespace)
+        {
+            repl.Write(newNamespace.ConvertToClojureNamespaceExpression());
+        }
 	}
 }

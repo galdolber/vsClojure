@@ -21,18 +21,6 @@ namespace Clojure.Code.Repl
 			if (OnClientWrite != null) OnClientWrite();
 		}
 
-		public void LoadFiles(List<string> fileList)
-		{
-			Write(fileList
-				.FindAllClojureFiles()
-				.CreateScriptToLoadFilesIntoRepl());
-		}
-
-		public void ChangeNamespace(string newNamespace)
-		{
-			Write("(in-ns '" + newNamespace + ")");
-		}
-
 		public void Stop()
 		{
 			_process.Kill();

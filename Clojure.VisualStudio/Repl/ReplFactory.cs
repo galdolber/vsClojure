@@ -45,16 +45,16 @@ namespace Clojure.VisualStudio.Repl
 			var headerPanel = ReplUserInterfaceFactory.CreateHeaderPanel(name, closeButton);
 			var tabItem = ReplUserInterfaceFactory.CreateTabItem(headerPanel, grid);
 
-			var keyEventHandlers = new List<IKeyEventHandler>();
-			var commandWindow = new CommandTextBox(interactiveText, keyEventHandlers);
-			keyEventHandlers.PreventEditingBeforePrompt();
-			commandWindow.AddHistoryKeyHandlers(keyEventHandlers);
-			commandWindow.AddTextEditingKeyHandlers(keyEventHandlers);
-			commandWindow.AddSubmitKeyHandlers(keyEventHandlers);
+			var commandWindowKeyHandlers = new List<IKeyEventHandler>();
+			var commandWindow = new CommandTextBox(interactiveText, commandWindowKeyHandlers);
+			commandWindowKeyHandlers.PreventEditingBeforePrompt();
+			commandWindow.AddHistoryKeyHandlers(commandWindowKeyHandlers);
+			commandWindow.AddTextEditingKeyHandlers(commandWindowKeyHandlers);
+			commandWindow.AddSubmitKeyHandlers(commandWindowKeyHandlers);
 			replProcess.TextReceived += commandWindow.Write;
 
 			var repl = new ExternalProcessRepl(replProcess);
-			repl.AddSubmitKeyHandlers(keyEventHandlers);
+			repl.AddSubmitKeyHandlers(commandWindowKeyHandlers);
 
 			WireUpTheReplEditorCommandsToTheEditor(repl, tabItem);
 
@@ -85,15 +85,6 @@ namespace Clojure.VisualStudio.Repl
 			var dte = (DTE2) _serviceProvider.GetService(typeof (DTE));
 			repl.OnClientWrite += () => _replToolWindow.ShowNoActivate();
 
-			Action loadSelectedFilesIntoRepl =
-				() => dte.ToolWindows.SolutionExplorer.GetSelectedFiles().LoadFilesInto(repl);
-
-			Action loadSelectedProjectIntoRepl =
-				() => dte.ToolWindows.SolutionExplorer.GetSelectedProject().GetAllFiles().LoadFilesInto(repl);
-
-			Action loadActiveFileIntoRepl =
-				() => dte.ActiveDocument.FullName.SingletonAsList().LoadFilesInto(repl);
-
 			var componentModel = (IComponentModel) _serviceProvider.GetService(typeof (SComponentModel));
 			var namespaceParser = new NamespaceParser(NamespaceParser.NamespaceSymbols);
 
@@ -103,9 +94,9 @@ namespace Clojure.VisualStudio.Repl
 					(IVsTextManager) _serviceProvider.GetService(typeof (SVsTextManager)));
 
 			var menuCommands = new List<MenuCommand>();
-			menuCommands.Add(new MenuCommand((sender, args) => loadSelectedProjectIntoRepl(), new CommandID(Guids.GuidClojureExtensionCmdSet, 11)));
-			menuCommands.Add(new MenuCommand((sender, args) => loadSelectedFilesIntoRepl(), new CommandID(Guids.GuidClojureExtensionCmdSet, 12)));
-			menuCommands.Add(new MenuCommand((sender, args) => loadActiveFileIntoRepl(), new CommandID(Guids.GuidClojureExtensionCmdSet, 13)));
+			menuCommands.Add(new MenuCommand((sender, args) => repl.LoadFiles(dte.ToolWindows.SolutionExplorer.GetSelectedProject().GetAllFiles()), new CommandID(Guids.GuidClojureExtensionCmdSet, 11)));
+            menuCommands.Add(new MenuCommand((sender, args) => repl.LoadFiles(dte.ToolWindows.SolutionExplorer.GetSelectedFiles()), new CommandID(Guids.GuidClojureExtensionCmdSet, 12)));
+            menuCommands.Add(new MenuCommand((sender, args) => repl.LoadFiles(dte.ActiveDocument.FullName.SingletonAsList()), new CommandID(Guids.GuidClojureExtensionCmdSet, 13)));
 			menuCommands.Add(new MenuCommand((sender, args) => repl.ChangeNamespace(namespaceParser.Execute(activeTextBufferStateProvider.Get())), new CommandID(Guids.GuidClojureExtensionCmdSet, 14)));
 			menuCommands.Add(new MenuCommand((sender, args) => repl.Write((string) dte.ActiveDocument.Selection), new CommandID(Guids.GuidClojureExtensionCmdSet, 15)));
 			return menuCommands;
