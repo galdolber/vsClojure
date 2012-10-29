@@ -10,20 +10,16 @@ namespace Clojure.VisualStudio.Project.Launching
 	public class ProjectLauncher
 	{
 		private readonly ProjectNode _project;
-		private readonly IProvider<LaunchParameters> _launchParametersProvider;
-		private readonly LaunchParametersValidator _validator;
 
-		public ProjectLauncher(ProjectNode project, IProvider<LaunchParameters> launchParametersProvider, LaunchParametersValidator validator)
+		public ProjectLauncher(ProjectNode project)
 		{
 			_project = project;
-			_launchParametersProvider = launchParametersProvider;
-			_validator = validator;
 		}
 
 		public void Execute()
 		{
-			var launchParameters = _launchParametersProvider.Get();
-			_validator.Validate(launchParameters);
+			var launchParameters = _project.CreateLaunchParameters();
+            launchParameters.Validate();
 
 			var launchInfo = CreateClojureLaunchInfo(launchParameters);
 			if (launchParameters.StartupFileType == StartupFileType.Executable) launchInfo = CreateExecutableLaunchInfo(launchParameters);

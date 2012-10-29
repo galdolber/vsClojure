@@ -12,7 +12,7 @@ using Clojure.System.CommandWindow.Presentation;
 using Clojure.System.Diagnostics;
 using Clojure.VisualStudio.Editor;
 using Clojure.VisualStudio.Menus;
-using Clojure.VisualStudio.Project.FileSystem;
+using Clojure.VisualStudio.Project.Hierarchy;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;

@@ -41,6 +41,8 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Project\ProjectMenuCommand.cs" />
+    <Compile Include="Project\IProjectUserCommandListener.cs" />
     <Compile Include="Menus\ClearableMenuCommandService.cs" />
     <Compile Include="ClojurePackage.cs" />
     <Compile Include="CommandIds.cs" />
@@ -69,24 +71,24 @@
     <Compile Include="Editor\Tagger\ClojureTokenTagger.cs" />
     <Compile Include="Editor\TextBuffer\TextBufferAdapter.cs" />
     <Compile Include="Editor\TokenizedBufferBuilder.cs" />
-    <Compile Include="Project\ClojureConfigProvider.cs" />
-    <Compile Include="Project\ClojureProjectConfig.cs" />
-    <Compile Include="Project\ClojureProjectFactory.cs" />
-    <Compile Include="Project\ClojureProjectFileNode.cs" />
-    <Compile Include="Project\ClojureProjectNode.cs" />
+    <Compile Include="Project\ProjectSnapshot.cs" />
+    <Compile Include="Project\Hierarchy\ClojureConfigProvider.cs" />
+    <Compile Include="Project\Hierarchy\ClojureProjectConfig.cs" />
+    <Compile Include="Project\Hierarchy\ClojureProjectFactory.cs" />
+    <Compile Include="Project\Hierarchy\ClojureProjectFileNode.cs" />
+    <Compile Include="Project\Hierarchy\ClojureProjectNode.cs" />
     <Compile Include="Project\Configuration\GeneralPropertyPage.cs" />
     <Compile Include="Project\Configuration\SettingsStore.cs" />
     <Compile Include="Project\Configuration\SettingsStoreProvider.cs" />
-    <Compile Include="Project\FileSystem\UIHierarchyExtensions.cs" />
+    <Compile Include="Project\Hierarchy\UIHierarchyExtensions.cs" />
     <Compile Include="Project\Launching\LaunchParameters.cs" />
-    <Compile Include="Project\Launching\LaunchParametersBuilder.cs" />
-    <Compile Include="Project\Launching\LaunchParametersValidator.cs" />
+    <Compile Include="Project\Launching\LaunchParametersExtensions.cs" />
     <Compile Include="Project\Launching\ProjectLauncher.cs" />
     <Compile Include="Project\Launching\StartupFileType.cs" />
-    <Compile Include="Project\OAClojureProject.cs" />
-    <Compile Include="Project\OAClojureProjectFileItem.cs" />
+    <Compile Include="Project\Hierarchy\OAClojureProject.cs" />
+    <Compile Include="Project\Hierarchy\OAClojureProjectFileItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repl\StartReplUsingProjectVersion.cs" />
+    <Compile Include="Repl\ReplLauncher.cs" />
     <Compile Include="Repl\ReplFactory.cs" />
     <Compile Include="Repl\ReplToolWindow.cs" />
     <Compile Include="Repl\ReplUserInterfaceFactory.cs" />
