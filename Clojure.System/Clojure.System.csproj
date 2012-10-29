@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="CommandWindow\EventHandlers\BeforePromptEventHandler.cs" />
+    <Compile Include="CommandWindow\IKeyEventDispatcher.cs" />
     <Compile Include="CommandWindow\Presentation\CommandTextBox.cs" />
     <Compile Include="CommandWindow\CommandWindowUserEvent.cs" />
     <Compile Include="CommandWindow\EventHandlers\EraseSelectionEventHandler.cs" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Clojure.Code.Parsing;
 using Clojure.System.CommandWindow;
 using Clojure.System.CommandWindow.EventHandlers;
 
@@ -35,9 +36,10 @@ namespace Clojure.Code.Repl
 			repl.Write(fileList.FindAllClojureFiles().CreateScriptToLoadFilesIntoRepl());
         }
 
-        public static void ChangeNamespace(this IRepl repl, string newNamespace)
+        public static void ChangeNamespace(this IRepl repl, LinkedList<Token> newNamespace)
         {
-            repl.Write(newNamespace.ConvertToClojureNamespaceExpression());
+			var namespaceParser = new NamespaceParser(NamespaceParser.NamespaceSymbols);
+			repl.Write(namespaceParser.Execute(newNamespace).ConvertToClojureNamespaceExpression());
         }
 	}
 }

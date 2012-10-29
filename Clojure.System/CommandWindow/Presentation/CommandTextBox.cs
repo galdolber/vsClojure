@@ -3,22 +3,30 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Clojure.System.CommandWindow.EventHandlers;
 using Clojure.System.IO.Keyboard;
 
 namespace Clojure.System.CommandWindow.Presentation
 {
-	public class CommandTextBox : ITextCommandListener, IHistoryEventListener, ISubmitCommandListener
+	public class CommandTextBox : IKeyEventDispatcher, ITextCommandListener, IHistoryEventListener, ISubmitCommandListener
 	{
 		private readonly TextBox _textBox;
 		private readonly List<IKeyEventHandler> _keyEventHandlers;
 		private int _promptPosition;
 
-		public CommandTextBox(TextBox textBox, List<IKeyEventHandler> keyEventHandlers)
+		public CommandTextBox(TextBox textBox)
 		{
 			_textBox = textBox;
-			_keyEventHandlers = keyEventHandlers;
+			_keyEventHandlers = new List<IKeyEventHandler>();
 			_textBox.PreviewKeyDown += PreviewKeyDown;
+			this.PreventEditingBeforePrompt();
+			this.AddHistoryKeyHandlers(this);
+			this.AddTextEditingKeyHandlers(this);
+			this.AddSubmitKeyHandlers(this);
+		}
+
+		public void AddKeyHandler(IKeyEventHandler keyHandler)
+		{
+			_keyEventHandlers.Add(keyHandler);
 		}
 
 		private void PreviewKeyDown(object sender,  KeyEventArgs args)

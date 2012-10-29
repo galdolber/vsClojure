@@ -191,7 +191,7 @@ namespace Clojure.VisualStudio
 			var replToolWindow = (ReplToolWindow) FindToolWindow(typeof (ReplToolWindow), 0, true);
 			var replToolWindowFrame = (IVsWindowFrame) replToolWindow.Frame;
 			var dte = (DTE2) GetService(typeof (DTE));
-			var replLauncher = new ReplLauncher(new ReplFactory(replToolWindow.TabControl, replToolWindowFrame, this), replToolWindowFrame);
+			var replLauncher = new ReplLauncher(this, replToolWindowFrame, replToolWindow.TabControl);
 			var projectMenuCommand = new ProjectMenuCommand(dte.ToolWindows.SolutionExplorer, replLauncher);
 			menuCommandService.AddCommand(new MenuCommand((sender, args) => projectMenuCommand.Click(), ProjectMenuCommand.LaunchReplCommandId));
 		}

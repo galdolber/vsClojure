@@ -5,29 +5,29 @@ namespace Clojure.System.CommandWindow
 {
 	public static class DefaultKeyHandlers
 	{
-		public static void PreventEditingBeforePrompt(this List<IKeyEventHandler> keyHandlerList)
+		public static void PreventEditingBeforePrompt(this IKeyEventDispatcher dispatcher)
 		{
-			keyHandlerList.Add(new BeforePromptEventHandler());
+			dispatcher.AddKeyHandler(new BeforePromptEventHandler());
 		}
 
-		public static void AddHistoryKeyHandlers(this IHistoryEventListener historyEventListener, List<IKeyEventHandler> keyHandlerList)
+		public static void AddHistoryKeyHandlers(this IHistoryEventListener historyEventListener, IKeyEventDispatcher dispatcher)
 		{
 			var history = new History(historyEventListener);
-			keyHandlerList.Add(new HistoryNextEventHandler(history));
-			keyHandlerList.Add(new HistoryPreviousEventHandler(history));
-			keyHandlerList.Add(new SubmitEventHandler(history));
+			dispatcher.AddKeyHandler(new HistoryNextEventHandler(history));
+			dispatcher.AddKeyHandler(new HistoryPreviousEventHandler(history));
+			dispatcher.AddKeyHandler(new SubmitEventHandler(history));
 		}
 
-		public static void AddSubmitKeyHandlers(this ISubmitCommandListener submitListener, List<IKeyEventHandler> keyHandlerList)
+		public static void AddSubmitKeyHandlers(this ISubmitCommandListener submitListener, IKeyEventDispatcher dispatcher)
 		{
-			keyHandlerList.Add(new SubmitEventHandler(submitListener));
+			dispatcher.AddKeyHandler(new SubmitEventHandler(submitListener));
 		}
 
-		public static void AddTextEditingKeyHandlers(this ITextCommandListener textCommandListener, List<IKeyEventHandler> keyHandlerList)
+		public static void AddTextEditingKeyHandlers(this ITextCommandListener textCommandListener, IKeyEventDispatcher dispatcher)
 		{
-			keyHandlerList.Add(new EraseSelectionEventHandler(textCommandListener));
-			keyHandlerList.Add(new MoveCursorToStartOfPromptEventHandler(textCommandListener));
-			keyHandlerList.Add(new UpdateSelectionEventHandler(textCommandListener));
+			dispatcher.AddKeyHandler(new EraseSelectionEventHandler(textCommandListener));
+			dispatcher.AddKeyHandler(new MoveCursorToStartOfPromptEventHandler(textCommandListener));
+			dispatcher.AddKeyHandler(new UpdateSelectionEventHandler(textCommandListener));
 		}
 	}
 }
