@@ -10,6 +10,7 @@ using Clojure.System.CommandWindow;
 using Clojure.System.CommandWindow.Presentation;
 using Clojure.System.Diagnostics;
 using Clojure.VisualStudio.Editor;
+using Clojure.VisualStudio.Editor.Window;
 using Clojure.VisualStudio.Menus;
 using Clojure.VisualStudio.Project;
 using Clojure.VisualStudio.Project.Hierarchy;
@@ -23,7 +24,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Clojure.VisualStudio.Repl
 {
-	public class ReplLauncher : IProjectUserCommandListener
+	public class ReplLauncher : IProjectMenuCommandListener
 	{
 		private readonly IVsWindowFrame _toolWindowFrame;
 		private readonly TabControl _replManager;
@@ -36,7 +37,7 @@ namespace Clojure.VisualStudio.Repl
 			_toolWindowFrame = toolWindowFrame;
 		}
 
-		public void LaunchRepl(ProjectSnapshot projectSnapshot)
+		public void Selected(ProjectSnapshot projectSnapshot)
 		{
 			var environmentVariables = new Dictionary<string, string>();
 			environmentVariables["clojure.load.path"] = Path.GetDirectoryName(projectSnapshot.Path);
@@ -54,18 +55,14 @@ namespace Clojure.VisualStudio.Repl
 			var grid = ReplUserInterfaceFactory.CreateTextBoxGrid(interactiveText);
 			var headerPanel = ReplUserInterfaceFactory.CreateHeaderPanel(name, closeButton);
 			var tabItem = ReplUserInterfaceFactory.CreateTabItem(headerPanel, grid);
-
 			var commandWindow = new CommandTextBox(interactiveText);
-			replProcess.TextReceived += commandWindow.Write;
-
-			var repl = new ExternalProcessRepl(replProcess);
-			repl.AddSubmitKeyHandlers(commandWindow);
+			var repl = new ExternalProcessRepl(replProcess, commandWindow);
 
 			WireUpTheReplEditorCommandsToTheEditor(repl, tabItem);
 
-			closeButton.Click += (o, e) => repl.Stop();
+			closeButton.Click += (o, e) => replProcess.Kill();
 			closeButton.Click += (o, e) => _replManager.Items.Remove(tabItem);
-			tabItem.Loaded += (o, e) => repl.Start();
+			tabItem.Loaded += (o, e) => replProcess.Start();
 			_replManager.Items.Add(tabItem);
 			_replManager.SelectedItem = tabItem;
 		}
@@ -75,13 +72,13 @@ namespace Clojure.VisualStudio.Repl
 			var dte = (DTE2)_serviceProvider.GetService(typeof(DTE));
 			var menuCommandService = (OleMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
 
-			var menuCommandListWirer = new MenuCommandListWirer(
+			var menuCommandListWirer = new MenuCommandGroup(
 				menuCommandService,
 				CreateMenuCommands(repl),
 				() => dte.ActiveDocument != null && dte.ActiveDocument.FullName.ToLower().EndsWith(".clj") && _replManager.SelectedItem == tabItem);
 
-			dte.Events.WindowEvents.WindowActivated += (o, e) => menuCommandListWirer.TryToShowMenuCommands();
-			_replManager.SelectionChanged += (sender, eventData) => menuCommandListWirer.TryToShowMenuCommands();
+			dte.Events.WindowEvents.WindowActivated += (o, e) => menuCommandListWirer.EvaluateRelevance();
+			_replManager.SelectionChanged += (sender, eventData) => menuCommandListWirer.EvaluateRelevance();
 		}
 
 		private List<MenuCommand> CreateMenuCommands(IRepl repl)

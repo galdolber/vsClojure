@@ -9,10 +9,10 @@ namespace Clojure.VisualStudio.Project
     public class ProjectMenuCommand
     {
         private readonly UIHierarchy _solutionExplorer;
-        private readonly IProjectUserCommandListener _launchListener;
+        private readonly IProjectMenuCommandListener _launchListener;
         public static CommandID LaunchReplCommandId = new CommandID(Guids.GuidClojureExtensionCmdSet, 10);
 
-        public ProjectMenuCommand(UIHierarchy solutionExplorer, IProjectUserCommandListener launchListener)
+        public ProjectMenuCommand(UIHierarchy solutionExplorer, IProjectMenuCommandListener launchListener)
         {
             _solutionExplorer = solutionExplorer;
             _launchListener = launchListener;
@@ -24,7 +24,7 @@ namespace Clojure.VisualStudio.Project
             var projectNode = ((ProjectNode) selectedProject.Object);
             var frameworkPath = projectNode.CreateLaunchParameters().FrameworkPath;
             var projectPath = selectedProject.FullName;
-            _launchListener.LaunchRepl(new ProjectSnapshot(projectPath, frameworkPath));
+            _launchListener.Selected(new ProjectSnapshot(projectPath, frameworkPath));
         }
     }
 }

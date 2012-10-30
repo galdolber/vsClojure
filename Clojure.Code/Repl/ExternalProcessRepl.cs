@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Clojure.System.CommandWindow;
 using Clojure.System.Diagnostics;
 
@@ -10,25 +9,17 @@ namespace Clojure.Code.Repl
 		private readonly IProcess _process;
 		public event Action OnClientWrite;
 
-		public ExternalProcessRepl(IProcess process)
+		public ExternalProcessRepl(IProcess process, ICommandWindow commandWindow)
 		{
 			_process = process;
+			_process.TextReceived += commandWindow.Write;
+			this.AddSubmitKeyHandlers(commandWindow);
 		}
 
 		public void Write(string expression)
 		{
 			_process.Write(expression);
 			if (OnClientWrite != null) OnClientWrite();
-		}
-
-		public void Stop()
-		{
-			_process.Kill();
-		}
-
-		public void Start()
-		{
-			_process.Start();
 		}
 
 		public void Submit(string expression)

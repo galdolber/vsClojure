@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Clojure.Code.Repl
 {
@@ -7,6 +6,5 @@ namespace Clojure.Code.Repl
 	{
 		event Action OnClientWrite;
 		void Write(string expression);
-		void Stop();
 	}
 }

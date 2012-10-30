@@ -7,7 +7,7 @@ using Clojure.System.IO.Keyboard;
 
 namespace Clojure.System.CommandWindow.Presentation
 {
-	public class CommandTextBox : IKeyEventDispatcher, ITextCommandListener, IHistoryEventListener, ISubmitCommandListener
+	public class CommandTextBox : ICommandWindow, ITextCommandListener, IHistoryEventListener, ISubmitCommandListener
 	{
 		private readonly TextBox _textBox;
 		private readonly List<IKeyEventHandler> _keyEventHandlers;
