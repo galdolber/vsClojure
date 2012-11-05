@@ -5,7 +5,7 @@ using Clojure.System.Diagnostics;
 
 namespace Clojure.Code.Repl
 {
-	public class ExternalProcessRepl : IReplWriteCompleteDispatcher, ISubmitCommandListener, IReplWriteRequestListener
+	public class ExternalProcessRepl : IRepl, ISubmitCommandListener
 	{
 		private readonly IProcess _process;
 		private readonly List<IReplWriteCompleteListener> _listeners;

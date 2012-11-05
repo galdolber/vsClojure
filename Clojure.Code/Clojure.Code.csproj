@@ -69,6 +69,7 @@
     <Compile Include="Parsing\TokenType.cs" />
     <Compile Include="Parsing\TokenTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repl\IRepl.cs" />
     <Compile Include="Repl\IReplWriteCompleteDispatcher.cs" />
     <Compile Include="Repl\ExternalProcessRepl.cs" />
     <Compile Include="Repl\IReplWriteRequestListener.cs" />

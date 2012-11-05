@@ -1,15 +1,13 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Windows.Controls;
 using Clojure.Code.Repl;
-using Clojure.VisualStudio.Repl.Presentation;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Clojure.VisualStudio.Repl
 {
     [Guid("8C5C7302-ECC8-435D-AAFE-D0E5A0A02FE9")]
-    public class ReplToolWindow : ToolWindowPane, IReplWriteCompleteListener
+    public class ReplToolWindow : ToolWindowPane, IReplWriteCompleteListener, IReplPortfolioListener
     {
         private readonly TabControl _replManager;
 
@@ -19,7 +17,7 @@ namespace Clojure.VisualStudio.Repl
         }
 
         public ReplToolWindow()
-            : this(ReplUserInterfaceFactory.CreateTabControl())
+            : this(ClojurePackage.ReplTabControl)
         {
         }
 
@@ -37,6 +35,13 @@ namespace Clojure.VisualStudio.Repl
     	{
 			var replToolWindowFrame = (IVsWindowFrame) this.Frame;
     		replToolWindowFrame.ShowNoActivate();
+    	}
+
+    	public void ReplAdded(IRepl repl)
+    	{
+			var replToolWindowFrame = (IVsWindowFrame)this.Frame;
+			replToolWindowFrame.Show();
+			repl.AddReplWriteCompleteListener(this);
     	}
     }
 }

@@ -8,11 +8,9 @@ namespace Clojure.VisualStudio.Workspace
 	{
 		private readonly List<IEnvironmentListener> _listeners;
 		private ClojureEnvironmentSnapshot _snapshot;
-		private readonly TabItem _replTab;
 
-		public ClojureEnvironment(TabItem replTab)
+		public ClojureEnvironment()
 		{
-			_replTab = replTab;
 			_listeners = new List<IEnvironmentListener>();
 			_snapshot = ClojureEnvironmentSnapshot.Empty;
 		}
@@ -57,8 +55,7 @@ namespace Clojure.VisualStudio.Workspace
 
 		public void OnReplActivated()
 		{
-			if (_replTab.IsSelected) HandleReplActivated();
-			else HandleReplDeactivated();
+			// Not sure what to do here.  Isn't a REPL always active?  We're creating the control right away for it.
 		}
 
 		private void HandleReplDeactivated()

@@ -41,7 +41,8 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Repl\ReplCollector.cs" />
+    <Compile Include="Repl\ReplPortfolio.cs" />
+    <Compile Include="Repl\ReplEventRouter.cs" />
     <Compile Include="Workspace\ClojureEnvironmentSnapshot.cs" />
     <Compile Include="Workspace\EditorWindow\ITextEditorWindowActiveDocumentChangedListener.cs" />
     <Compile Include="Workspace\TextEditor\ClojureTextEditor.cs" />
