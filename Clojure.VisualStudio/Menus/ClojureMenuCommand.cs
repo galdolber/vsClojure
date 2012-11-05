@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using Clojure.VisualStudio.Environment;
+using Clojure.VisualStudio.Workspace;
 
 namespace Clojure.VisualStudio.Repl
 {

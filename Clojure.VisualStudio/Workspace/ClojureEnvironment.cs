@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
-using EnvDTE;
+using Clojure.VisualStudio.Workspace.EditorWindow;
 
-namespace Clojure.VisualStudio.Environment
+namespace Clojure.VisualStudio.Workspace
 {
-	public class ClojureEnvironment : ITextEditorDocumentChangedListener
+	public class ClojureEnvironment : ITextEditorWindowActiveDocumentChangedListener
 	{
 		private readonly List<IEnvironmentListener> _listeners;
 		private ClojureEnvironmentSnapshot _snapshot;
@@ -15,7 +14,7 @@ namespace Clojure.VisualStudio.Environment
 		{
 			_replTab = replTab;
 			_listeners = new List<IEnvironmentListener>();
-			_snapshot = new ClojureEnvironmentSnapshot(ClojureEnvironmentState.ReplAndEditorNotActive, "");
+			_snapshot = ClojureEnvironmentSnapshot.Empty;
 		}
 
 		public void AddActivationListener(IEnvironmentListener listener)
@@ -90,9 +89,8 @@ namespace Clojure.VisualStudio.Environment
 			}
 		}
 
-		public void OnTextEditorDocumentChange(string newDocumentPath)
+		public void OnActiveDocumentChange(string newDocumentPath)
 		{
-			_snapshot = _snapshot.ChangeActiveDocumentPath(newDocumentPath);
 			if (!newDocumentPath.ToLower().EndsWith(".clj")) HandleNonClojureDocument();
 			else HandleClojureDocument();
 		}

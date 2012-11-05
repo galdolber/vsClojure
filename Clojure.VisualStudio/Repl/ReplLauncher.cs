@@ -7,10 +7,12 @@ using Clojure.Code.Repl;
 using Clojure.System.CommandWindow.Presentation;
 using Clojure.System.Diagnostics;
 using Clojure.VisualStudio.Editor;
-using Clojure.VisualStudio.Environment;
 using Clojure.VisualStudio.Repl.Commands;
 using Clojure.VisualStudio.Repl.Presentation;
 using Clojure.VisualStudio.SolutionExplorer;
+using Clojure.VisualStudio.Workspace;
+using Clojure.VisualStudio.Workspace.EditorWindow;
+using Clojure.VisualStudio.Workspace.TextEditor;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -62,13 +64,15 @@ namespace Clojure.VisualStudio.Repl
 			repl.AddReplWriteCompleteListener(_replWriteCompleteListener);
 
 			var environmentListener = new ClojureEnvironment(tabItem);
-
 			var textEditorWindow = new TextEditorWindow(dte);
 			textEditorWindow.AddTextEditorDocumentChangedListener(environmentListener);
-			
-			_replManager.SelectionChanged += (sender, eventData) => environmentListener.OnReplActivated();
 
-			WireUpTheReplEditorCommandsToTheEditor(new VisualStudioExplorer(dte), repl, environmentListener, textEditorWindow);
+			var componentModel = (IComponentModel)_serviceProvider.GetService(typeof(SComponentModel));
+			var textEditor = new ClojureTextEditor(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager)_serviceProvider.GetService(typeof(SVsTextManager)));
+			textEditorWindow.AddTextEditorDocumentChangedListener(textEditor);
+
+			_replManager.SelectionChanged += (sender, eventData) => environmentListener.OnReplActivated();
+			WireUpTheReplEditorCommandsToTheEditor(new VisualStudioExplorer(dte), repl, environmentListener, textEditorWindow, textEditor);
 
 			closeButton.Click += (o, e) => replProcess.Kill();
 			closeButton.Click += (o, e) => _replManager.Items.Remove(tabItem);
@@ -79,42 +83,41 @@ namespace Clojure.VisualStudio.Repl
 
 		private void WireUpTheReplEditorCommandsToTheEditor(
 			IExplorer explorer,
-			IReplWriteRequestListener replWriteRequestListener,
+			IReplWriteRequestListener repl,
 			ClojureEnvironment environmentListener,
-			TextEditorWindow textEditorWindow)
+			TextEditorWindow textEditorWindow,
+			ClojureTextEditor editor)
 		{
 			var menuCommandService = (OleMenuCommandService) _serviceProvider.GetService(typeof (IMenuCommandService));
 
-			var loadSelectedProjectCommand = new LoadSelectedProjectCommand(explorer, replWriteRequestListener);
+			var loadSelectedProjectCommand = new LoadSelectedProjectCommand(explorer, repl);
 			var loadSelectedProjectMenuCommand = new ClojureMenuCommand(ClojureMenuCommand.LoadProjectIntoReplCommandId, loadSelectedProjectCommand);
 			loadSelectedProjectMenuCommand.RegisterWith(menuCommandService);
 			explorer.AddSelectionListener(loadSelectedProjectCommand);
 
-			var loadSelectedFilesCommand = new LoadSelectedFilesCommand(replWriteRequestListener);
+			var loadSelectedFilesCommand = new LoadSelectedFilesCommand(repl);
 			var loadSelectedFilesMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 12), loadSelectedFilesCommand);
 			environmentListener.AddActivationListener(loadSelectedFilesMenuCommand);
 			explorer.AddSelectionListener(loadSelectedFilesCommand);
 			loadSelectedFilesMenuCommand.RegisterWith(menuCommandService);
 
-			var loadActiveFileCommand = new LoadActiveFileCommand(replWriteRequestListener);
+			var loadActiveFileCommand = new LoadActiveFileCommand(repl);
 			var loadActiveFileMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 13), loadActiveFileCommand);
 			environmentListener.AddActivationListener(loadActiveFileMenuCommand);
 			loadActiveFileMenuCommand.RegisterWith(menuCommandService);
 			textEditorWindow.AddTextEditorDocumentChangedListener(loadActiveFileCommand);
 
-			// dte.Events.WindowEvents.WindowActivated
-			var componentModel = (IComponentModel) _serviceProvider.GetService(typeof (SComponentModel));
-			var activeTextBufferStateProvider = new ActiveTextBufferStateProvider(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager) _serviceProvider.GetService(typeof (SVsTextManager)));
-			var changeNamespaceCommand = new ChangeNamespaceCommand(activeTextBufferStateProvider);
+			var changeNamespaceCommand = new ChangeNamespaceCommand(repl);
 			var changeNamespaceMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 14), changeNamespaceCommand);
 			environmentListener.AddActivationListener(changeNamespaceMenuCommand);
+			editor.AddStateChangeListener(changeNamespaceCommand);
 			changeNamespaceMenuCommand.RegisterWith(menuCommandService);
 
-			// TextView.Selection.SelectionChanged
-			var loadSelectionCommand = new LoadSelectionCommand(replWriteRequestListener);
+			var loadSelectionCommand = new LoadSelectionCommand(repl);
 			var loadSelectionMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 15), loadSelectionCommand);
 			environmentListener.AddActivationListener(loadSelectionMenuCommand);
 			loadSelectionMenuCommand.RegisterWith(menuCommandService);
+			editor.AddStateChangeListener(loadSelectionCommand);
 		}
 	}
 }

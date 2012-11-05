@@ -1,21 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Clojure.VisualStudio.Editor;
+﻿using Clojure.Code.Repl;
+using Clojure.VisualStudio.Workspace;
+using Clojure.VisualStudio.Workspace.TextEditor;
 
 namespace Clojure.VisualStudio.Repl.Commands
 {
-	public class ChangeNamespaceCommand : IMenuCommandListener
+	public class ChangeNamespaceCommand : IMenuCommandListener, ITextEditorStateChangeListener
 	{
-		public ChangeNamespaceCommand(ActiveTextBufferStateProvider activeTextBufferStateProvider)
+		private readonly IReplWriteRequestListener _replWriteRequestListener;
+		private TextEditorSnapshot _snapshot;
+
+		public ChangeNamespaceCommand(IReplWriteRequestListener replWriteRequestListener)
 		{
-			throw new NotImplementedException();
+			_replWriteRequestListener = replWriteRequestListener;
 		}
 
 		public void OnMenuCommandClick()
 		{
-			throw new NotImplementedException();
+			_replWriteRequestListener.ChangeNamespace(_snapshot.Tokens);
+		}
+
+		public void OnTextEditorStateChange(TextEditorSnapshot snapshot)
+		{
+			_snapshot = snapshot;
 		}
 	}
 }

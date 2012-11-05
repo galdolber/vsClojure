@@ -1,4 +1,4 @@
-﻿namespace Clojure.VisualStudio.Environment
+﻿namespace Clojure.VisualStudio.Workspace
 {
 	public interface IEnvironmentListener
 	{
