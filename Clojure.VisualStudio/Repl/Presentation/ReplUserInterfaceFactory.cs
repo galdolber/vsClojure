@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Clojure.VisualStudio.Repl
+namespace Clojure.VisualStudio.Repl.Presentation
 {
 	public class ReplUserInterfaceFactory
 	{

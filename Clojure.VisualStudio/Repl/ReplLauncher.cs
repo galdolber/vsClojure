@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Windows.Controls;
-using Clojure.Code.Parsing;
 using Clojure.Code.Repl;
-using Clojure.System.Collections;
-using Clojure.System.CommandWindow;
 using Clojure.System.CommandWindow.Presentation;
 using Clojure.System.Diagnostics;
 using Clojure.VisualStudio.Editor;
-using Clojure.VisualStudio.Editor.Window;
-using Clojure.VisualStudio.Menus;
-using Clojure.VisualStudio.Project;
-using Clojure.VisualStudio.Project.Hierarchy;
+using Clojure.VisualStudio.Environment;
+using Clojure.VisualStudio.Repl.Commands;
+using Clojure.VisualStudio.Repl.Presentation;
+using Clojure.VisualStudio.SolutionExplorer;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -29,9 +26,11 @@ namespace Clojure.VisualStudio.Repl
 		private readonly IVsWindowFrame _toolWindowFrame;
 		private readonly TabControl _replManager;
 		private readonly IServiceProvider _serviceProvider;
+		private readonly IReplWriteCompleteListener _replWriteCompleteListener;
 
-		public ReplLauncher(IServiceProvider serviceProvider, IVsWindowFrame toolWindowFrame, TabControl replManager)
+		public ReplLauncher(IServiceProvider serviceProvider, IVsWindowFrame toolWindowFrame, TabControl replManager, IReplWriteCompleteListener replWriteCompleteListener)
 		{
+			_replWriteCompleteListener = replWriteCompleteListener;
 			_serviceProvider = serviceProvider;
 			_replManager = replManager;
 			_toolWindowFrame = toolWindowFrame;
@@ -47,8 +46,10 @@ namespace Clojure.VisualStudio.Repl
 			_toolWindowFrame.Show();
 		}
 
-		public void CreateRepl(ConsoleProcess replProcess)
+		private void CreateRepl(ConsoleProcess replProcess)
 		{
+			var dte = (DTE2) _serviceProvider.GetService(typeof (DTE));
+
 			var interactiveText = ReplUserInterfaceFactory.CreateInteractiveText();
 			var closeButton = ReplUserInterfaceFactory.CreateCloseButton();
 			var name = ReplUserInterfaceFactory.CreateTabLabel();
@@ -56,9 +57,18 @@ namespace Clojure.VisualStudio.Repl
 			var headerPanel = ReplUserInterfaceFactory.CreateHeaderPanel(name, closeButton);
 			var tabItem = ReplUserInterfaceFactory.CreateTabItem(headerPanel, grid);
 			var commandWindow = new CommandTextBox(interactiveText);
-			var repl = new ExternalProcessRepl(replProcess, commandWindow);
 
-			WireUpTheReplEditorCommandsToTheEditor(repl, tabItem);
+			var repl = new ExternalProcessRepl(replProcess, commandWindow);
+			repl.AddReplWriteCompleteListener(_replWriteCompleteListener);
+
+			var environmentListener = new ClojureEnvironment(tabItem);
+
+			var textEditorWindow = new TextEditorWindow(dte);
+			textEditorWindow.AddTextEditorDocumentChangedListener(environmentListener);
+			
+			_replManager.SelectionChanged += (sender, eventData) => environmentListener.OnReplActivated();
+
+			WireUpTheReplEditorCommandsToTheEditor(new VisualStudioExplorer(dte), repl, environmentListener, textEditorWindow);
 
 			closeButton.Click += (o, e) => replProcess.Kill();
 			closeButton.Click += (o, e) => _replManager.Items.Remove(tabItem);
@@ -67,39 +77,44 @@ namespace Clojure.VisualStudio.Repl
 			_replManager.SelectedItem = tabItem;
 		}
 
-		private void WireUpTheReplEditorCommandsToTheEditor(IRepl repl, TabItem tabItem)
+		private void WireUpTheReplEditorCommandsToTheEditor(
+			IExplorer explorer,
+			IReplWriteRequestListener replWriteRequestListener,
+			ClojureEnvironment environmentListener,
+			TextEditorWindow textEditorWindow)
 		{
-			var dte = (DTE2)_serviceProvider.GetService(typeof(DTE));
-			var menuCommandService = (OleMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
+			var menuCommandService = (OleMenuCommandService) _serviceProvider.GetService(typeof (IMenuCommandService));
 
-			var menuCommandListWirer = new MenuCommandGroup(
-				menuCommandService,
-				CreateMenuCommands(repl),
-				() => dte.ActiveDocument != null && dte.ActiveDocument.FullName.ToLower().EndsWith(".clj") && _replManager.SelectedItem == tabItem);
+			var loadSelectedProjectCommand = new LoadSelectedProjectCommand(explorer, replWriteRequestListener);
+			var loadSelectedProjectMenuCommand = new ClojureMenuCommand(ClojureMenuCommand.LoadProjectIntoReplCommandId, loadSelectedProjectCommand);
+			loadSelectedProjectMenuCommand.RegisterWith(menuCommandService);
+			explorer.AddSelectionListener(loadSelectedProjectCommand);
 
-			dte.Events.WindowEvents.WindowActivated += (o, e) => menuCommandListWirer.EvaluateRelevance();
-			_replManager.SelectionChanged += (sender, eventData) => menuCommandListWirer.EvaluateRelevance();
-		}
+			var loadSelectedFilesCommand = new LoadSelectedFilesCommand(replWriteRequestListener);
+			var loadSelectedFilesMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 12), loadSelectedFilesCommand);
+			environmentListener.AddActivationListener(loadSelectedFilesMenuCommand);
+			explorer.AddSelectionListener(loadSelectedFilesCommand);
+			loadSelectedFilesMenuCommand.RegisterWith(menuCommandService);
 
-		private List<MenuCommand> CreateMenuCommands(IRepl repl)
-		{
-			var dte = (DTE2)_serviceProvider.GetService(typeof(DTE));
-			repl.OnClientWrite += () => _toolWindowFrame.ShowNoActivate();
+			var loadActiveFileCommand = new LoadActiveFileCommand(replWriteRequestListener);
+			var loadActiveFileMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 13), loadActiveFileCommand);
+			environmentListener.AddActivationListener(loadActiveFileMenuCommand);
+			loadActiveFileMenuCommand.RegisterWith(menuCommandService);
+			textEditorWindow.AddTextEditorDocumentChangedListener(loadActiveFileCommand);
 
-			var componentModel = (IComponentModel)_serviceProvider.GetService(typeof(SComponentModel));
+			// dte.Events.WindowEvents.WindowActivated
+			var componentModel = (IComponentModel) _serviceProvider.GetService(typeof (SComponentModel));
+			var activeTextBufferStateProvider = new ActiveTextBufferStateProvider(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager) _serviceProvider.GetService(typeof (SVsTextManager)));
+			var changeNamespaceCommand = new ChangeNamespaceCommand(activeTextBufferStateProvider);
+			var changeNamespaceMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 14), changeNamespaceCommand);
+			environmentListener.AddActivationListener(changeNamespaceMenuCommand);
+			changeNamespaceMenuCommand.RegisterWith(menuCommandService);
 
-			var activeTextBufferStateProvider =
-				new ActiveTextBufferStateProvider(
-					componentModel.GetService<IVsEditorAdaptersFactoryService>(),
-					(IVsTextManager)_serviceProvider.GetService(typeof(SVsTextManager)));
-
-			var menuCommands = new List<MenuCommand>();
-			menuCommands.Add(new MenuCommand((sender, args) => repl.LoadFiles(dte.ToolWindows.SolutionExplorer.GetSelectedProject().GetAllFiles()), new CommandID(Guids.GuidClojureExtensionCmdSet, 11)));
-			menuCommands.Add(new MenuCommand((sender, args) => repl.LoadFiles(dte.ToolWindows.SolutionExplorer.GetSelectedFiles()), new CommandID(Guids.GuidClojureExtensionCmdSet, 12)));
-			menuCommands.Add(new MenuCommand((sender, args) => repl.LoadFiles(dte.ActiveDocument.FullName.SingletonAsList()), new CommandID(Guids.GuidClojureExtensionCmdSet, 13)));
-			menuCommands.Add(new MenuCommand((sender, args) => repl.ChangeNamespace(activeTextBufferStateProvider.Get()), new CommandID(Guids.GuidClojureExtensionCmdSet, 14)));
-			menuCommands.Add(new MenuCommand((sender, args) => repl.Write((string)dte.ActiveDocument.Selection), new CommandID(Guids.GuidClojureExtensionCmdSet, 15)));
-			return menuCommands;
+			// TextView.Selection.SelectionChanged
+			var loadSelectionCommand = new LoadSelectionCommand(replWriteRequestListener);
+			var loadSelectionMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 15), loadSelectionCommand);
+			environmentListener.AddActivationListener(loadSelectionMenuCommand);
+			loadSelectionMenuCommand.RegisterWith(menuCommandService);
 		}
 	}
 }

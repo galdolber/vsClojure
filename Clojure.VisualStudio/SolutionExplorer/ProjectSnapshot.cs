@@ -1,4 +1,4 @@
-﻿namespace Clojure.VisualStudio.Project
+﻿namespace Clojure.VisualStudio.SolutionExplorer
 {
     public class ProjectSnapshot
     {

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Clojure.VisualStudio.Project.Hierarchy;
 using EnvDTE;
 
-namespace Clojure.VisualStudio.Project.Hierarchy
+namespace Clojure.VisualStudio.SolutionExplorer
 {
 	public static class UIHierarchyExtensions
 	{

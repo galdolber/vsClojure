@@ -30,6 +30,7 @@ using Clojure.VisualStudio.Project;
 using Clojure.VisualStudio.Project.Configuration;
 using Clojure.VisualStudio.Project.Hierarchy;
 using Clojure.VisualStudio.Repl;
+using Clojure.VisualStudio.SolutionExplorer;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -191,7 +192,7 @@ namespace Clojure.VisualStudio
 			var replToolWindow = (ReplToolWindow) FindToolWindow(typeof (ReplToolWindow), 0, true);
 			var replToolWindowFrame = (IVsWindowFrame) replToolWindow.Frame;
 			var dte = (DTE2) GetService(typeof (DTE));
-			var replLauncher = new ReplLauncher(this, replToolWindowFrame, replToolWindow.TabControl);
+			var replLauncher = new ReplLauncher(this, replToolWindowFrame, replToolWindow.TabControl, replToolWindow);
 			var projectMenuCommand = new ProjectMenuCommand(dte.ToolWindows.SolutionExplorer, replLauncher);
 			menuCommandService.AddCommand(new MenuCommand((sender, args) => projectMenuCommand.Click(), ProjectMenuCommand.LaunchReplCommandId));
 		}

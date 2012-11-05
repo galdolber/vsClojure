@@ -1,32 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using Clojure.VisualStudio.Environment;
+using Clojure.VisualStudio.Repl;
 
 namespace Clojure.VisualStudio.Menus
 {
-	public class MenuCommandGroup
+	public class MenuCommandGroup : IEnvironmentListener
 	{
 		private readonly IMenuCommandService _menuCommandService;
 		private readonly List<MenuCommand> _menuCommands;
-		private readonly Func<bool> _shouldDisplay;
 
-		public MenuCommandGroup(IMenuCommandService menuCommandService, List<MenuCommand> menuCommands, Func<bool> shouldDisplay)
+		public MenuCommandGroup(IMenuCommandService menuCommandService, List<MenuCommand> menuCommands)
 		{
 			_menuCommandService = menuCommandService;
 			_menuCommands = menuCommands;
-			_shouldDisplay = shouldDisplay;
 		}
 
-		public void EvaluateRelevance()
+		private void Enable()
 		{
-			if (!_shouldDisplay()) return;
-
 			foreach (var menuCommand in _menuCommands)
 			{
-				var existingMenuCommand = _menuCommandService.FindCommand(menuCommand.CommandID);
-				if (existingMenuCommand != null) _menuCommandService.RemoveCommand(existingMenuCommand);
 				_menuCommandService.AddCommand(menuCommand);
 			}
+		}
+
+		private void Disable()
+		{
+			foreach (var menuCommand in _menuCommands)
+			{
+				_menuCommandService.RemoveCommand(menuCommand);
+			}
+		}
+
+		public void EnvironmentStateChange(ClojureEnvironmentSnapshot snapshot)
+		{
+			if (snapshot.State == ClojureEnvironmentState.ReplAndEditorActive) Enable();
+			else Disable();
 		}
 	}
 }

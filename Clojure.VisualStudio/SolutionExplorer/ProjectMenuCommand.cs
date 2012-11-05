@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.Design;
-using Clojure.VisualStudio.Project.Hierarchy;
 using Clojure.VisualStudio.Project.Launching;
 using EnvDTE;
 using Microsoft.VisualStudio.Project;
 
-namespace Clojure.VisualStudio.Project
+namespace Clojure.VisualStudio.SolutionExplorer
 {
     public class ProjectMenuCommand
     {
