@@ -41,8 +41,11 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Repl\Presentation\ICloseListener.cs" />
+    <Compile Include="Repl\Presentation\IReplActivationListener.cs" />
+    <Compile Include="Repl\Presentation\ReplTab.cs" />
+    <Compile Include="Repl\Presentation\ReplTabControl.cs" />
     <Compile Include="Repl\ReplPortfolio.cs" />
-    <Compile Include="Repl\ReplEventRouter.cs" />
     <Compile Include="Workspace\ClojureEnvironmentSnapshot.cs" />
     <Compile Include="Workspace\EditorWindow\ITextEditorWindowActiveDocumentChangedListener.cs" />
     <Compile Include="Workspace\TextEditor\ClojureTextEditor.cs" />
@@ -112,10 +115,8 @@
     <Compile Include="Menus\IMenuCommandListener.cs" />
     <Compile Include="Repl\ReplLauncher.cs" />
     <Compile Include="Repl\ReplToolWindow.cs" />
-    <Compile Include="Repl\Presentation\ReplUserInterfaceFactory.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Menus\MenuCommandListHider.cs" />
-    <Compile Include="Menus\MenuCommandGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Project\Resources\Project.resx">

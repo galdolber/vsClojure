@@ -1,18 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Clojure.Code.Repl;
+using Clojure.VisualStudio.Repl.Presentation;
 using Clojure.VisualStudio.SolutionExplorer;
 
 namespace Clojure.VisualStudio.Repl.Commands
 {
-	public class LoadSelectedProjectCommand : IMenuCommandListener, IExplorerSelectionChangedListener
+	public class LoadSelectedProjectCommand : IMenuCommandListener, IExplorerSelectionChangedListener, IReplActivationListener
 	{
 		private readonly IExplorer _explorer;
-		private readonly IReplWriteRequestListener _requestListener;
 		private List<SolutionItem> _selectedItems;
+		private IRepl _repl;
 
-		public LoadSelectedProjectCommand(IExplorer explorer, IReplWriteRequestListener requestListener)
+		public LoadSelectedProjectCommand(IExplorer explorer)
 		{
-			_requestListener = requestListener;
 			_selectedItems = new List<SolutionItem>();
 			_explorer = explorer;
 		}
@@ -32,13 +33,18 @@ namespace Clojure.VisualStudio.Repl.Commands
 					filePaths.Add(solutionItem.Path);
 				}
 			}
-			
-			_requestListener.LoadFiles(filePaths);
+
+			_repl.LoadFiles(filePaths);
 		}
 
 		public void ExplorerSelectionChanged(List<SolutionItem> selectedItems)
 		{
 			_selectedItems = selectedItems;
+		}
+
+		public void ReplActivated(IRepl repl)
+		{
+			_repl = repl;
 		}
 	}
 }

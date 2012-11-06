@@ -1,46 +1,76 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Clojure.Code.Repl;
+using Clojure.System.CommandWindow;
+using Clojure.System.CommandWindow.Presentation;
 
 namespace Clojure.VisualStudio.Repl.Presentation
 {
-	public class ReplUserInterfaceFactory
+	public class ReplTab : TabItem, IReplOutputListener, ICloseListener
 	{
-		public static TabControl CreateTabControl()
+		private readonly List<ICloseListener> _listeners;
+		private readonly CommandTextBox _commandWindow;
+		private readonly IRepl _repl;
+
+		public ReplTab(IRepl repl)
 		{
-			TabControl tabControl = new TabControl();
-			tabControl.HorizontalAlignment = HorizontalAlignment.Stretch;
-			tabControl.VerticalAlignment = VerticalAlignment.Stretch;
-			tabControl.Padding = new Thickness(2);
-			return tabControl;
+			_repl = repl;
+			_listeners = new List<ICloseListener>();
+
+			var interactiveText = CreateInteractiveText();
+			var closeButton = CreateCloseButton();
+
+			Header = CreateHeaderPanel(CreateTabLabel(), closeButton);
+			Content = CreateTextBoxGrid(interactiveText);
+
+			_commandWindow = new CommandTextBox(interactiveText);
+			repl.AddSubmitKeyHandlers(_commandWindow);
+			repl.AddReplOutputListener(this);
+
+			Loaded += (o, e) => repl.Start();
+			closeButton.Click += (o, e) => DispatchCloseEvent();
 		}
 
-		public static TabItem CreateTabItem(WrapPanel headerPanel, Grid textBoxGrid)
+		public void AddCloseTabListener(ICloseListener listener)
 		{
-			TabItem tabItem = new TabItem();
-			tabItem.Header = headerPanel;
-			tabItem.Content = textBoxGrid;
-			return tabItem;
+			_listeners.Add(listener);
 		}
 
-		public static WrapPanel CreateHeaderPanel(Label replName, Button closeButton)
+		public void ReplOutput(string text)
 		{
-			WrapPanel headerPanel = new WrapPanel();
+			_commandWindow.Write(text);
+		}
+
+		public void OnTabClose()
+		{
+			_repl.Stop();
+		}
+
+		private void DispatchCloseEvent()
+		{
+			_listeners.ForEach(l => l.OnTabClose());
+		}
+
+		private static WrapPanel CreateHeaderPanel(Label replName, Button closeButton)
+		{
+			var headerPanel = new WrapPanel();
 			headerPanel.Children.Add(replName);
 			headerPanel.Children.Add(closeButton);
 			return headerPanel;
 		}
 
-		public static Grid CreateTextBoxGrid(TextBox textBox)
+		private static Grid CreateTextBoxGrid(TextBox textBox)
 		{
-			Grid grid = new Grid();
+			var grid = new Grid();
 			grid.Children.Add(textBox);
 			return grid;
 		}
 
-		public static Label CreateTabLabel()
+		private static Label CreateTabLabel()
 		{
-			Label name = new Label();
+			var name = new Label();
 			name.Content = "Repl";
 			name.Height = 19;
 			name.HorizontalAlignment = HorizontalAlignment.Left;
@@ -53,9 +83,9 @@ namespace Clojure.VisualStudio.Repl.Presentation
 			return name;
 		}
 
-		public static Button CreateCloseButton()
+		private Button CreateCloseButton()
 		{
-			Button closeButton = new Button();
+			var closeButton = new Button();
 			closeButton.Content = "X";
 			closeButton.Width = 20;
 			closeButton.Height = 19;
@@ -69,9 +99,9 @@ namespace Clojure.VisualStudio.Repl.Presentation
 			return closeButton;
 		}
 
-		public static TextBox CreateInteractiveText()
+		private static TextBox CreateInteractiveText()
 		{
-			TextBox interactiveText = new TextBox();
+			var interactiveText = new TextBox();
 			interactiveText.HorizontalAlignment = HorizontalAlignment.Stretch;
 			interactiveText.VerticalAlignment = VerticalAlignment.Stretch;
 			interactiveText.FontSize = 12;

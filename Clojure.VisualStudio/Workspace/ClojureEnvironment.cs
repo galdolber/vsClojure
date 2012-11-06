@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
+using Clojure.Code.Repl;
+using Clojure.VisualStudio.Repl.Presentation;
 using Clojure.VisualStudio.Workspace.EditorWindow;
 
 namespace Clojure.VisualStudio.Workspace
 {
-	public class ClojureEnvironment : ITextEditorWindowActiveDocumentChangedListener
+	public class ClojureEnvironment : ITextEditorWindowActiveDocumentChangedListener, IReplActivationListener
 	{
 		private readonly List<IEnvironmentListener> _listeners;
 		private ClojureEnvironmentSnapshot _snapshot;
@@ -53,11 +56,6 @@ namespace Clojure.VisualStudio.Workspace
 			_listeners.ForEach(l => l.EnvironmentStateChange(_snapshot));
 		}
 
-		public void OnReplActivated()
-		{
-			// Not sure what to do here.  Isn't a REPL always active?  We're creating the control right away for it.
-		}
-
 		private void HandleReplDeactivated()
 		{
 			if (_snapshot.State == ClojureEnvironmentState.ReplActiveOnly)
@@ -90,6 +88,12 @@ namespace Clojure.VisualStudio.Workspace
 		{
 			if (!newDocumentPath.ToLower().EndsWith(".clj")) HandleNonClojureDocument();
 			else HandleClojureDocument();
+		}
+
+		public void ReplActivated(IRepl repl)
+		{
+			HandleReplActivated();
+			// What about if a REPL is closed?
 		}
 	}
 }

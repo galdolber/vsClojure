@@ -18,7 +18,7 @@ namespace Clojure.VisualStudio.Workspace.EditorWindow
 			_listeners = new List<ITextEditorWindowActiveDocumentChangedListener>();
 		}
 
-		public void AddTextEditorDocumentChangedListener(ITextEditorWindowActiveDocumentChangedListener listener)
+		public void AddActiveDocumentChangedListener(ITextEditorWindowActiveDocumentChangedListener listener)
 		{
 			_listeners.Add(listener);
 		}

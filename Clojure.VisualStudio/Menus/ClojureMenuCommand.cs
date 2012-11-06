@@ -15,6 +15,9 @@ namespace Clojure.VisualStudio.Repl
 		public ClojureMenuCommand(CommandID commandId, IMenuCommandListener listener)
 		{
 			_menuCommand = new MenuCommand((sender, args) => OnClick(), commandId);
+			_menuCommand.Visible = true;
+			_menuCommand.Supported = true;
+			_menuCommand.Enabled = true;
 			_listeners = new List<IMenuCommandListener>() {listener};
 		}
 

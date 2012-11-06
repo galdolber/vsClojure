@@ -1,27 +1,29 @@
-﻿using Clojure.Code.Repl;
+﻿using System;
+using Clojure.Code.Repl;
+using Clojure.VisualStudio.Repl.Presentation;
 using Clojure.VisualStudio.Workspace;
 using Clojure.VisualStudio.Workspace.TextEditor;
 
 namespace Clojure.VisualStudio.Repl.Commands
 {
-	public class LoadSelectionCommand : IMenuCommandListener, ITextEditorStateChangeListener
+	public class LoadSelectionCommand : IMenuCommandListener, ITextEditorStateChangeListener, IReplActivationListener
 	{
-		private readonly IReplWriteRequestListener _replWriteRequestListener;
 		private TextEditorSnapshot _snapshot;
-
-		public LoadSelectionCommand(IReplWriteRequestListener replWriteRequestListener)
-		{
-			_replWriteRequestListener = replWriteRequestListener;
-		}
+		private IRepl _repl;
 
 		public void OnMenuCommandClick()
 		{
-			_replWriteRequestListener.Write(_snapshot.Selection);
+			_repl.Write(_snapshot.Selection);
 		}
 
 		public void OnTextEditorStateChange(TextEditorSnapshot snapshot)
 		{
 			_snapshot = snapshot;
+		}
+
+		public void ReplActivated(IRepl repl)
+		{
+			_repl = repl;
 		}
 	}
 }

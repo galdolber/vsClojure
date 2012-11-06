@@ -25,6 +25,7 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 			_vsTextManager = vsTextManager;
 			_listeners = new List<ITextEditorStateChangeListener>();
 			_snapshot = TextEditorSnapshot.Empty;
+			_currentDocumentPath = "";
 		}
 
 		public void AddStateChangeListener(ITextEditorStateChangeListener listener)

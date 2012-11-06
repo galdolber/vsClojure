@@ -30,7 +30,7 @@ namespace Clojure.VisualStudio.SolutionExplorer
 		{
 			var selectedItems = new List<SolutionItem>();
 
-			for (int i = 0; i < _dte.SelectedItems.Count; i++)
+			for (int i = 1; i <= _dte.SelectedItems.Count; i++)
 			{
 				var currentItem = _dte.SelectedItems.Item(i);
 
