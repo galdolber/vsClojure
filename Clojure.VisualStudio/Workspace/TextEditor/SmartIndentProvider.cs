@@ -10,11 +10,11 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 	[ContentType("Clojure")]
 	public class SmartIndentProvider : ISmartIndentProvider
 	{
-		public static SmartIndentCommandAdapter Command { get; set; }
+		public static SmartIndentCommand Command { get; set; }
 
 		public ISmartIndent CreateSmartIndent(ITextView textView)
 		{
-			return Command;
+			return new SmartIndentCommandAdapter(Command);
 		}
 	}
 

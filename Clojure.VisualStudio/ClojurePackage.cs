@@ -117,10 +117,10 @@ namespace Clojure.VisualStudio
 			var textEditorWindow = new TextEditorWindow(dte);
 			textEditorWindow.AddActiveDocumentChangedListener(textEditor);
 
-			var optionsFactory = componentModel.GetService<IEditorOptionsFactoryService>();
+			var textEditorOptions = new ClojureTextEditorOptions(componentModel.GetService<IEditorOptionsFactoryService>());
 			var smartIndentCommand = new SmartIndentCommand();
-			optionsFactory.GlobalOptions.OptionChanged += (o, e) => smartIndentCommand.OnOptionChange(new EditorOptions(optionsFactory.GlobalOptions.GetOptionValue<int>(new IndentSize().Key)));
-			SmartIndentProvider.Command = new SmartIndentCommandAdapter(smartIndentCommand);
+			textEditorOptions.AddOptionsChangedListener(smartIndentCommand);
+			SmartIndentProvider.Command = smartIndentCommand;
 
 			var formatter = new AutoFormatCommand();
 			formatter.AddAutoFormatListener(textEditor);
@@ -130,7 +130,7 @@ namespace Clojure.VisualStudio
 				(o, e) => e.TextView.GotAggregateFocus +=
 				          (sender, args) =>
 				          {
-				          	if (e.TextView.TextSnapshot.ContentType.TypeName.ToLower() != "clojure") return;
+							if (e.TextView.TextSnapshot.ContentType.TypeName.ToLower() != "clojure") return;
 
 				          	var blockComment = new BlockCommentAdapter(new TextBufferAdapter(e.TextView));
 				          	var blockUncomment = new BlockUncommentAdapter(new TextBufferAdapter(e.TextView));
