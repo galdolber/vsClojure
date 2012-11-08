@@ -1,7 +1,7 @@
 ﻿namespace Clojure.Workspace.Explorer
 {
-    public interface IProjectMenuCommandListener
-    {
-        void Selected(ProjectSnapshot projectSnapshot);
-    }
+	public interface IProjectMenuCommandListener
+	{
+		void Selected(ProjectSnapshot projectSnapshot);
+	}
 }

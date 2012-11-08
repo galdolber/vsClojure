@@ -1,15 +1,4 @@
-﻿/***************************************************************************
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-This code is licensed under the Visual Studio SDK license terms.
-THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
-ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
-IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
-PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
-
-***************************************************************************/
-
-using System;
+﻿using System;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
@@ -24,7 +13,6 @@ using Clojure.VisualStudio.Editor.Commenting;
 using Clojure.VisualStudio.Editor.TextBuffer;
 using Clojure.VisualStudio.Project.Configuration;
 using Clojure.VisualStudio.Project.Hierarchy;
-using Clojure.VisualStudio.Workspace;
 using Clojure.VisualStudio.Workspace.Menus;
 using Clojure.VisualStudio.Workspace.Repl;
 using Clojure.VisualStudio.Workspace.SolutionExplorer;
@@ -121,11 +109,11 @@ namespace Clojure.VisualStudio
 		{
 			var componentModel = (IComponentModel) GetService(typeof (SComponentModel));
 			var editorFactoryService = componentModel.GetService<ITextEditorFactoryService>();
-			var menuCommandService = (OleMenuCommandService)GetService(typeof(IMenuCommandService));
-			
+			var menuCommandService = (OleMenuCommandService) GetService(typeof (IMenuCommandService));
+
 			// Remove this duplication.
-			var dte = (DTE2)GetService(typeof(DTE));
-			var textEditor = new ClojureTextEditor(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager)this.GetService(typeof(SVsTextManager)));
+			var dte = (DTE2) GetService(typeof (DTE));
+			var textEditor = new ClojureTextEditor(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager) this.GetService(typeof (SVsTextManager)));
 			var textEditorWindow = new TextEditorWindow(dte);
 			textEditorWindow.AddActiveDocumentChangedListener(textEditor);
 
@@ -146,9 +134,9 @@ namespace Clojure.VisualStudio
 
 				          	var blockComment = new BlockCommentAdapter(new TextBufferAdapter(e.TextView));
 				          	var blockUncomment = new BlockUncommentAdapter(new TextBufferAdapter(e.TextView));
-							menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => formatter.Format(), CommandIDs.FormatDocument));
-							menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => blockComment.Execute(), CommandIDs.BlockComment));
-							menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => blockUncomment.Execute(), CommandIDs.BlockUncomment));
+				          	menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => formatter.Format(), CommandIDs.FormatDocument));
+				          	menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => blockComment.Execute(), CommandIDs.BlockComment));
+				          	menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => blockUncomment.Execute(), CommandIDs.BlockUncomment));
 				          };
 		}
 

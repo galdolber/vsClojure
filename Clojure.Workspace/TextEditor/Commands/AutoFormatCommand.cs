@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Clojure.Code.Editing.Formatting;
 using Clojure.Workspace.TextEditor.Options;
 
 namespace Clojure.Workspace.TextEditor.Commands
@@ -21,7 +22,7 @@ namespace Clojure.Workspace.TextEditor.Commands
 
 		public void Format()
 		{
-			var autoFormatter = new Clojure.Code.Editing.Formatting.AutoFormat();
+			var autoFormatter = new AutoFormat();
 			var formattedBuffer = autoFormatter.Format(_snapshot.Tokens, _currentOptions.IndentSize);
 			_commandListeners.ForEach(l => l.OnAutoFormat(formattedBuffer));
 		}
