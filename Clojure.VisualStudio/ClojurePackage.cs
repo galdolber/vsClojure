@@ -10,7 +10,6 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ***************************************************************************/
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
@@ -21,12 +20,9 @@ using System.Windows.Forms;
 using Clojure.Code.Parsing;
 using Clojure.System.IO.Compression;
 using Clojure.VisualStudio.Editor;
-using Clojure.VisualStudio.Editor.AutoFormat;
+using Clojure.VisualStudio.Editor.AutoIndent;
 using Clojure.VisualStudio.Editor.Commenting;
-using Clojure.VisualStudio.Editor.Options;
 using Clojure.VisualStudio.Editor.TextBuffer;
-using Clojure.VisualStudio.Menus;
-using Clojure.VisualStudio.Project;
 using Clojure.VisualStudio.Project.Configuration;
 using Clojure.VisualStudio.Project.Hierarchy;
 using Clojure.VisualStudio.Repl;
@@ -36,6 +32,8 @@ using Clojure.VisualStudio.SolutionExplorer;
 using Clojure.VisualStudio.Workspace;
 using Clojure.VisualStudio.Workspace.EditorWindow;
 using Clojure.VisualStudio.Workspace.TextEditor;
+using Clojure.VisualStudio.Workspace.TextEditor.Commands;
+using Clojure.VisualStudio.Workspace.TextEditor.Options;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -62,8 +60,6 @@ namespace Clojure.VisualStudio
 	public sealed class ClojurePackage : ProjectPackage
 	{
 		public const string PackageGuid = "7712178c-977f-45ec-adf6-e38108cc7739";
-
-		private ClearableMenuCommandService _thirdPartyEditorCommands;
 		private DTEEvents _dteEvents;
 
 		protected override void Initialize()
@@ -77,8 +73,6 @@ namespace Clojure.VisualStudio
 				{
 					AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainAssemblyResolve;
 					RegisterProjectFactory(new ClojureProjectFactory(this));
-					RegisterCommandMenuService();
-					HideAllClojureEditorMenuCommands();
 					ShowClojureProjectMenuCommands();
 					EnableTokenizationOfNewClojureBuffers();
 					SetupNewClojureBuffersWithSpacingOptions();
@@ -109,14 +103,6 @@ namespace Clojure.VisualStudio
 			return Path.GetDirectoryName(Registry.GetValue(codebaseRegistryLocation, "CodeBase", "").ToString());
 		}
 
-		private void RegisterCommandMenuService()
-		{
-			var commandRegistry = GetService(typeof (SVsRegisterPriorityCommandTarget)) as IVsRegisterPriorityCommandTarget;
-			_thirdPartyEditorCommands = new ClearableMenuCommandService(this);
-			uint cookie = 0;
-			commandRegistry.RegisterPriorityCommandTarget(0, _thirdPartyEditorCommands, out cookie);
-		}
-
 		private void EnableSettingOfRuntimePathForNewClojureProjects()
 		{
 			string codebaseRegistryLocation = ApplicationRegistryRoot + "\\Packages\\{" + PackageGuid + "}";
@@ -130,38 +116,38 @@ namespace Clojure.VisualStudio
 			}
 		}
 
-		private void HideAllClojureEditorMenuCommands()
-		{
-			var allCommandIds = new List<int>() {11, 12, 13, 14, 15};
-			var dte = (DTE2) GetService(typeof (DTE));
-			var menuCommandService = (OleMenuCommandService) GetService(typeof (IMenuCommandService));
-			var menuCommands = new List<MenuCommand>();
-			foreach (var commandId in allCommandIds) menuCommands.Add(new MenuCommand((o, s) => { }, new CommandID(Guids.GuidClojureExtensionCmdSet, commandId)));
-			var hider = new MenuCommandListHider(menuCommandService, menuCommands);
-			//dte.Events.WindowEvents.WindowActivated += (o, e) => hider.HideMenuCommands();
-		}
-
 		private void EnableMenuCommandsOnNewClojureBuffers()
 		{
 			var componentModel = (IComponentModel) GetService(typeof (SComponentModel));
 			var editorFactoryService = componentModel.GetService<ITextEditorFactoryService>();
+			var menuCommandService = (OleMenuCommandService)GetService(typeof(IMenuCommandService));
+			
+			// Remove this duplication.
+			var dte = (DTE2)GetService(typeof(DTE));
+			var textEditor = new ClojureTextEditor(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager)this.GetService(typeof(SVsTextManager)));
+			var textEditorWindow = new TextEditorWindow(dte);
+			textEditorWindow.AddActiveDocumentChangedListener(textEditor);
+
+			var optionsFactory = componentModel.GetService<IEditorOptionsFactoryService>();
+			var smartIndentCommand = new SmartIndentCommand();
+			optionsFactory.GlobalOptions.OptionChanged += (o, e) => smartIndentCommand.OnOptionChange(new EditorOptions(optionsFactory.GlobalOptions.GetOptionValue<int>(new IndentSize().Key)));
+			SmartIndentProvider.Command = smartIndentCommand;
+
+			var formatter = new AutoFormatCommand();
+			formatter.AddAutoFormatListener(textEditor);
+			textEditor.AddStateChangeListener(formatter);
 
 			editorFactoryService.TextViewCreated +=
 				(o, e) => e.TextView.GotAggregateFocus +=
 				          (sender, args) =>
 				          {
-							//_thirdPartyEditorCommands.Clear();
-							//if (e.TextView.TextSnapshot.ContentType.TypeName.ToLower() != "clojure") return;
+				          	if (e.TextView.TextSnapshot.ContentType.TypeName.ToLower() != "clojure") return;
 
-							//var editorOptionsBuilder = new EditorOptionsBuilder(componentModel.GetService<IEditorOptionsFactoryService>().GetOptions(e.TextView));
-							//var tokenizedBuffer = TokenizedBufferBuilder.TokenizedBuffers[e.TextView.TextBuffer];
-							//var formatter = new AutoFormatter(new TextBufferAdapter(e.TextView), tokenizedBuffer);
-							//var blockComment = new BlockCommentAdapter(new TextBufferAdapter(e.TextView));
-							//var blockUncomment = new BlockUncommentAdapter(new TextBufferAdapter(e.TextView));
-							//_thirdPartyEditorCommands.AddCommand(new MenuCommand((commandSender, commandArgs) => formatter.Format(editorOptionsBuilder.Get()), CommandIDs.FormatDocument));
-							//_thirdPartyEditorCommands.AddCommand(new MenuCommand((commandSender, commandArgs) => blockComment.Execute(), CommandIDs.BlockComment));
-							//_thirdPartyEditorCommands.AddCommand(new MenuCommand((commandSender, commandArgs) => blockUncomment.Execute(), CommandIDs.BlockUncomment));
-							//_thirdPartyEditorCommands.AddCommand(new MenuCommand((commandSender, commandArgs) => { }, CommandIDs.GotoDefinition));
+				          	var blockComment = new BlockCommentAdapter(new TextBufferAdapter(e.TextView));
+				          	var blockUncomment = new BlockUncommentAdapter(new TextBufferAdapter(e.TextView));
+							menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => formatter.Format(), CommandIDs.FormatDocument));
+							menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => blockComment.Execute(), CommandIDs.BlockComment));
+							menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => blockUncomment.Execute(), CommandIDs.BlockUncomment));
 				          };
 		}
 
@@ -197,10 +183,10 @@ namespace Clojure.VisualStudio
 
 		private void ShowClojureProjectMenuCommands()
 		{
-			var componentModel = (IComponentModel)this.GetService(typeof(SComponentModel));
+			var dte = (DTE2) GetService(typeof (DTE));
+			var componentModel = (IComponentModel) this.GetService(typeof (SComponentModel));
 			var menuCommandService = (OleMenuCommandService) GetService(typeof (IMenuCommandService));
 			var replToolWindow = (ReplToolWindow) FindToolWindow(typeof (ReplToolWindow), 0, true);
-			var dte = (DTE2) GetService(typeof (DTE));
 
 			var replPortfolio = new ReplPortfolio();
 			replPortfolio.AddPortfolioListener(ReplTabControl);
@@ -212,7 +198,7 @@ namespace Clojure.VisualStudio
 
 			var explorer = new VisualStudioExplorer(dte);
 			var environmentListener = new ClojureEnvironment();
-			var textEditor = new ClojureTextEditor(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager)this.GetService(typeof(SVsTextManager)));
+			var textEditor = new ClojureTextEditor(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager) this.GetService(typeof (SVsTextManager)));
 			var textEditorWindow = new TextEditorWindow(dte);
 			textEditorWindow.AddActiveDocumentChangedListener(textEditor);
 			textEditorWindow.AddActiveDocumentChangedListener(environmentListener);

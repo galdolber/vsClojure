@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Clojure.VisualStudio.Editor;
 using Clojure.VisualStudio.Workspace.EditorWindow;
+using Clojure.VisualStudio.Workspace.TextEditor.Commands;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
@@ -9,7 +10,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Clojure.VisualStudio.Workspace.TextEditor
 {
-	public class ClojureTextEditor : ITextEditorWindowActiveDocumentChangedListener
+	public class ClojureTextEditor : ITextEditorWindowActiveDocumentChangedListener, IAutoFormatListener
 	{
 		private readonly IVsEditorAdaptersFactoryService _vsEditorAdaptersFactoryService;
 		private readonly IVsTextManager _vsTextManager;
@@ -70,6 +71,11 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		private void FireStateChangeEvent()
 		{
 			_listeners.ForEach(l => l.OnTextEditorStateChange(_snapshot));
+		}
+
+		public void OnAutoFormat(string text)
+		{
+			_currentBuffer.Replace(new Span(0, _currentBuffer.CurrentSnapshot.Length), text);
 		}
 	}
 }

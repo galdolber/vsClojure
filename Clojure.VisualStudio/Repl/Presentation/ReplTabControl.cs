@@ -23,8 +23,8 @@ namespace Clojure.VisualStudio.Repl.Presentation
 			var tab = new ReplTab(repl);
 			tab.AddCloseTabListener(new TabCloseListener(this, tab));
 			Items.Add(tab);
-			SelectedItem = tab;
 			SelectionChanged += (o, e) => TryDispatchActivationEvent(tab, repl);
+			SelectedItem = tab;
 		}
 
 		public void AddReplActivationListener(IReplActivationListener listener)

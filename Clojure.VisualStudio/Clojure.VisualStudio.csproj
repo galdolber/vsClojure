@@ -49,6 +49,9 @@
     <Compile Include="Workspace\ClojureEnvironmentSnapshot.cs" />
     <Compile Include="Workspace\EditorWindow\ITextEditorWindowActiveDocumentChangedListener.cs" />
     <Compile Include="Workspace\TextEditor\ClojureTextEditor.cs" />
+    <Compile Include="Workspace\TextEditor\Commands\IAutoFormatListener.cs" />
+    <Compile Include="Workspace\TextEditor\Commands\SmartIndentCommand.cs" />
+    <Compile Include="Workspace\TextEditor\Commands\SmartIndentProvider.cs" />
     <Compile Include="Workspace\TextEditor\ITextEditorStateChangeListener.cs" />
     <Compile Include="Workspace\TextEditor\TextEditorSnapshot.cs" />
     <Compile Include="Workspace\EditorWindow\TextEditorWindow.cs" />
@@ -57,12 +60,9 @@
     <Compile Include="SolutionExplorer\IExplorerSelectionChangedListener.cs" />
     <Compile Include="SolutionExplorer\ProjectMenuCommand.cs" />
     <Compile Include="SolutionExplorer\IProjectMenuCommandListener.cs" />
-    <Compile Include="Menus\ClearableMenuCommandService.cs" />
     <Compile Include="ClojurePackage.cs" />
     <Compile Include="CommandIds.cs" />
-    <Compile Include="Editor\AutoFormat\AutoFormatter.cs" />
-    <Compile Include="Editor\AutoIndent\SmartIndentAdapter.cs" />
-    <Compile Include="Editor\AutoIndent\SmartIndentProvider.cs" />
+    <Compile Include="Workspace\TextEditor\Commands\AutoFormatCommand.cs" />
     <Compile Include="Editor\BraceMatching\BraceMatchingFormatDefinitions.cs" />
     <Compile Include="Editor\BraceMatching\BraceMatchingTagger.cs" />
     <Compile Include="Editor\BraceMatching\BraceMatchingTaggerProvider.cs" />
@@ -77,8 +77,6 @@
     <Compile Include="Editor\Intellisense\HippieCompletionSourceProvider.cs" />
     <Compile Include="Editor\Intellisense\IntellisenseCommandFilter.cs" />
     <Compile Include="Editor\Intellisense\IntellisenseCommandFilterFactory.cs" />
-    <Compile Include="Editor\Options\EditorOptions.cs" />
-    <Compile Include="Editor\Options\EditorOptionsBuilder.cs" />
     <Compile Include="Editor\Tagger\ClojureTagProvider.cs" />
     <Compile Include="Editor\Tagger\ClojureTokenTag.cs" />
     <Compile Include="Editor\Tagger\ClojureTokenTagger.cs" />
@@ -116,7 +114,6 @@
     <Compile Include="Repl\ReplLauncher.cs" />
     <Compile Include="Repl\ReplToolWindow.cs" />
     <Compile Include="Guids.cs" />
-    <Compile Include="Menus\MenuCommandListHider.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Project\Resources\Project.resx">

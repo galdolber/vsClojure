@@ -9,26 +9,12 @@ namespace Clojure.VisualStudio.Repl
     [Guid("8C5C7302-ECC8-435D-AAFE-D0E5A0A02FE9")]
     public class ReplToolWindow : ToolWindowPane, IReplWriteCompleteListener, IReplPortfolioListener
     {
-        private readonly TabControl _replManager;
-
-        public TabControl TabControl
+        public ReplToolWindow() : base(null)
         {
-            get { return _replManager; }
-        }
-
-        public ReplToolWindow()
-            : this(ClojurePackage.ReplTabControl)
-        {
-        }
-
-        public ReplToolWindow(TabControl replManager) :
-            base(null)
-        {
-            _replManager = replManager;
-            Caption = "Repl Manager";
-            BitmapResourceID = 301;
-            BitmapIndex = 1;
-            base.Content = _replManager;
+			Caption = "Repl Manager";
+			BitmapResourceID = 301;
+			BitmapIndex = 1;
+        	base.Content = ClojurePackage.ReplTabControl;
         }
 
     	public void OnReplWriteComplete()
