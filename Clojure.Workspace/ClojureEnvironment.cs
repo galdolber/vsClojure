@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
-using Clojure.Code.Repl;
+using Clojure.Workspace.Repl;
+using Clojure.Workspace.Repl.Presentation;
+using Clojure.Workspace.TextEditor;
 
 namespace Clojure.Workspace
 {

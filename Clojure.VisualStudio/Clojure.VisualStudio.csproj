@@ -41,28 +41,13 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Repl\Presentation\ICloseListener.cs" />
-    <Compile Include="Repl\Presentation\IReplActivationListener.cs" />
-    <Compile Include="Repl\Presentation\ReplTab.cs" />
-    <Compile Include="Repl\Presentation\ReplTabControl.cs" />
-    <Compile Include="Repl\ReplPortfolio.cs" />
-    <Compile Include="Workspace\ClojureEnvironmentSnapshot.cs" />
-    <Compile Include="Workspace\EditorWindow\ITextEditorWindowActiveDocumentChangedListener.cs" />
     <Compile Include="Workspace\TextEditor\ClojureTextEditor.cs" />
-    <Compile Include="Workspace\TextEditor\Commands\IAutoFormatListener.cs" />
-    <Compile Include="Workspace\TextEditor\Commands\SmartIndentCommand.cs" />
-    <Compile Include="Workspace\TextEditor\Commands\SmartIndentProvider.cs" />
-    <Compile Include="Workspace\TextEditor\ITextEditorStateChangeListener.cs" />
-    <Compile Include="Workspace\TextEditor\TextEditorSnapshot.cs" />
-    <Compile Include="Workspace\EditorWindow\TextEditorWindow.cs" />
-    <Compile Include="SolutionExplorer\VisualStudioExplorer.cs" />
-    <Compile Include="SolutionExplorer\IExplorer.cs" />
-    <Compile Include="SolutionExplorer\IExplorerSelectionChangedListener.cs" />
-    <Compile Include="SolutionExplorer\ProjectMenuCommand.cs" />
-    <Compile Include="SolutionExplorer\IProjectMenuCommandListener.cs" />
+    <Compile Include="Workspace\TextEditor\SmartIndentProvider.cs" />
+    <Compile Include="Workspace\TextEditor\TextEditorWindow.cs" />
+    <Compile Include="Workspace\SolutionExplorer\VisualStudioExplorer.cs" />
+    <Compile Include="Workspace\SolutionExplorer\ProjectMenuCommand.cs" />
     <Compile Include="ClojurePackage.cs" />
     <Compile Include="CommandIds.cs" />
-    <Compile Include="Workspace\TextEditor\Commands\AutoFormatCommand.cs" />
     <Compile Include="Editor\BraceMatching\BraceMatchingFormatDefinitions.cs" />
     <Compile Include="Editor\BraceMatching\BraceMatchingTagger.cs" />
     <Compile Include="Editor\BraceMatching\BraceMatchingTaggerProvider.cs" />
@@ -82,7 +67,6 @@
     <Compile Include="Editor\Tagger\ClojureTokenTagger.cs" />
     <Compile Include="Editor\TextBuffer\TextBufferAdapter.cs" />
     <Compile Include="Editor\TokenizedBufferBuilder.cs" />
-    <Compile Include="SolutionExplorer\ProjectSnapshot.cs" />
     <Compile Include="Project\Hierarchy\ClojureConfigProvider.cs" />
     <Compile Include="Project\Hierarchy\ClojureProjectConfig.cs" />
     <Compile Include="Project\Hierarchy\ClojureProjectFactory.cs" />
@@ -91,9 +75,7 @@
     <Compile Include="Project\Configuration\GeneralPropertyPage.cs" />
     <Compile Include="Project\Configuration\SettingsStore.cs" />
     <Compile Include="Project\Configuration\SettingsStoreProvider.cs" />
-    <Compile Include="SolutionExplorer\SolutionItem.cs" />
-    <Compile Include="SolutionExplorer\SolutionItemType.cs" />
-    <Compile Include="SolutionExplorer\UIHierarchyExtensions.cs" />
+    <Compile Include="Workspace\SolutionExplorer\UIHierarchyExtensions.cs" />
     <Compile Include="Project\Launching\LaunchParameters.cs" />
     <Compile Include="Project\Launching\LaunchParametersExtensions.cs" />
     <Compile Include="Project\Launching\ProjectLauncher.cs" />
@@ -101,18 +83,8 @@
     <Compile Include="Project\Hierarchy\OAClojureProject.cs" />
     <Compile Include="Project\Hierarchy\OAClojureProjectFileItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Workspace\ClojureEnvironment.cs" />
-    <Compile Include="Workspace\ClojureEnvironmentState.cs" />
-    <Compile Include="Menus\ClojureMenuCommand.cs" />
-    <Compile Include="Repl\Commands\ChangeNamespaceCommand.cs" />
-    <Compile Include="Repl\Commands\LoadActiveFileCommand.cs" />
-    <Compile Include="Repl\Commands\LoadSelectedFilesCommand.cs" />
-    <Compile Include="Repl\Commands\LoadSelectedProjectCommand.cs" />
-    <Compile Include="Repl\Commands\LoadSelectionCommand.cs" />
-    <Compile Include="Workspace\IEnvironmentListener.cs" />
-    <Compile Include="Menus\IMenuCommandListener.cs" />
-    <Compile Include="Repl\ReplLauncher.cs" />
-    <Compile Include="Repl\ReplToolWindow.cs" />
+    <Compile Include="Workspace\Menus\ClojureMenuCommand.cs" />
+    <Compile Include="Workspace\Repl\ReplToolWindow.cs" />
     <Compile Include="Guids.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +149,10 @@
     <ProjectReference Include="..\Clojure.System\Clojure.System.csproj">
       <Project>{FF930F13-4053-42BC-AB5B-D38D76723068}</Project>
       <Name>Clojure.System</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Clojure.Workspace\Clojure.Workspace.csproj">
+      <Project>{8ACA8B8D-901D-420A-9A20-529517B99F60}</Project>
+      <Name>Clojure.Workspace</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

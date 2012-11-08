@@ -1,4 +1,4 @@
-﻿namespace Clojure.VisualStudio.Workspace.EditorWindow
+﻿namespace Clojure.Workspace.TextEditor
 {
 	public interface ITextEditorWindowActiveDocumentChangedListener
 	{

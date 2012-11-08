@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Clojure.VisualStudio.Editor;
-using Clojure.VisualStudio.Workspace.EditorWindow;
-using Clojure.VisualStudio.Workspace.TextEditor.Commands;
+using Clojure.Workspace.TextEditor;
+using Clojure.Workspace.TextEditor.Commands;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;

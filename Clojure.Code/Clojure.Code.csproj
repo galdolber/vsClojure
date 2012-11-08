@@ -69,12 +69,6 @@
     <Compile Include="Parsing\TokenType.cs" />
     <Compile Include="Parsing\TokenTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repl\IRepl.cs" />
-    <Compile Include="Repl\IReplOutputListener.cs" />
-    <Compile Include="Repl\ExternalProcessRepl.cs" />
-    <Compile Include="Repl\IReplWriteRequestListener.cs" />
-    <Compile Include="Repl\IReplWriteCompleteListener.cs" />
-    <Compile Include="Repl\ReplExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />

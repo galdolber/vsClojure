@@ -3,7 +3,7 @@ using Clojure.Workspace.TextEditor.Options;
 
 namespace Clojure.Workspace.TextEditor.Commands
 {
-	public class SmartIndentCommand : ISmartIndent, ITextEditorStateChangeListener, IEditorOptionsChangedListener
+	public class SmartIndentCommand : ITextEditorStateChangeListener, IEditorOptionsChangedListener
 	{
 		private TextEditorSnapshot _snapshot;
 		private EditorOptions _currentEditorOptions;
@@ -12,9 +12,9 @@ namespace Clojure.Workspace.TextEditor.Commands
 		{
 		}
 
-		public int? GetDesiredIndentation(ITextSnapshotLine line)
+		public int GetDesiredIndentation(int startPosition)
 		{
-			return new ClojureSmartIndent().GetDesiredIndentation(_snapshot.Tokens, line.Start.Position, _currentEditorOptions.IndentSize);
+			return new ClojureSmartIndent().GetDesiredIndentation(_snapshot.Tokens, startPosition, _currentEditorOptions.IndentSize);
 		}
 
 		public void OnTextEditorStateChange(TextEditorSnapshot snapshot)
