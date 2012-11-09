@@ -5,7 +5,8 @@ using System.Text;
 
 namespace Clojure.Workspace.Explorer.Menus
 {
-	interface IExplorerMenuCommandListener
+	public interface IExplorerMenuCommandListener
 	{
+		void OnClick(List<SolutionItem> selectedItems);
 	}
 }

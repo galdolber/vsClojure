@@ -17,6 +17,7 @@ using Clojure.VisualStudio.Workspace.Repl;
 using Clojure.VisualStudio.Workspace.SolutionExplorer;
 using Clojure.VisualStudio.Workspace.TextEditor;
 using Clojure.Workspace;
+using Clojure.Workspace.Explorer.Menus;
 using Clojure.Workspace.Menus;
 using Clojure.Workspace.Repl;
 using Clojure.Workspace.Repl.Commands;
@@ -198,6 +199,14 @@ namespace Clojure.VisualStudio
 			return editorMenuCommand;
 		}
 
+		private ExplorerMenuCommand CreateExplorerMenuCommand(CommandID commandId)
+		{
+			var adapter = CreateReplMenuCommand(commandId);
+			var explorerMenuCommand = new ExplorerMenuCommand();
+			adapter.AddClickListener(explorerMenuCommand);
+			return explorerMenuCommand;
+		}
+
 		private void CreateReplMenuCommands()
 		{
 			var dte = (DTE2) GetService(typeof (DTE));
@@ -216,14 +225,8 @@ namespace Clojure.VisualStudio
 			var repl = new ReplCommandRouter();
 			ReplTabControl.AddReplActivationListener(repl);
 
-			var loadSelectedProjectCommand = new LoadSelectedProjectCommand(explorer, repl);
-			CreateReplMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 11)).AddClickListener(loadSelectedProjectCommand);
-			explorer.AddSelectionListener(loadSelectedProjectCommand);
-
-			var loadSelectedFilesCommand = new LoadSelectedFilesCommand(repl);
-			CreateReplMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 12)).AddClickListener(loadSelectedFilesCommand);
-			explorer.AddSelectionListener(loadSelectedFilesCommand);
-
+			CreateExplorerMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 11)).AddClickListener(new LoadSelectedProjectCommand(explorer, repl));
+			CreateExplorerMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 12)).AddClickListener(new LoadSelectedFilesCommand(repl));
 			CreateReplEditorMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 13)).AddMenuCommandListener(new LoadActiveFileCommand(repl));
 			CreateReplEditorMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 14)).AddMenuCommandListener(new ChangeNamespaceCommand(repl));
 			CreateReplEditorMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 15)).AddMenuCommandListener(new LoadSelectionCommand(repl));

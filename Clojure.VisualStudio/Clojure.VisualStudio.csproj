@@ -84,7 +84,6 @@
     <Compile Include="Project\Hierarchy\OAClojureProject.cs" />
     <Compile Include="Project\Hierarchy\OAClojureProjectFileItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Workspace\Menus\ReplMenuCommand.cs" />
     <Compile Include="Workspace\Repl\ReplToolWindow.cs" />
     <Compile Include="Guids.cs" />
   </ItemGroup>
