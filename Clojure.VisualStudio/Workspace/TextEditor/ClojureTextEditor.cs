@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Clojure.VisualStudio.Editor;
 using Clojure.Workspace.TextEditor;
-using Clojure.Workspace.TextEditor.Commands;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Clojure.VisualStudio.Workspace.TextEditor
 {
-	public class ClojureTextEditor : ITextEditorWindowActiveDocumentChangedListener, IAutoFormatListener
+	public class ClojureTextEditor : ITextEditorWindowActiveDocumentChangedListener, ITextEditorCommandListener
 	{
 		private readonly IVsEditorAdaptersFactoryService _vsEditorAdaptersFactoryService;
 		private readonly IVsTextManager _vsTextManager;
@@ -50,6 +50,8 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 				_currentBuffer = _currentWpfTextView.TextBuffer;
 				_currentBuffer.Changed += DocumentEdited;
 				_currentWpfTextView.Selection.SelectionChanged += SelectionChanged;
+				_snapshot = _snapshot.ChangeFilePath(newDocumentPath);
+				FireStateChangeEvent();
 			}
 
 			_currentDocumentPath = newDocumentPath;
@@ -58,6 +60,7 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		private void SelectionChanged(object sender, EventArgs e)
 		{
 			_snapshot = _snapshot.ChangeSelection(_currentWpfTextView.Selection.StreamSelectionSpan.Snapshot.GetText());
+			_snapshot = _snapshot.ChangeSelectedLines(GetSelectedLines());
 			FireStateChangeEvent();
 		}
 
@@ -76,6 +79,25 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		public void OnAutoFormat(string text)
 		{
 			_currentBuffer.Replace(new Span(0, _currentBuffer.CurrentSnapshot.Length), text);
+		}
+
+		public void ReplaceSelectedLines(List<string> newLines)
+		{
+			int startPosition = _currentWpfTextView.Selection.Start.Position.GetContainingLine().Start.Position;
+			int endPosition = _currentWpfTextView.Selection.End.Position.GetContainingLine().End.Position;
+			bool originalSelectedIsReversed = _currentWpfTextView.Selection.IsReversed;
+			string replacementText = newLines.Aggregate((first, second) => first + "\r\n" + second);
+			_currentBuffer.Replace(new Span(startPosition, endPosition - startPosition), replacementText);
+			var replacementSpan = new SnapshotSpan(new SnapshotPoint(_currentBuffer.CurrentSnapshot, startPosition), replacementText.Length);
+			_currentWpfTextView.Selection.Select(replacementSpan, originalSelectedIsReversed);
+		}
+
+		private List<string> GetSelectedLines()
+		{
+			int startPosition = _currentWpfTextView.Selection.Start.Position.GetContainingLine().Start.Position;
+			int endPosition = _currentWpfTextView.Selection.End.Position.GetContainingLine().End.Position;
+			string rawLines = _currentBuffer.CurrentSnapshot.GetText(startPosition, endPosition - startPosition);
+			return new List<string>(rawLines.Split(new[] { "\r\n" }, StringSplitOptions.None));
 		}
 	}
 }

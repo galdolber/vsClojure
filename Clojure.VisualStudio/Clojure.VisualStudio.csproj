@@ -41,7 +41,10 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Workspace\Menus\MenuCommandAdapterReference.cs" />
+    <Compile Include="Workspace\Menus\VisualStudioClojureMenuCommandAdapter.cs" />
     <Compile Include="Workspace\TextEditor\ClojureTextEditor.cs" />
+    <Compile Include="Workspace\TextEditor\ClojureTextEditorOptions.cs" />
     <Compile Include="Workspace\TextEditor\SmartIndentProvider.cs" />
     <Compile Include="Workspace\TextEditor\TextEditorWindow.cs" />
     <Compile Include="Workspace\SolutionExplorer\VisualStudioExplorer.cs" />
@@ -55,8 +58,6 @@
     <Compile Include="Editor\Classification\ClassificationType.cs" />
     <Compile Include="Editor\Classification\ClojureClassifier.cs" />
     <Compile Include="Editor\Classification\ClojureClassifierProvider.cs" />
-    <Compile Include="Editor\Commenting\BlockCommentAdapter.cs" />
-    <Compile Include="Editor\Commenting\BlockUncommentAdapter.cs" />
     <Compile Include="Editor\InputHandling\TextChangeAdapter.cs" />
     <Compile Include="Editor\Intellisense\HippieCompletionSource.cs" />
     <Compile Include="Editor\Intellisense\HippieCompletionSourceProvider.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="Project\Hierarchy\OAClojureProject.cs" />
     <Compile Include="Project\Hierarchy\OAClojureProjectFileItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Workspace\Menus\ClojureMenuCommand.cs" />
+    <Compile Include="Workspace\Menus\ReplMenuCommand.cs" />
     <Compile Include="Workspace\Repl\ReplToolWindow.cs" />
     <Compile Include="Guids.cs" />
   </ItemGroup>

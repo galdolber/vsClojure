@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
@@ -9,8 +10,6 @@ using System.Windows.Forms;
 using Clojure.Code.Parsing;
 using Clojure.System.IO.Compression;
 using Clojure.VisualStudio.Editor;
-using Clojure.VisualStudio.Editor.Commenting;
-using Clojure.VisualStudio.Editor.TextBuffer;
 using Clojure.VisualStudio.Project.Configuration;
 using Clojure.VisualStudio.Project.Hierarchy;
 using Clojure.VisualStudio.Workspace.Menus;
@@ -18,11 +17,12 @@ using Clojure.VisualStudio.Workspace.Repl;
 using Clojure.VisualStudio.Workspace.SolutionExplorer;
 using Clojure.VisualStudio.Workspace.TextEditor;
 using Clojure.Workspace;
+using Clojure.Workspace.Menus;
 using Clojure.Workspace.Repl;
 using Clojure.Workspace.Repl.Commands;
 using Clojure.Workspace.Repl.Presentation;
+using Clojure.Workspace.TextEditor;
 using Clojure.Workspace.TextEditor.Commands;
-using Clojure.Workspace.TextEditor.Options;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -62,7 +62,7 @@ namespace Clojure.VisualStudio
 				{
 					AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainAssemblyResolve;
 					RegisterProjectFactory(new ClojureProjectFactory(this));
-					ShowClojureProjectMenuCommands();
+					CreateReplMenuCommands();
 					EnableTokenizationOfNewClojureBuffers();
 					SetupNewClojureBuffersWithSpacingOptions();
 					EnableMenuCommandsOnNewClojureBuffers();
@@ -107,37 +107,52 @@ namespace Clojure.VisualStudio
 
 		private void EnableMenuCommandsOnNewClojureBuffers()
 		{
-			var componentModel = (IComponentModel) GetService(typeof (SComponentModel));
-			var editorFactoryService = componentModel.GetService<ITextEditorFactoryService>();
-			var menuCommandService = (OleMenuCommandService) GetService(typeof (IMenuCommandService));
-
 			// Remove this duplication.
-			var dte = (DTE2) GetService(typeof (DTE));
+			var componentModel = (IComponentModel) GetService(typeof (SComponentModel));
 			var textEditor = new ClojureTextEditor(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager) this.GetService(typeof (SVsTextManager)));
-			var textEditorWindow = new TextEditorWindow(dte);
+			var textEditorWindow = new TextEditorWindow((DTE2) GetService(typeof (DTE)));
 			textEditorWindow.AddActiveDocumentChangedListener(textEditor);
 
 			var textEditorOptions = new ClojureTextEditorOptions(componentModel.GetService<IEditorOptionsFactoryService>());
-			var smartIndentCommand = new SmartIndentCommand();
+			var smartIndentCommand = new AutoIndent();
 			textEditorOptions.AddOptionsChangedListener(smartIndentCommand);
 			SmartIndentProvider.Command = smartIndentCommand;
 
-			var formatter = new AutoFormatCommand();
-			formatter.AddAutoFormatListener(textEditor);
-			textEditor.AddStateChangeListener(formatter);
+			CreateEditorMenuCommand(CommandIDs.FormatDocument).AddMenuCommandListener(new AutoFormatCommand(textEditor));
+			CreateEditorMenuCommand(CommandIDs.BlockComment).AddMenuCommandListener(new BlockCommentCommand(textEditor));
+			CreateEditorMenuCommand(CommandIDs.BlockUncomment).AddMenuCommandListener(new BlockUncommentCommand(textEditor));
 
-			editorFactoryService.TextViewCreated +=
-				(o, e) => e.TextView.GotAggregateFocus +=
-				          (sender, args) =>
-				          {
-							if (e.TextView.TextSnapshot.ContentType.TypeName.ToLower() != "clojure") return;
+			// Group editor options with other text editor snapshot data.
+		}
 
-				          	var blockComment = new BlockCommentAdapter(new TextBufferAdapter(e.TextView));
-				          	var blockUncomment = new BlockUncommentAdapter(new TextBufferAdapter(e.TextView));
-				          	menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => formatter.Format(), CommandIDs.FormatDocument));
-				          	menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => blockComment.Execute(), CommandIDs.BlockComment));
-				          	menuCommandService.AddCommand(new MenuCommand((commandSender, commandArgs) => blockUncomment.Execute(), CommandIDs.BlockUncomment));
-				          };
+		private EditorMenuCommand CreateEditorMenuCommand(CommandID commandId)
+		{
+			var menuCommandAdapter = CreateMenuCommandAdapter(commandId, EnvironmentVisibility.VisibleEditorStates);
+			var editorMenuCommand = new EditorMenuCommand();
+			menuCommandAdapter.AddClickListener(editorMenuCommand);
+			return editorMenuCommand;
+		}
+
+		private VisualStudioClojureMenuCommandAdapter CreateMenuCommandAdapter(CommandID commandId, List<ClojureEnvironmentState> visibleStates)
+		{
+			var dte = (DTE2)GetService(typeof(DTE));
+			var menuCommandService = (OleMenuCommandService)GetService(typeof(IMenuCommandService));
+			var textEditorWindow = new TextEditorWindow(dte);
+
+			var environmentListener = new ClojureEnvironment();
+			textEditorWindow.AddActiveDocumentChangedListener(environmentListener);
+			ReplTabControl.AddReplActivationListener(environmentListener);
+
+			var editorEnvironmentListener = new EnvironmentVisibility(visibleStates);
+			environmentListener.AddActivationListener(editorEnvironmentListener);
+
+			var menuCommandAdapterReference = new MenuCommandAdapterReference();
+			var internalMenuCommand = new MenuCommand((o, e) => menuCommandAdapterReference.Adapter.OnClick(), commandId);
+			var menuCommandAdapter = new VisualStudioClojureMenuCommandAdapter(internalMenuCommand);
+			menuCommandAdapterReference.Adapter = menuCommandAdapter;
+			editorEnvironmentListener.AddVisibilityListener(menuCommandAdapter);
+			menuCommandService.AddCommand(internalMenuCommand);
+			return menuCommandAdapter;
 		}
 
 		private void SetupNewClojureBuffersWithSpacingOptions()
@@ -170,10 +185,22 @@ namespace Clojure.VisualStudio
 
 		public static ReplTabControl ReplTabControl = new ReplTabControl();
 
-		private void ShowClojureProjectMenuCommands()
+		private VisualStudioClojureMenuCommandAdapter CreateReplMenuCommand(CommandID commandId)
+		{
+			return CreateMenuCommandAdapter(commandId, EnvironmentVisibility.VisibleReplStates);
+		}
+
+		private EditorMenuCommand CreateReplEditorMenuCommand(CommandID commandId)
+		{
+			var adapter = CreateReplMenuCommand(commandId);
+			var editorMenuCommand = new EditorMenuCommand();
+			adapter.AddClickListener(editorMenuCommand);
+			return editorMenuCommand;
+		}
+
+		private void CreateReplMenuCommands()
 		{
 			var dte = (DTE2) GetService(typeof (DTE));
-			var componentModel = (IComponentModel) this.GetService(typeof (SComponentModel));
 			var menuCommandService = (OleMenuCommandService) GetService(typeof (IMenuCommandService));
 			var replToolWindow = (ReplToolWindow) FindToolWindow(typeof (ReplToolWindow), 0, true);
 
@@ -186,47 +213,20 @@ namespace Clojure.VisualStudio
 			menuCommandService.AddCommand(new MenuCommand((sender, args) => projectMenuCommand.Click(), ProjectMenuCommand.LaunchReplCommandId));
 
 			var explorer = new VisualStudioExplorer(dte);
-			var environmentListener = new ClojureEnvironment();
-			var textEditor = new ClojureTextEditor(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager) this.GetService(typeof (SVsTextManager)));
-			var textEditorWindow = new TextEditorWindow(dte);
-			textEditorWindow.AddActiveDocumentChangedListener(textEditor);
-			textEditorWindow.AddActiveDocumentChangedListener(environmentListener);
+			var repl = new ReplCommandRouter();
+			ReplTabControl.AddReplActivationListener(repl);
 
-			ReplTabControl.AddReplActivationListener(environmentListener);
-
-			var loadSelectedProjectCommand = new LoadSelectedProjectCommand(explorer);
-			var loadSelectedProjectMenuCommand = new ClojureMenuCommand(ClojureMenuCommand.LoadProjectIntoReplCommandId, loadSelectedProjectCommand);
-			loadSelectedProjectMenuCommand.RegisterWith(menuCommandService);
+			var loadSelectedProjectCommand = new LoadSelectedProjectCommand(explorer, repl);
+			CreateReplMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 11)).AddClickListener(loadSelectedProjectCommand);
 			explorer.AddSelectionListener(loadSelectedProjectCommand);
-			ReplTabControl.AddReplActivationListener(loadSelectedProjectCommand);
 
-			var loadSelectedFilesCommand = new LoadSelectedFilesCommand();
-			var loadSelectedFilesMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 12), loadSelectedFilesCommand);
-			environmentListener.AddActivationListener(loadSelectedFilesMenuCommand);
+			var loadSelectedFilesCommand = new LoadSelectedFilesCommand(repl);
+			CreateReplMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 12)).AddClickListener(loadSelectedFilesCommand);
 			explorer.AddSelectionListener(loadSelectedFilesCommand);
-			loadSelectedFilesMenuCommand.RegisterWith(menuCommandService);
-			ReplTabControl.AddReplActivationListener(loadSelectedFilesCommand);
 
-			var loadActiveFileCommand = new LoadActiveFileCommand();
-			var loadActiveFileMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 13), loadActiveFileCommand);
-			environmentListener.AddActivationListener(loadActiveFileMenuCommand);
-			loadActiveFileMenuCommand.RegisterWith(menuCommandService);
-			textEditorWindow.AddActiveDocumentChangedListener(loadActiveFileCommand);
-			ReplTabControl.AddReplActivationListener(loadActiveFileCommand);
-
-			var changeNamespaceCommand = new ChangeNamespaceCommand();
-			var changeNamespaceMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 14), changeNamespaceCommand);
-			environmentListener.AddActivationListener(changeNamespaceMenuCommand);
-			textEditor.AddStateChangeListener(changeNamespaceCommand);
-			changeNamespaceMenuCommand.RegisterWith(menuCommandService);
-			ReplTabControl.AddReplActivationListener(changeNamespaceCommand);
-
-			var loadSelectionCommand = new LoadSelectionCommand();
-			var loadSelectionMenuCommand = new ClojureMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 15), loadSelectionCommand);
-			environmentListener.AddActivationListener(loadSelectionMenuCommand);
-			loadSelectionMenuCommand.RegisterWith(menuCommandService);
-			textEditor.AddStateChangeListener(loadSelectionCommand);
-			ReplTabControl.AddReplActivationListener(loadSelectionCommand);
+			CreateReplEditorMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 13)).AddMenuCommandListener(new LoadActiveFileCommand(repl));
+			CreateReplEditorMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 14)).AddMenuCommandListener(new ChangeNamespaceCommand(repl));
+			CreateReplEditorMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 15)).AddMenuCommandListener(new LoadSelectionCommand(repl));
 		}
 
 		public override string ProductUserContext

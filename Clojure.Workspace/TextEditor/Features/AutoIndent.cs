@@ -3,7 +3,7 @@ using Clojure.Workspace.TextEditor.Options;
 
 namespace Clojure.Workspace.TextEditor.Commands
 {
-	public class SmartIndentCommand : ITextEditorStateChangeListener, IEditorOptionsChangedListener
+	public class AutoIndent : ITextEditorStateChangeListener, IEditorOptionsChangedListener
 	{
 		private TextEditorSnapshot _snapshot;
 		private EditorOptions _currentEditorOptions;

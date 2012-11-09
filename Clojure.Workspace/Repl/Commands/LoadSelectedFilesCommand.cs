@@ -1,29 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Clojure.Workspace.Explorer;
-using Clojure.Workspace.Menus;
-using Clojure.Workspace.Repl.Presentation;
+using Clojure.Workspace.Explorer.Menus;
 
 namespace Clojure.Workspace.Repl.Commands
 {
-	public class LoadSelectedFilesCommand : IMenuCommandListener, IExplorerSelectionChangedListener, IReplActivationListener
+	public class LoadSelectedFilesCommand : IExplorerMenuCommandListener
 	{
-		private List<SolutionItem> _selectedItems;
-		private IRepl _repl;
+		private readonly IRepl _repl;
 
-		public void OnMenuCommandClick()
-		{
-			_repl.LoadFiles(_selectedItems.FindAll(i => i.ItemType == SolutionItemType.File).Select(i => i.Path).ToList());
-		}
-
-		public void ExplorerSelectionChanged(List<SolutionItem> selectedItems)
-		{
-			_selectedItems = selectedItems;
-		}
-
-		public void ReplActivated(IRepl repl)
+		public LoadSelectedFilesCommand(IRepl repl)
 		{
 			_repl = repl;
+		}
+
+		public void OnClick(List<SolutionItem> selectedItems)
+		{
+			_repl.LoadFiles(selectedItems.FindAll(i => i.ItemType == SolutionItemType.File).Select(i => i.Path).ToList());
 		}
 	}
 }

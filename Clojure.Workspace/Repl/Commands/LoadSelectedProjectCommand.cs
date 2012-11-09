@@ -1,23 +1,23 @@
 ﻿using System.Collections.Generic;
 using Clojure.Workspace.Explorer;
 using Clojure.Workspace.Menus;
-using Clojure.Workspace.Repl.Presentation;
 
 namespace Clojure.Workspace.Repl.Commands
 {
-	public class LoadSelectedProjectCommand : IMenuCommandListener, IExplorerSelectionChangedListener, IReplActivationListener
+	public class LoadSelectedProjectCommand : IExternalClickListener, IExplorerSelectionChangedListener
 	{
 		private readonly IExplorer _explorer;
 		private List<SolutionItem> _selectedItems;
-		private IRepl _repl;
+		private readonly IRepl _repl;
 
-		public LoadSelectedProjectCommand(IExplorer explorer)
+		public LoadSelectedProjectCommand(IExplorer explorer, ReplCommandRouter repl)
 		{
 			_selectedItems = new List<SolutionItem>();
 			_explorer = explorer;
+			_repl = repl;
 		}
 
-		public void OnMenuCommandClick()
+		public void OnExternalClick()
 		{
 			var filePaths = new List<string>();
 
@@ -39,11 +39,6 @@ namespace Clojure.Workspace.Repl.Commands
 		public void ExplorerSelectionChanged(List<SolutionItem> selectedItems)
 		{
 			_selectedItems = selectedItems;
-		}
-
-		public void ReplActivated(IRepl repl)
-		{
-			_repl = repl;
 		}
 	}
 }

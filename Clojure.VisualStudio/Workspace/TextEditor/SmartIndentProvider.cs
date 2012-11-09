@@ -10,7 +10,7 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 	[ContentType("Clojure")]
 	public class SmartIndentProvider : ISmartIndentProvider
 	{
-		public static SmartIndentCommand Command { get; set; }
+		public static AutoIndent Command { get; set; }
 
 		public ISmartIndent CreateSmartIndent(ITextView textView)
 		{
@@ -20,9 +20,9 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 
 	public class SmartIndentCommandAdapter : ISmartIndent
 	{
-		private readonly SmartIndentCommand _command;
+		private readonly AutoIndent _command;
 
-		public SmartIndentCommandAdapter(SmartIndentCommand command)
+		public SmartIndentCommandAdapter(AutoIndent command)
 		{
 			_command = command;
 		}

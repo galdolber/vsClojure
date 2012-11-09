@@ -60,7 +60,8 @@
     <Compile Include="Explorer\SolutionItem.cs" />
     <Compile Include="Explorer\SolutionItemType.cs" />
     <Compile Include="IEnvironmentListener.cs" />
-    <Compile Include="Menus\IMenuCommandListener.cs" />
+    <Compile Include="Menus\IExternalClickListener.cs" />
+    <Compile Include="Menus\IVisibilityListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repl\Commands\ChangeNamespaceCommand.cs" />
     <Compile Include="Repl\Commands\LoadActiveFileCommand.cs" />
@@ -80,8 +81,13 @@
     <Compile Include="Repl\ReplLauncher.cs" />
     <Compile Include="Repl\ReplPortfolio.cs" />
     <Compile Include="TextEditor\Commands\AutoFormatCommand.cs" />
-    <Compile Include="TextEditor\Commands\IAutoFormatListener.cs" />
-    <Compile Include="TextEditor\Commands\SmartIndentCommand.cs" />
+    <Compile Include="TextEditor\Commands\BlockCommentCommand.cs" />
+    <Compile Include="TextEditor\Commands\BlockUncommentCommand.cs" />
+    <Compile Include="TextEditor\Features\AutoIndent.cs" />
+    <Compile Include="TextEditor\ITextEditorCommandListener.cs" />
+    <Compile Include="TextEditor\Menus\EditorMenuCommand.cs" />
+    <Compile Include="TextEditor\Menus\IEditorMenuCommandListener.cs" />
+    <Compile Include="TextEditor\EditorEnvironmentListener.cs" />
     <Compile Include="TextEditor\ITextEditorStateChangeListener.cs" />
     <Compile Include="TextEditor\ITextEditorWindowActiveDocumentChangedListener.cs" />
     <Compile Include="TextEditor\Options\EditorOptions.cs" />

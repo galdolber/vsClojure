@@ -1,27 +1,22 @@
-﻿using Clojure.Workspace.Menus;
+﻿using System;
+using Clojure.Workspace.Menus;
 using Clojure.Workspace.Repl.Presentation;
 using Clojure.Workspace.TextEditor;
 
 namespace Clojure.Workspace.Repl.Commands
 {
-	public class ChangeNamespaceCommand : IMenuCommandListener, ITextEditorStateChangeListener, IReplActivationListener
+	public class ChangeNamespaceCommand : IEditorMenuCommandListener
 	{
-		private TextEditorSnapshot _snapshot;
-		private IRepl _repl;
+		private readonly IRepl _repl;
 
-		public void OnMenuCommandClick()
-		{
-			_repl.ChangeNamespace(_snapshot.Tokens);
-		}
-
-		public void OnTextEditorStateChange(TextEditorSnapshot snapshot)
-		{
-			_snapshot = snapshot;
-		}
-
-		public void ReplActivated(IRepl repl)
+		public ChangeNamespaceCommand(IRepl repl)
 		{
 			_repl = repl;
+		}
+
+		public void Selected(TextEditorSnapshot snapshot)
+		{
+			_repl.ChangeNamespace(snapshot.Tokens);
 		}
 	}
 }
