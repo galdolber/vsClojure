@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Windows.Controls;
 using Clojure.Workspace.Repl;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -13,7 +14,11 @@ namespace Clojure.VisualStudio.Workspace.Repl
 			Caption = "Repl Manager";
 			BitmapResourceID = 301;
 			BitmapIndex = 1;
-			base.Content = ClojurePackage.ReplTabControl;
+		}
+
+		public void SetControl(TabControl tabControl)
+		{
+			base.Content = tabControl;
 		}
 
 		public void OnReplWriteComplete()

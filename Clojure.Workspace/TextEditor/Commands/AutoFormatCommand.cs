@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Clojure.Code.Editing.Formatting;
+using Clojure.Workspace.Menus;
 using Clojure.Workspace.TextEditor.Options;
 
 namespace Clojure.Workspace.TextEditor.Commands
 {
-	public class AutoFormatCommand : IEditorMenuCommandListener, IEditorOptionsChangedListener
+	public class AutoFormatCommand : IEditorOptionsChangedListener, ITextEditorStateChangeListener, IExternalClickListener
 	{
 		private EditorOptions _currentOptions;
 		private readonly ITextEditorCommandListener _textEditor;
+		private TextEditorSnapshot _snapshot;
 
 		public AutoFormatCommand(ITextEditorCommandListener textEditor)
 		{
@@ -20,10 +22,15 @@ namespace Clojure.Workspace.TextEditor.Commands
 			_currentOptions = newOptions;
 		}
 
-		public void Selected(TextEditorSnapshot snapshot)
+		public void OnTextEditorStateChange(TextEditorSnapshot snapshot)
+		{
+			_snapshot = snapshot;
+		}
+
+		public void OnExternalClick()
 		{
 			var autoFormatter = new AutoFormat();
-			var formattedBuffer = autoFormatter.Format(snapshot.Tokens, _currentOptions.IndentSize);
+			var formattedBuffer = autoFormatter.Format(_snapshot.Tokens, _currentOptions.IndentSize);
 			_textEditor.OnAutoFormat(formattedBuffer);
 		}
 	}

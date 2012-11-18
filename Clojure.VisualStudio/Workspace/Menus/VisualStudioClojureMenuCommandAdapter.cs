@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Design;
 using Clojure.Workspace.Menus;
-using Clojure.Workspace.TextEditor;
 
 namespace Clojure.VisualStudio.Workspace.Menus
 {
-	public class VisualStudioClojureMenuCommandAdapter : IVisibilityListener
+	public class VisualStudioClojureMenuCommandAdapter : IMenuCommand
 	{
 		private readonly MenuCommand _internalMenuCommand;
 		private readonly List<IExternalClickListener> _clickListeners;
@@ -24,19 +23,19 @@ namespace Clojure.VisualStudio.Workspace.Menus
 			_clickListeners.Add(listener);
 		}
 
-		public void OnClick()
-		{
-			_clickListeners.ForEach(l => l.OnExternalClick());
-		}
-
-		public void OnVisible()
+		public void Hide()
 		{
 			_internalMenuCommand.Visible = true;
 		}
 
-		public void OnInvisible()
+		public void Show()
 		{
 			_internalMenuCommand.Visible = false;
+		}
+
+		public void OnClick()
+		{
+			_clickListeners.ForEach(l => l.OnExternalClick());
 		}
 	}
 }
