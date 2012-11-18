@@ -1,19 +1,27 @@
-﻿using Clojure.Code.Editing.Commenting;
+﻿using System;
+using Clojure.Code.Editing.Commenting;
+using Clojure.Workspace.Menus;
 
 namespace Clojure.Workspace.TextEditor.Commands
 {
-	public class BlockUncommentCommand : IEditorMenuCommandListener
+	public class BlockUncommentCommand : ITextEditorStateChangeListener, IExternalClickListener
 	{
 		private readonly ITextEditorCommandListener _textEditorCommandListener;
+		private TextEditorSnapshot _snapshot;
 
 		public BlockUncommentCommand(ITextEditorCommandListener textEditorCommandListener)
 		{
 			_textEditorCommandListener = textEditorCommandListener;
 		}
 
-		public void Selected(TextEditorSnapshot snapshot)
+		public void OnTextEditorStateChange(TextEditorSnapshot snapshot)
 		{
-			_textEditorCommandListener.ReplaceSelectedLines(new BlockUncomment().Execute(snapshot.SelectedLines));
+			_snapshot = snapshot;
+		}
+
+		public void OnExternalClick()
+		{
+			_textEditorCommandListener.ReplaceSelectedLines(new BlockUncomment().Execute(_snapshot.SelectedLines));
 		}
 	}
 }

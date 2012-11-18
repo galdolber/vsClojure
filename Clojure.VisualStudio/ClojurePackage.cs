@@ -56,6 +56,7 @@ namespace Clojure.VisualStudio
 		private ClojureEnvironment _clojureEnvironment;
 		private TextEditorWindow _textEditorWindow;
 		private ClojureTextEditor _textEditor;
+		private ClojureTextEditorOptions _textEditorOptions;
 
 		protected override void Initialize()
 		{
@@ -75,6 +76,7 @@ namespace Clojure.VisualStudio
 					_textEditor = new ClojureTextEditor(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager)this.GetService(typeof(SVsTextManager)));
 					_textEditorWindow = new TextEditorWindow(dte);
 					_textEditorWindow.AddActiveDocumentChangedListener(_textEditor);
+					_textEditorOptions = new ClojureTextEditorOptions(componentModel.GetService<IEditorOptionsFactoryService>());
 
 					_clojureEnvironment = new ClojureEnvironment();
 					_textEditorWindow.AddActiveDocumentChangedListener(_clojureEnvironment);
@@ -127,26 +129,23 @@ namespace Clojure.VisualStudio
 
 		private void EnableMenuCommandsOnNewClojureBuffers()
 		{
-			// Remove this duplication.
-			var componentModel = (IComponentModel) GetService(typeof (SComponentModel));
-			var textEditorOptions = new ClojureTextEditorOptions(componentModel.GetService<IEditorOptionsFactoryService>());
 			var smartIndentCommand = new AutoIndent();
-			textEditorOptions.AddOptionsChangedListener(smartIndentCommand);
+			_textEditorOptions.AddOptionsChangedListener(smartIndentCommand);
 			SmartIndentProvider.Command = smartIndentCommand;
 
-			CreateEditorMenuCommand(CommandIDs.FormatDocument).AddMenuCommandListener(new AutoFormatCommand(_textEditor));
-			CreateEditorMenuCommand(CommandIDs.BlockComment).AddMenuCommandListener(new BlockCommentCommand(_textEditor));
-			CreateEditorMenuCommand(CommandIDs.BlockUncomment).AddMenuCommandListener(new BlockUncommentCommand(_textEditor));
+			var autoFormatCommand = new AutoFormatCommand(_textEditor);
+			_textEditorOptions.AddOptionsChangedListener(autoFormatCommand);
+			_textEditor.AddStateChangeListener(autoFormatCommand);
 
-			// Group editor options with other text editor snapshot data.
-		}
+			var blockCommentCommand = new BlockCommentCommand(_textEditor);
+			_textEditor.AddStateChangeListener(blockCommentCommand);
 
-		private EditorMenuCommand CreateEditorMenuCommand(CommandID commandId)
-		{
-			var menuCommandAdapter = CreateMenuCommandAdapter(commandId, EnvironmentVisibility.VisibleEditorStates);
-			var editorMenuCommand = new EditorMenuCommand();
-			menuCommandAdapter.AddClickListener(editorMenuCommand);
-			return editorMenuCommand;
+			var blockUncommentCommand = new BlockUncommentCommand(_textEditor);
+			_textEditor.AddStateChangeListener(blockUncommentCommand);
+
+			CreateMenuCommandAdapter(CommandIDs.FormatDocument, EnvironmentVisibility.VisibleEditorStates).AddClickListener(autoFormatCommand);
+			CreateMenuCommandAdapter(CommandIDs.BlockComment, EnvironmentVisibility.VisibleEditorStates).AddClickListener(blockCommentCommand);
+			CreateMenuCommandAdapter(CommandIDs.BlockUncomment, EnvironmentVisibility.VisibleEditorStates).AddClickListener(blockUncommentCommand);
 		}
 
 		private IMenuCommand CreateMenuCommandAdapter(CommandID commandId, List<ClojureEnvironmentState> visibleStates)
