@@ -5,18 +5,24 @@ using Clojure.Workspace.TextEditor;
 
 namespace Clojure.Workspace.Repl.Commands
 {
-	public class ChangeNamespaceCommand : IEditorMenuCommandListener
+	public class ChangeNamespaceCommand : ITextEditorStateChangeListener, IExternalClickListener
 	{
 		private readonly IRepl _repl;
+		private TextEditorSnapshot _snapshot;
 
 		public ChangeNamespaceCommand(IRepl repl)
 		{
 			_repl = repl;
 		}
 
-		public void Selected(TextEditorSnapshot snapshot)
+		public void OnTextEditorStateChange(TextEditorSnapshot snapshot)
 		{
-			_repl.ChangeNamespace(snapshot.Tokens);
+			_snapshot = snapshot;
+		}
+
+		public void OnExternalClick()
+		{
+			_repl.ChangeNamespace(_snapshot.Tokens);
 		}
 	}
 }

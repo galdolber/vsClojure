@@ -30,6 +30,11 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		public void AddOptionsChangedListener(IEditorOptionsChangedListener listener)
 		{
 			_listeners.Add(listener);
+
+			var indentSize = _optionsFactory.GlobalOptions.GetOptionValue<int>(new IndentSize().Key);
+			var newOptions = new EditorOptions(indentSize);
+
+			listener.OnOptionChange(newOptions);
 		}
 	}
 }

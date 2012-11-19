@@ -2,6 +2,7 @@
 {
 	public enum ClojureEnvironmentState
 	{
+		Unknown,
 		ReplActiveOnly,
 		EditorActiveOnly,
 		ReplAndEditorNotActive,

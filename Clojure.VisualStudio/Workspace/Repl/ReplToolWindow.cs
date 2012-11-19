@@ -14,6 +14,7 @@ namespace Clojure.VisualStudio.Workspace.Repl
 			Caption = "Repl Manager";
 			BitmapResourceID = 301;
 			BitmapIndex = 1;
+			base.Content = new Label();
 		}
 
 		public void SetControl(TabControl tabControl)

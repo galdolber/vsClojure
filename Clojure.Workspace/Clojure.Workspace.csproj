@@ -55,15 +55,13 @@
     <Compile Include="Environment\ClojureEnvironmentState.cs" />
     <Compile Include="Explorer\IExplorer.cs" />
     <Compile Include="Explorer\IExplorerSelectionChangedListener.cs" />
-    <Compile Include="Explorer\Menus\ExplorerMenuCommand.cs" />
-    <Compile Include="Explorer\Menus\IExplorerMenuCommandListener.cs" />
     <Compile Include="Explorer\Menus\IProjectMenuCommandListener.cs" />
     <Compile Include="Explorer\ProjectSnapshot.cs" />
     <Compile Include="Explorer\SolutionItem.cs" />
     <Compile Include="Explorer\SolutionItemType.cs" />
     <Compile Include="Environment\IEnvironmentListener.cs" />
     <Compile Include="Menus\IExternalClickListener.cs" />
-    <Compile Include="Environment\IVisibilityListener.cs" />
+    <Compile Include="Menus\IMenuCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repl\Commands\ChangeNamespaceCommand.cs" />
     <Compile Include="Repl\Commands\LoadActiveFileCommand.cs" />
@@ -88,9 +86,7 @@
     <Compile Include="TextEditor\Commands\BlockUncommentCommand.cs" />
     <Compile Include="TextEditor\Features\AutoIndent.cs" />
     <Compile Include="TextEditor\ITextEditorCommandListener.cs" />
-    <Compile Include="TextEditor\Menus\EditorMenuCommand.cs" />
-    <Compile Include="TextEditor\Menus\IEditorMenuCommandListener.cs" />
-    <Compile Include="Environment\EnvironmentVisibility.cs" />
+    <Compile Include="Menus\MenuCommandCollection.cs" />
     <Compile Include="TextEditor\ITextEditorStateChangeListener.cs" />
     <Compile Include="TextEditor\ITextEditorWindowActiveDocumentChangedListener.cs" />
     <Compile Include="TextEditor\Options\EditorOptions.cs" />

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Clojure.Workspace.Menus;
 
 namespace Clojure.Workspace.TextEditor
 {
-	public class EnvironmentVisibility : IEnvironmentListener
+	public class MenuCommandCollection : IEnvironmentListener
 	{
 		public static readonly List<ClojureEnvironmentState> VisibleEditorStates = new List<ClojureEnvironmentState>()
 			{
@@ -16,18 +17,19 @@ namespace Clojure.Workspace.TextEditor
 			};
 
 		private ClojureEnvironmentSnapshot _lastKnownEnvironmentState;
-		private readonly List<IVisibilityListener> _listeners;
+		private readonly List<IMenuCommand> _menuCommands;
 		private readonly List<ClojureEnvironmentState> _visibleStates;
 
-		public EnvironmentVisibility(List<ClojureEnvironmentState> visibleStates)
+		public MenuCommandCollection(List<ClojureEnvironmentState> visibleStates)
 		{
 			_visibleStates = visibleStates;
-			_listeners = new List<IVisibilityListener>();
+			_menuCommands = new List<IMenuCommand>();
+			_lastKnownEnvironmentState = new ClojureEnvironmentSnapshot(ClojureEnvironmentState.Unknown);
 		}
 
-		public void AddVisibilityListener(IVisibilityListener listener)
+		public void Add(IMenuCommand menuCommand)
 		{
-			_listeners.Add(listener);
+			_menuCommands.Add(menuCommand);
 		}
 
 		public void EnvironmentStateChange(ClojureEnvironmentSnapshot snapshot)
@@ -36,8 +38,8 @@ namespace Clojure.Workspace.TextEditor
 			bool wasInvisible = !wasVisible;
 			_lastKnownEnvironmentState = snapshot;
 
-			if (wasInvisible && _visibleStates.Contains(snapshot.State)) _listeners.ForEach(l => l.OnVisible());
-			else if (wasVisible && !_visibleStates.Contains(snapshot.State)) _listeners.ForEach(l => l.OnInvisible());
+			if (wasInvisible && _visibleStates.Contains(snapshot.State)) _menuCommands.ForEach(m => m.Show());
+			else if (wasVisible && !_visibleStates.Contains(snapshot.State)) _menuCommands.ForEach(l => l.Hide());
 		}
 	}
 }

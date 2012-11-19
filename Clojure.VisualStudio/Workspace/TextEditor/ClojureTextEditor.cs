@@ -32,6 +32,7 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		public void AddStateChangeListener(ITextEditorStateChangeListener listener)
 		{
 			_listeners.Add(listener);
+			listener.OnTextEditorStateChange(_snapshot);
 		}
 
 		public void OnActiveDocumentChange(string newDocumentPath)
@@ -51,6 +52,10 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 				_currentBuffer.Changed += DocumentEdited;
 				_currentWpfTextView.Selection.SelectionChanged += SelectionChanged;
 				_snapshot = _snapshot.ChangeFilePath(newDocumentPath);
+
+				var bufferState = TokenizedBufferBuilder.TokenizedBuffers[_currentBuffer].CurrentState;
+				_snapshot = _snapshot.ChangeTokens(bufferState);
+
 				FireStateChangeEvent();
 			}
 
