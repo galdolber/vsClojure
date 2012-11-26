@@ -81,16 +81,22 @@
     <Compile Include="Repl\ReplExtensions.cs" />
     <Compile Include="Repl\ReplLauncher.cs" />
     <Compile Include="Repl\ReplPortfolio.cs" />
+    <Compile Include="TextEditor\BufferDiffGram.cs" />
+    <Compile Include="TextEditor\ClojureTextBuffer.cs" />
     <Compile Include="TextEditor\Commands\AutoFormatCommand.cs" />
     <Compile Include="TextEditor\Commands\BlockCommentCommand.cs" />
     <Compile Include="TextEditor\Commands\BlockUncommentCommand.cs" />
     <Compile Include="TextEditor\Features\AutoIndent.cs" />
+    <Compile Include="TextEditor\IClojureTextBufferStateListener.cs" />
+    <Compile Include="TextEditor\IClojureTextEditor.cs" />
+    <Compile Include="TextEditor\ITextEditorActionListener.cs" />
     <Compile Include="TextEditor\ITextEditorCommandListener.cs" />
     <Compile Include="Menus\MenuCommandCollection.cs" />
     <Compile Include="TextEditor\ITextEditorStateChangeListener.cs" />
     <Compile Include="TextEditor\ITextEditorWindowActiveDocumentChangedListener.cs" />
     <Compile Include="TextEditor\Options\EditorOptions.cs" />
     <Compile Include="TextEditor\Options\IEditorOptionsChangedListener.cs" />
+    <Compile Include="TextEditor\TextChangeExtensions.cs" />
     <Compile Include="TextEditor\TextEditorSnapshot.cs" />
   </ItemGroup>
   <ItemGroup>
