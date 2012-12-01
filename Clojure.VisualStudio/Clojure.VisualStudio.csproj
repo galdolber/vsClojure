@@ -43,10 +43,9 @@
   <ItemGroup>
     <Compile Include="Workspace\Menus\MenuCommandAdapterReference.cs" />
     <Compile Include="Workspace\Menus\VisualStudioClojureMenuCommandAdapter.cs" />
-    <Compile Include="Workspace\TextEditor\ClojureTextEditor.cs" />
+    <Compile Include="Workspace\TextEditor\VisualStudioClojureTextEditor.cs" />
     <Compile Include="Workspace\TextEditor\ClojureTextEditorOptions.cs" />
     <Compile Include="Workspace\TextEditor\SmartIndentProvider.cs" />
-    <Compile Include="Workspace\TextEditor\TextEditorWindow.cs" />
     <Compile Include="Workspace\SolutionExplorer\VisualStudioExplorer.cs" />
     <Compile Include="Workspace\SolutionExplorer\ProjectMenuCommand.cs" />
     <Compile Include="ClojurePackage.cs" />
@@ -63,10 +62,7 @@
     <Compile Include="Editor\Intellisense\HippieCompletionSourceProvider.cs" />
     <Compile Include="Editor\Intellisense\IntellisenseCommandFilter.cs" />
     <Compile Include="Editor\Intellisense\IntellisenseCommandFilterFactory.cs" />
-    <Compile Include="Editor\Tagger\ClojureTagProvider.cs" />
-    <Compile Include="Editor\Tagger\ClojureTokenTag.cs" />
-    <Compile Include="Editor\Tagger\ClojureTokenTagger.cs" />
-    <Compile Include="Editor\TextBuffer\TextBufferAdapter.cs" />
+    <Compile Include="Workspace\TextEditor\ClojureTokenTag.cs" />
     <Compile Include="Editor\TokenizedBufferBuilder.cs" />
     <Compile Include="Project\Hierarchy\ClojureConfigProvider.cs" />
     <Compile Include="Project\Hierarchy\ClojureProjectConfig.cs" />

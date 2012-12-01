@@ -4,6 +4,7 @@ using Clojure.Code.Parsing;
 
 namespace Clojure.Workspace.TextEditor
 {
+	// Rename this to buffer snapshot.
 	public class TextEditorSnapshot
 	{
 		private readonly LinkedList<Token> _tokens;

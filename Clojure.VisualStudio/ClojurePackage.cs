@@ -26,13 +26,11 @@ using Clojure.Workspace.TextEditor.Commands;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
-using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Project;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Win32;
 
 namespace Clojure.VisualStudio
@@ -53,9 +51,6 @@ namespace Clojure.VisualStudio
 
 		private ReplTabControl _replTabControl;
 		private ClojureEnvironment _clojureEnvironment;
-		private TextEditorWindow _textEditorWindow;
-		private ClojureTextEditor _textEditor;
-		private ClojureTextEditorOptions _textEditorOptions;
 
 		protected override void Initialize()
 		{
@@ -68,17 +63,10 @@ namespace Clojure.VisualStudio
 				{
 					_replTabControl = new ReplTabControl();
 
-					var replToolWindow = (ReplToolWindow)FindToolWindow(typeof(ReplToolWindow), 0, true);
+					var replToolWindow = (ReplToolWindow) FindToolWindow(typeof (ReplToolWindow), 0, true);
 					replToolWindow.SetControl(_replTabControl);
 
-					var componentModel = (IComponentModel)GetService(typeof(SComponentModel));
-					_textEditor = new ClojureTextEditor(componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager)this.GetService(typeof(SVsTextManager)));
-					_textEditorWindow = new TextEditorWindow(dte);
-					_textEditorWindow.AddActiveDocumentChangedListener(_textEditor);
-					_textEditorOptions = new ClojureTextEditorOptions(componentModel.GetService<IEditorOptionsFactoryService>());
-
 					_clojureEnvironment = new ClojureEnvironment();
-					_textEditorWindow.AddActiveDocumentChangedListener(_clojureEnvironment);
 					_replTabControl.AddReplActivationListener(_clojureEnvironment);
 
 					AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainAssemblyResolve;
@@ -128,21 +116,6 @@ namespace Clojure.VisualStudio
 
 		private void EnableMenuCommandsOnNewClojureBuffers()
 		{
-			var smartIndentCommand = new AutoIndent();
-			_textEditorOptions.AddOptionsChangedListener(smartIndentCommand);
-			_textEditor.AddStateChangeListener(smartIndentCommand);
-			SmartIndentProvider.Command = smartIndentCommand;
-
-			var autoFormatCommand = new AutoFormatCommand(_textEditor);
-			_textEditorOptions.AddOptionsChangedListener(autoFormatCommand);
-			_textEditor.AddStateChangeListener(autoFormatCommand);
-
-			var blockCommentCommand = new BlockCommentCommand(_textEditor);
-			_textEditor.AddStateChangeListener(blockCommentCommand);
-
-			var blockUncommentCommand = new BlockUncommentCommand(_textEditor);
-			_textEditor.AddStateChangeListener(blockUncommentCommand);
-
 			var menuCommandCollection = new MenuCommandCollection(MenuCommandCollection.VisibleEditorStates);
 			menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.FormatDocument, autoFormatCommand));
 			menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.BlockComment, blockCommentCommand));
@@ -153,7 +126,7 @@ namespace Clojure.VisualStudio
 		// Factory - VS specific.  Need interface to work with non-VS specific code?
 		private IMenuCommand CreateVisualStudioMenuCommand(CommandID commandId, IExternalClickListener clickListener)
 		{
-			var menuCommandService = (OleMenuCommandService)GetService(typeof(IMenuCommandService));
+			var menuCommandService = (OleMenuCommandService) GetService(typeof (IMenuCommandService));
 			var menuCommandAdapterReference = new MenuCommandAdapterReference();
 			var internalMenuCommand = new MenuCommand((o, e) => menuCommandAdapterReference.Adapter.OnClick(), commandId);
 			var menuCommandAdapter = new VisualStudioClojureMenuCommandAdapter(internalMenuCommand);
@@ -171,10 +144,14 @@ namespace Clojure.VisualStudio
 			editorFactoryService.TextViewCreated +=
 				(o, e) =>
 				{
-					// Have the ClojureTextEditor set the options each time the active editor changes?
-					// One ClojureTextEditor per TextView?  Might need to create a "router" TextEditor to
-					// get menu commands to work with multiple ClojureTextEditors.
 					if (e.TextView.TextSnapshot.ContentType.TypeName.ToLower() != "clojure") return;
+
+					var buffer = new ClojureTextBuffer();
+
+					var editor = new VisualStudioClojureTextEditor(e.TextView);
+					e.TextView.Closed += (obj, args) => VisualStudioClojureTextEditor.Editors.Remove(e.TextView);
+					VisualStudioClojureTextEditor.Editors.Add(e.TextView, editor);
+
 					IEditorOptions editorOptions = componentModel.GetService<IEditorOptionsFactoryService>().GetOptions(e.TextView);
 					editorOptions.SetOptionValue(new ConvertTabsToSpaces().Key, true);
 					editorOptions.SetOptionValue(new IndentSize().Key, 2);
@@ -191,7 +168,16 @@ namespace Clojure.VisualStudio
 				(o, e) => tokenizedBufferBuilder.RemoveTokenizedBuffer(e.TextDocument.TextBuffer);
 
 			documentFactoryService.TextDocumentCreated +=
-				(o, e) => { if (e.TextDocument.FilePath.EndsWith(".clj")) tokenizedBufferBuilder.CreateTokenizedBuffer(e.TextDocument.TextBuffer); };
+				(o, e) =>
+				{
+					if (!e.TextDocument.FilePath.EndsWith(".clj")) return;
+					var editor = new VisualStudioClojureTextEditor(null);
+					var buffer = new ClojureTextBuffer();
+					editor.AddUserActionListener(buffer);
+					buffer.AddStateChangeListener(editor);
+
+					tokenizedBufferBuilder.CreateTokenizedBuffer(e.TextDocument.TextBuffer);
+				};
 		}
 
 		private void CreateReplMenuCommands()

@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Clojure.Code.Editing.Commenting;
 using Clojure.Code.Editing.Formatting;
 using Clojure.Code.Editing.PartialUpdate;
+using Clojure.Code.Parsing;
 
 namespace Clojure.Workspace.TextEditor
 {
-	public class ClojureTextBuffer : ITextEditorActionListener
+	public class ClojureTextBuffer : IUserActionListener
 	{
 		private TextEditorSnapshot _snapshot;
 		private readonly List<IClojureTextBufferStateListener> _listeners;
@@ -22,10 +24,10 @@ namespace Clojure.Workspace.TextEditor
 			_listeners.Add(listener);
 		}
 
-		public void TextChanged(List<TextChangeData> changes, string textSnapshot)
+		public void Edit(List<TextChangeData> changes, string textSnapshot)
 		{
 			var diffGrams = changes.Select(change => _snapshot.Tokens.ApplyChange(change, textSnapshot)).ToList();
-			diffGrams.ForEach(diffGram => _listeners.ForEach(l => l.TokensChanged(diffGram)));
+			diffGrams.ForEach(diffGram => _listeners.ForEach(l => l.TokensChanged(_snapshot, diffGram)));
 		}
 
 		public void Format()
@@ -35,9 +37,14 @@ namespace Clojure.Workspace.TextEditor
 			_listeners.ForEach(l => l.BufferChanged(result));
 		}
 
-		public void CommentSelection(List<string> selectedLines)
+		public void CommentLines(int startIndex, int endIndex)
 		{
-			_listeners.ForEach(l => l.ReplaceSelectedLines(new BlockComment().Execute(selectedLines)));
+			throw new NotImplementedException();
+		}
+
+		public void UncommentLines(int startPosition, int endPosition)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
