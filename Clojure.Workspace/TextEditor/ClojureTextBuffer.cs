@@ -24,6 +24,11 @@ namespace Clojure.Workspace.TextEditor
 			_listeners.Add(listener);
 		}
 
+		public TextEditorSnapshot GetSnapshot()
+		{
+			return _snapshot;
+		}
+
 		public void Edit(List<TextChangeData> changes, string textSnapshot)
 		{
 			var diffGrams = changes.Select(change => _snapshot.Tokens.ApplyChange(change, textSnapshot)).ToList();

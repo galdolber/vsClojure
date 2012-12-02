@@ -55,6 +55,7 @@ namespace Clojure.VisualStudio.Editor.BraceMatching
 
 		public void BufferChanged(string newText)
 		{
+			
 		}
 
 		public void OnCaretPositionChange(int newPosition)

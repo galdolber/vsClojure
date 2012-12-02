@@ -62,7 +62,6 @@
     <Compile Include="Workspace\TextEditor\Intellisense\HippieCompletionSourceProvider.cs" />
     <Compile Include="Workspace\TextEditor\Intellisense\IntellisenseCommandFilter.cs" />
     <Compile Include="Workspace\TextEditor\Intellisense\IntellisenseCommandFilterFactory.cs" />
-    <Compile Include="Editor\TokenizedBufferBuilder.cs" />
     <Compile Include="Project\Hierarchy\ClojureConfigProvider.cs" />
     <Compile Include="Project\Hierarchy\ClojureProjectConfig.cs" />
     <Compile Include="Project\Hierarchy\ClojureProjectFactory.cs" />

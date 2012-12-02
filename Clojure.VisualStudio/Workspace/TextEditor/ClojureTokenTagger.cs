@@ -12,32 +12,6 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Clojure.VisualStudio.Workspace.TextEditor.Tagging
 {
-	[Export(typeof(IViewTaggerProvider))]
-	[ContentType("Clojure")]
-	[TagType(typeof(ClojureTokenTag))]
-	public class ClojureTagProvider : IViewTaggerProvider
-	{
-		public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
-		{
-			return buffer.Properties.GetProperty(typeof(ClojureTokenTagger)) as ITagger<T>;
-		}
-	}
-
-	public class ClojureTokenTag : ITag
-	{
-		private readonly Token _token;
-
-		public Token Token
-		{
-			get { return _token; }
-		}
-
-		public ClojureTokenTag(Token token)
-		{
-			_token = token;
-		}
-	}
-
 	public class ClojureTokenTagger : ITagger<ClojureTokenTag>, IClojureTextBufferStateListener
 	{
 		private TextEditorSnapshot _snapshot;
@@ -78,6 +52,32 @@ namespace Clojure.VisualStudio.Workspace.TextEditor.Tagging
 
 		public void BufferChanged(string newText)
 		{
+		}
+	}
+
+	[Export(typeof(IViewTaggerProvider))]
+	[ContentType("Clojure")]
+	[TagType(typeof(ClojureTokenTag))]
+	public class ClojureTagProvider : IViewTaggerProvider
+	{
+		public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
+		{
+			return buffer.Properties.GetProperty(typeof(ClojureTokenTagger)) as ITagger<T>;
+		}
+	}
+
+	public class ClojureTokenTag : ITag
+	{
+		private readonly Token _token;
+
+		public Token Token
+		{
+			get { return _token; }
+		}
+
+		public ClojureTokenTag(Token token)
+		{
+			_token = token;
 		}
 	}
 }

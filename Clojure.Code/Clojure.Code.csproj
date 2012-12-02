@@ -53,8 +53,10 @@
     <Compile Include="Editing\Commenting\BlockUncomment.cs" />
     <Compile Include="Editing\Formatting\AutoFormat.cs" />
     <Compile Include="Editing\Indenting\ClojureSmartIndent.cs" />
+    <Compile Include="Editing\PartialUpdate\BufferDiffGram.cs" />
     <Compile Include="Editing\PartialUpdate\BufferTextChangeHandler.cs" />
     <Compile Include="Editing\PartialUpdate\TextChangeData.cs" />
+    <Compile Include="Editing\PartialUpdate\TextChangeExtensions.cs" />
     <Compile Include="Editing\PartialUpdate\TokenChangedEventArgs.cs" />
     <Compile Include="Editing\TextBuffer\ITextBufferAdapter.cs" />
     <Compile Include="Parsing\IndexToken.cs" />

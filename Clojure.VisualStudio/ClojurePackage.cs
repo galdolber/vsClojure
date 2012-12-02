@@ -8,9 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Clojure.Code.Editing.PartialUpdate;
-using Clojure.Code.Parsing;
 using Clojure.System.IO.Compression;
-using Clojure.VisualStudio.Editor;
 using Clojure.VisualStudio.Editor.BraceMatching;
 using Clojure.VisualStudio.Project.Configuration;
 using Clojure.VisualStudio.Project.Hierarchy;
@@ -18,15 +16,12 @@ using Clojure.VisualStudio.Workspace.Menus;
 using Clojure.VisualStudio.Workspace.Repl;
 using Clojure.VisualStudio.Workspace.SolutionExplorer;
 using Clojure.VisualStudio.Workspace.TextEditor;
-using Clojure.VisualStudio.Workspace.TextEditor.SmartIndent;
-using Clojure.VisualStudio.Workspace.TextEditor.Tagging;
 using Clojure.Workspace;
 using Clojure.Workspace.Menus;
 using Clojure.Workspace.Repl;
 using Clojure.Workspace.Repl.Commands;
 using Clojure.Workspace.Repl.Presentation;
 using Clojure.Workspace.TextEditor;
-using Clojure.Workspace.TextEditor.Commands;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -70,7 +65,7 @@ namespace Clojure.VisualStudio
 				{
 					var componentModel = (IComponentModel) GetService(typeof (SComponentModel));
 
-					_editorCollection = new ClojureEditorCollection(dte, componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager) GetService(typeof(VsTextManagerClass)));
+					_editorCollection = new ClojureEditorCollection(dte, componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager) GetService(typeof (VsTextManagerClass)));
 					_replTabControl = new ReplTabControl();
 
 					var replToolWindow = (ReplToolWindow) FindToolWindow(typeof (ReplToolWindow), 0, true);
@@ -137,7 +132,7 @@ namespace Clojure.VisualStudio
 
 		private IMenuCommand CreateVisualStudioMenuCommand(CommandID commandId, Action clickListener)
 		{
-			var menuCommandService = (OleMenuCommandService)GetService(typeof(IMenuCommandService));
+			var menuCommandService = (OleMenuCommandService) GetService(typeof (IMenuCommandService));
 			var internalMenuCommand = new MenuCommand((o, e) => clickListener(), commandId);
 			var menuCommandAdapter = new VisualStudioClojureMenuCommandAdapter(internalMenuCommand);
 			menuCommandService.AddCommand(internalMenuCommand);
@@ -173,7 +168,7 @@ namespace Clojure.VisualStudio
 					var clojureTextBuffer = vsTextBuffer.Properties.GetOrCreateSingletonProperty(() => new ClojureTextBuffer());
 					vsTextBuffer.Properties.GetOrCreateSingletonProperty(() => new VisualStudioClojureTextBuffer(vsTextBuffer, clojureTextBuffer));
 
-					clojureTextBuffer.Edit(new List<TextChangeData>() { new TextChangeData(0, vsTextBuffer.CurrentSnapshot.Length) }, vsTextBuffer.CurrentSnapshot.GetText() );
+					clojureTextBuffer.Edit(new List<TextChangeData>() {new TextChangeData(0, vsTextBuffer.CurrentSnapshot.Length)}, vsTextBuffer.CurrentSnapshot.GetText());
 				};
 
 			editorFactoryService.TextViewCreated +=
@@ -182,8 +177,8 @@ namespace Clojure.VisualStudio
 					if (e.TextView.TextSnapshot.ContentType.TypeName.ToLower() != "clojure") return;
 
 					var vsTextBuffer = e.TextView.TextBuffer;
-					var clojureTextBuffer = vsTextBuffer.Properties.GetProperty<ClojureTextBuffer>(typeof(ClojureTextBuffer));
-					var braceMatchingTagger = vsTextBuffer.Properties.GetProperty<BraceMatchingTagger>(typeof(BraceMatchingTagger));
+					var clojureTextBuffer = vsTextBuffer.Properties.GetProperty<ClojureTextBuffer>(typeof (ClojureTextBuffer));
+					var braceMatchingTagger = vsTextBuffer.Properties.GetProperty<BraceMatchingTagger>(typeof (BraceMatchingTagger));
 
 					var editor = new VisualStudioClojureTextEditor(e.TextView);
 					editor.AddUserActionListener(clojureTextBuffer);

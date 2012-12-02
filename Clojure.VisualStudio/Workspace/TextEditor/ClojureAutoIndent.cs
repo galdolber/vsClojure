@@ -11,13 +11,13 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Clojure.VisualStudio.Workspace.TextEditor.SmartIndent
 {
-	public class ClojureAutoIndent : ISmartIndent, IClojureTextBufferStateListener
+	public class ClojureAutoIndent : ISmartIndent
 	{
-		private TextEditorSnapshot _snapshot;
+		private readonly ClojureTextBuffer _clojureTextBuffer;
 
-		public ClojureAutoIndent()
+		public ClojureAutoIndent(ClojureTextBuffer clojureTextBuffer)
 		{
-			_snapshot = TextEditorSnapshot.Empty;
+			_clojureTextBuffer = clojureTextBuffer;
 		}
 
 		public void Dispose()
@@ -27,16 +27,7 @@ namespace Clojure.VisualStudio.Workspace.TextEditor.SmartIndent
 
 		public int? GetDesiredIndentation(ITextSnapshotLine line)
 		{
-			return new ClojureSmartIndent().GetDesiredIndentation(_snapshot.Tokens, line.Start.Position, 2);
-		}
-
-		public void TokensChanged(TextEditorSnapshot snapshot, BufferDiffGram diffGram)
-		{
-			_snapshot = snapshot;
-		}
-
-		public void BufferChanged(string newText)
-		{
+			return new ClojureSmartIndent().GetDesiredIndentation(_clojureTextBuffer.GetSnapshot().Tokens, line.Start.Position, 2);
 		}
 	}
 

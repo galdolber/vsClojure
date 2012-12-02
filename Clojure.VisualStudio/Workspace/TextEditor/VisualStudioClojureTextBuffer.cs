@@ -24,11 +24,11 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 
 			var bracerMatchingTagger = textBuffer.Properties.GetOrCreateSingletonProperty(() => new BraceMatchingTagger(textBuffer));
 			var tokenTagger = textBuffer.Properties.GetOrCreateSingletonProperty(() => new ClojureTokenTagger(textBuffer));
-			var autoIndent = textBuffer.Properties.GetOrCreateSingletonProperty(() => new ClojureAutoIndent());
+			textBuffer.Properties.GetOrCreateSingletonProperty(() => new ClojureAutoIndent(clojureTextBuffer));
+
 			clojureTextBuffer.AddStateChangeListener(this);
 			clojureTextBuffer.AddStateChangeListener(bracerMatchingTagger);
 			clojureTextBuffer.AddStateChangeListener(tokenTagger);
-			clojureTextBuffer.AddStateChangeListener(autoIndent);
 			AddUserActionListener(clojureTextBuffer);
 		}
 
