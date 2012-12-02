@@ -5,7 +5,7 @@ using Clojure.Workspace.TextEditor;
 
 namespace Clojure.Workspace
 {
-	public class ClojureEnvironment : ITextEditorWindowActiveDocumentChangedListener, IReplActivationListener
+	public class ClojureEnvironment : IReplActivationListener
 	{
 		private readonly List<IEnvironmentListener> _listeners;
 		private ClojureEnvironmentSnapshot _snapshot;

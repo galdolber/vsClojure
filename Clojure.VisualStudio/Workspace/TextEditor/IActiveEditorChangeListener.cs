@@ -1,7 +1,9 @@
-﻿namespace Clojure.Workspace.TextEditor
+﻿using Clojure.VisualStudio.Workspace.TextEditor;
+
+namespace Clojure.Workspace.TextEditor
 {
 	public interface IActiveEditorChangeListener
 	{
-		void OnActiveDocumentChange(IUserActionSource source);
+		void OnActiveEditorChange(VisualStudioClojureTextEditor editor);
 	}
 }

@@ -7,15 +7,19 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using Clojure.Code.Editing.PartialUpdate;
 using Clojure.Code.Parsing;
 using Clojure.System.IO.Compression;
 using Clojure.VisualStudio.Editor;
+using Clojure.VisualStudio.Editor.BraceMatching;
 using Clojure.VisualStudio.Project.Configuration;
 using Clojure.VisualStudio.Project.Hierarchy;
 using Clojure.VisualStudio.Workspace.Menus;
 using Clojure.VisualStudio.Workspace.Repl;
 using Clojure.VisualStudio.Workspace.SolutionExplorer;
 using Clojure.VisualStudio.Workspace.TextEditor;
+using Clojure.VisualStudio.Workspace.TextEditor.SmartIndent;
+using Clojure.VisualStudio.Workspace.TextEditor.Tagging;
 using Clojure.Workspace;
 using Clojure.Workspace.Menus;
 using Clojure.Workspace.Repl;
@@ -26,11 +30,13 @@ using Clojure.Workspace.TextEditor.Commands;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Project;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Win32;
 
 namespace Clojure.VisualStudio
@@ -51,6 +57,7 @@ namespace Clojure.VisualStudio
 
 		private ReplTabControl _replTabControl;
 		private ClojureEnvironment _clojureEnvironment;
+		private ClojureEditorCollection _editorCollection;
 
 		protected override void Initialize()
 		{
@@ -61,6 +68,9 @@ namespace Clojure.VisualStudio
 			_dteEvents.OnStartupComplete +=
 				() =>
 				{
+					var componentModel = (IComponentModel) GetService(typeof (SComponentModel));
+
+					_editorCollection = new ClojureEditorCollection(dte, componentModel.GetService<IVsEditorAdaptersFactoryService>(), (IVsTextManager) GetService(typeof(VsTextManagerClass)));
 					_replTabControl = new ReplTabControl();
 
 					var replToolWindow = (ReplToolWindow) FindToolWindow(typeof (ReplToolWindow), 0, true);
@@ -73,7 +83,6 @@ namespace Clojure.VisualStudio
 					RegisterProjectFactory(new ClojureProjectFactory(this));
 					CreateReplMenuCommands();
 					EnableTokenizationOfNewClojureBuffers();
-					SetupNewClojureBuffersWithSpacingOptions();
 					EnableMenuCommandsOnNewClojureBuffers();
 					EnableSettingOfRuntimePathForNewClojureProjects();
 					UnzipRuntimes();
@@ -116,11 +125,23 @@ namespace Clojure.VisualStudio
 
 		private void EnableMenuCommandsOnNewClojureBuffers()
 		{
+			var routingTextEditor = new RoutingTextEditor();
+			_editorCollection.AddEditorChangeListener(routingTextEditor);
+
 			var menuCommandCollection = new MenuCommandCollection(MenuCommandCollection.VisibleEditorStates);
-			menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.FormatDocument, autoFormatCommand));
-			menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.BlockComment, blockCommentCommand));
-			menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.BlockUncomment, blockUncommentCommand));
+			menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.FormatDocument, routingTextEditor.Format));
+			menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.BlockComment, routingTextEditor.CommentSelectedLines));
+			menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.BlockUncomment, routingTextEditor.UncommentSelectedLines));
 			_clojureEnvironment.AddActivationListener(menuCommandCollection);
+		}
+
+		private IMenuCommand CreateVisualStudioMenuCommand(CommandID commandId, Action clickListener)
+		{
+			var menuCommandService = (OleMenuCommandService)GetService(typeof(IMenuCommandService));
+			var internalMenuCommand = new MenuCommand((o, e) => clickListener(), commandId);
+			var menuCommandAdapter = new VisualStudioClojureMenuCommandAdapter(internalMenuCommand);
+			menuCommandService.AddCommand(internalMenuCommand);
+			return menuCommandAdapter;
 		}
 
 		// Factory - VS specific.  Need interface to work with non-VS specific code?
@@ -136,47 +157,42 @@ namespace Clojure.VisualStudio
 			return menuCommandAdapter;
 		}
 
-		private void SetupNewClojureBuffersWithSpacingOptions()
+		private void EnableTokenizationOfNewClojureBuffers()
 		{
 			var componentModel = (IComponentModel) GetService(typeof (SComponentModel));
+			var documentFactoryService = componentModel.GetService<ITextDocumentFactoryService>();
 			var editorFactoryService = componentModel.GetService<ITextEditorFactoryService>();
+
+			documentFactoryService.TextDocumentDisposed += (o, e) => { };
+
+			documentFactoryService.TextDocumentCreated +=
+				(o, e) =>
+				{
+					if (!e.TextDocument.FilePath.EndsWith(".clj")) return;
+					var vsTextBuffer = e.TextDocument.TextBuffer;
+					var clojureTextBuffer = vsTextBuffer.Properties.GetOrCreateSingletonProperty(() => new ClojureTextBuffer());
+					vsTextBuffer.Properties.GetOrCreateSingletonProperty(() => new VisualStudioClojureTextBuffer(vsTextBuffer, clojureTextBuffer));
+
+					clojureTextBuffer.Edit(new List<TextChangeData>() { new TextChangeData(0, vsTextBuffer.CurrentSnapshot.Length) }, vsTextBuffer.CurrentSnapshot.GetText() );
+				};
 
 			editorFactoryService.TextViewCreated +=
 				(o, e) =>
 				{
 					if (e.TextView.TextSnapshot.ContentType.TypeName.ToLower() != "clojure") return;
 
-					var buffer = new ClojureTextBuffer();
+					var vsTextBuffer = e.TextView.TextBuffer;
+					var clojureTextBuffer = vsTextBuffer.Properties.GetProperty<ClojureTextBuffer>(typeof(ClojureTextBuffer));
+					var braceMatchingTagger = vsTextBuffer.Properties.GetProperty<BraceMatchingTagger>(typeof(BraceMatchingTagger));
 
 					var editor = new VisualStudioClojureTextEditor(e.TextView);
-					e.TextView.Closed += (obj, args) => VisualStudioClojureTextEditor.Editors.Remove(e.TextView);
-					VisualStudioClojureTextEditor.Editors.Add(e.TextView, editor);
+					editor.AddUserActionListener(clojureTextBuffer);
+					editor.AddViewListener(braceMatchingTagger);
+					ClojureEditorCollection.Editors.Add(e.TextView, editor);
 
 					IEditorOptions editorOptions = componentModel.GetService<IEditorOptionsFactoryService>().GetOptions(e.TextView);
 					editorOptions.SetOptionValue(new ConvertTabsToSpaces().Key, true);
 					editorOptions.SetOptionValue(new IndentSize().Key, 2);
-				};
-		}
-
-		private void EnableTokenizationOfNewClojureBuffers()
-		{
-			var componentModel = (IComponentModel) GetService(typeof (SComponentModel));
-			var tokenizedBufferBuilder = new TokenizedBufferBuilder(new Tokenizer());
-			var documentFactoryService = componentModel.GetService<ITextDocumentFactoryService>();
-
-			documentFactoryService.TextDocumentDisposed +=
-				(o, e) => tokenizedBufferBuilder.RemoveTokenizedBuffer(e.TextDocument.TextBuffer);
-
-			documentFactoryService.TextDocumentCreated +=
-				(o, e) =>
-				{
-					if (!e.TextDocument.FilePath.EndsWith(".clj")) return;
-					var editor = new VisualStudioClojureTextEditor(null);
-					var buffer = new ClojureTextBuffer();
-					editor.AddUserActionListener(buffer);
-					buffer.AddStateChangeListener(editor);
-
-					tokenizedBufferBuilder.CreateTokenizedBuffer(e.TextDocument.TextBuffer);
 				};
 		}
 
@@ -208,13 +224,13 @@ namespace Clojure.VisualStudio
 			_clojureEnvironment.AddActivationListener(explorerMenuCommandCollection);
 
 			var loadActiveFileCommand = new LoadActiveFileCommand(repl);
-			_textEditor.AddStateChangeListener(loadActiveFileCommand);
+			//_textEditor.AddStateChangeListener(loadActiveFileCommand);
 
 			var changeNamespaceCommand = new ChangeNamespaceCommand(repl);
-			_textEditor.AddStateChangeListener(changeNamespaceCommand);
+			//_textEditor.AddStateChangeListener(changeNamespaceCommand);
 
 			var loadSelectionCommand = new LoadSelectionCommand(repl);
-			_textEditor.AddStateChangeListener(loadSelectionCommand);
+			//_textEditor.AddStateChangeListener(loadSelectionCommand);
 
 			var editorMenuCommandCollection = new MenuCommandCollection(MenuCommandCollection.VisibleEditorStates);
 			editorMenuCommandCollection.Add(CreateVisualStudioMenuCommand(new CommandID(Guids.GuidClojureExtensionCmdSet, 13), loadActiveFileCommand));
