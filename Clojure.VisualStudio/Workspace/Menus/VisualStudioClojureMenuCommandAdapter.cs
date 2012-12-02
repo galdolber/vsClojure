@@ -13,9 +13,7 @@ namespace Clojure.VisualStudio.Workspace.Menus
 		{
 			_clickListeners = new List<IExternalClickListener>();
 			_internalMenuCommand = internalMenuCommand;
-			_internalMenuCommand.Visible = true;
-			_internalMenuCommand.Supported = true;
-			_internalMenuCommand.Enabled = true;
+			Show();
 		}
 
 		public void AddClickListener(IExternalClickListener listener)
@@ -25,12 +23,16 @@ namespace Clojure.VisualStudio.Workspace.Menus
 
 		public void Hide()
 		{
-			_internalMenuCommand.Visible = true;
+			_internalMenuCommand.Visible = false;
+			_internalMenuCommand.Supported = false;
+			_internalMenuCommand.Enabled = false;
 		}
 
 		public void Show()
 		{
-			_internalMenuCommand.Visible = false;
+			_internalMenuCommand.Visible = true;
+			_internalMenuCommand.Supported = true;
+			_internalMenuCommand.Enabled = true;
 		}
 
 		public void OnClick()

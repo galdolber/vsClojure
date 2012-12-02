@@ -20,7 +20,7 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		public ClojureTokenTagger(ITextBuffer textBuffer)
 		{
 			_textBuffer = textBuffer;
-			_snapshot = TextBufferSnapshot.Empty;
+			_snapshot = TextBufferSnapshot.Empty();
 		}
 
 		public IEnumerable<ITagSpan<ClojureTokenTag>> GetTags(NormalizedSnapshotSpanCollection spans)

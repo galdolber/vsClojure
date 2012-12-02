@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.VisualStudio.Editor;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Clojure.VisualStudio.Workspace.TextEditor
 {
@@ -12,16 +9,11 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		private readonly WindowEvents _windowEvents;
 		private readonly DTE2 _dte;
 		private readonly List<IActiveEditorChangeListener> _listeners;
-		private readonly IVsEditorAdaptersFactoryService _vsEditorAdaptersFactoryService;
-		private readonly IVsTextManager _vsTextManager;
+		private readonly Dictionary<string, VisualStudioClojureTextView> _editors = new Dictionary<string, VisualStudioClojureTextView>();
 
-		public static Dictionary<ITextView, VisualStudioClojureTextView> Editors = new Dictionary<ITextView, VisualStudioClojureTextView>();
-
-		public ClojureEditorCollection(DTE2 dte, IVsEditorAdaptersFactoryService vsEditorAdaptersFactoryService, IVsTextManager vsTextManager)
+		public ClojureEditorCollection(DTE2 dte)
 		{
 			_dte = dte;
-			_vsTextManager = vsTextManager;
-			_vsEditorAdaptersFactoryService = vsEditorAdaptersFactoryService;
 			_windowEvents = dte.Events.WindowEvents;
 			_windowEvents.WindowActivated += (o, e) => ActiveDocumentChanged();
 			_listeners = new List<IActiveEditorChangeListener>();
@@ -32,15 +24,16 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 			_listeners.Add(listener);
 		}
 
+		public void EditorAdded(string path, VisualStudioClojureTextView editor)
+		{
+			_editors.Add(path, editor);
+		}
+
 		private void ActiveDocumentChanged()
 		{
 			var activeEditorPath = _dte.ActiveDocument == null ? "" : _dte.ActiveDocument.FullName;
 			if (!activeEditorPath.ToLower().EndsWith(".clj")) return;
-
-			IVsTextView activeView = null;
-			_vsTextManager.GetActiveView(0, null, out activeView);
-			ITextView textView = _vsEditorAdaptersFactoryService.GetWpfTextView(activeView);
-			_listeners.ForEach(l => l.OnActiveEditorChange(Editors[textView]));
+			_listeners.ForEach(l => l.OnActiveEditorChange(_editors[activeEditorPath]));
 		}
 	}
 }

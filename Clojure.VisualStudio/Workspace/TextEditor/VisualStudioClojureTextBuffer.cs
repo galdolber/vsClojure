@@ -55,6 +55,7 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 
 		public void TokensChanged(TextBufferSnapshot snapshot, BufferDiffGram diffGram)
 		{
+
 		}
 	}
 }

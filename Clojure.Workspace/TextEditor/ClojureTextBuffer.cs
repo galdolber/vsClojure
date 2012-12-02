@@ -15,7 +15,7 @@ namespace Clojure.Workspace.TextEditor
 
 		public ClojureTextBuffer()
 		{
-			_snapshot = TextBufferSnapshot.Empty;
+			_snapshot = TextBufferSnapshot.Empty();
 			_listeners = new List<IClojureTextBufferStateListener>();
 		}
 

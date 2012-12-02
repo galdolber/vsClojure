@@ -31,6 +31,7 @@ namespace Clojure.VisualStudio.Workspace.SolutionExplorer
 			for (int i = 1; i <= _dte.SelectedItems.Count; i++)
 			{
 				var currentItem = _dte.SelectedItems.Item(i);
+				if (currentItem.Project == null && currentItem.ProjectItem == null) continue;
 
 				if (currentItem.ProjectItem == null)
 				{

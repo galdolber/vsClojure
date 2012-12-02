@@ -15,13 +15,14 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 	public class BraceMatchingTagger : ITagger<TextMarkerTag>, IClojureTextBufferStateListener, IClojureViewActionListener
 	{
 		private readonly ITextBuffer _textBuffer;
-		private TextBufferSnapshot _snapshot = TextBufferSnapshot.Empty;
+		private TextBufferSnapshot _snapshot;
 		private int _caretPosition;
 		public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
 		public BraceMatchingTagger(ITextBuffer textBuffer)
 		{
 			_textBuffer = textBuffer;
+			_snapshot = TextBufferSnapshot.Empty();
 		}
 
 		public IEnumerable<ITagSpan<TextMarkerTag>> GetTags(NormalizedSnapshotSpanCollection spans)

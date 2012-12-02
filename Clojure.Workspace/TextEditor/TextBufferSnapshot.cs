@@ -4,7 +4,6 @@ using Clojure.Code.Parsing;
 
 namespace Clojure.Workspace.TextEditor
 {
-	// Rename this to buffer snapshot.
 	public class TextBufferSnapshot
 	{
 		private readonly LinkedList<Token> _tokens;
@@ -60,6 +59,9 @@ namespace Clojure.Workspace.TextEditor
 			return new TextBufferSnapshot(_tokens, _selection, _selectedLines, newPath);
 		}
 
-		public static TextBufferSnapshot Empty = new TextBufferSnapshot(new LinkedList<Token>(), "", new List<string>(), "");
+		public static TextBufferSnapshot Empty()
+		{
+			return new TextBufferSnapshot(new LinkedList<Token>(), "", new List<string>(), "");
+		}
 	}
 }
