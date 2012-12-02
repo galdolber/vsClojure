@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
-using Clojure.VisualStudio.Workspace.TextEditor.View;
 using Clojure.Workspace.TextEditor;
 using Microsoft.VisualStudio.Text.Editor;
 
 namespace Clojure.VisualStudio.Workspace.TextEditor
 {
-	public class VisualStudioClojureTextEditor : IUserActionSource
+	public class VisualStudioClojureTextView : IUserActionSource
 	{
 		private readonly ITextView _currentWpfTextView;
 		private readonly List<IUserActionListener> _actionListeners;
 		private readonly List<IClojureViewActionListener> _viewListeners;
 
-		public VisualStudioClojureTextEditor(ITextView view)
+		public VisualStudioClojureTextView(ITextView view)
 		{
 			_currentWpfTextView = view;
 			_currentWpfTextView.Caret.PositionChanged += CaretPositionChanged;

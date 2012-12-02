@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Clojure.VisualStudio.Editor.Intellisense
+namespace Clojure.VisualStudio.Workspace.TextEditor
 {
 	public class HippieCompletionSource : ICompletionSource
 	{
@@ -55,7 +55,7 @@ namespace Clojure.VisualStudio.Editor.Intellisense
 		}
 	}
 
-	[Export(typeof(ICompletionSourceProvider))]
+	[Export(typeof (ICompletionSourceProvider))]
 	[ContentType("Clojure")]
 	[Name("ClojureCompletion")]
 	public class HippieCompletionSourceProvider : ICompletionSourceProvider

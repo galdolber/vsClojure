@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Clojure.Code.Editing.PartialUpdate;
-using Clojure.Code.Parsing;
-using Clojure.VisualStudio.Editor.BraceMatching;
-using Clojure.VisualStudio.Workspace.TextEditor.SmartIndent;
-using Clojure.VisualStudio.Workspace.TextEditor.Tagging;
 using Clojure.Workspace.TextEditor;
 using Microsoft.VisualStudio.Text;
 
@@ -16,23 +12,35 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		private readonly ITextBuffer _textBuffer;
 		private readonly List<IUserActionListener> _listeners;
 
-		public VisualStudioClojureTextBuffer(ITextBuffer textBuffer, ClojureTextBuffer clojureTextBuffer)
+		public VisualStudioClojureTextBuffer(ITextBuffer textBuffer)
 		{
 			_textBuffer = textBuffer;
 			_textBuffer.Changed += OnBufferChange;
 			_listeners = new List<IUserActionListener>();
 
-			var bracerMatchingTagger = textBuffer.Properties.GetOrCreateSingletonProperty(() => new BraceMatchingTagger(textBuffer));
-			var tokenTagger = textBuffer.Properties.GetOrCreateSingletonProperty(() => new ClojureTokenTagger(textBuffer));
-			textBuffer.Properties.GetOrCreateSingletonProperty(() => new ClojureAutoIndent(clojureTextBuffer));
+			var clojureTextBuffer = new ClojureTextBuffer();
+			var bracerMatchingTagger = new BraceMatchingTagger(textBuffer);
+			var tokenTagger = new ClojureTokenTagger(textBuffer);
+			var autoIndent = new ClojureAutoIndent(clojureTextBuffer);
 
 			clojureTextBuffer.AddStateChangeListener(this);
 			clojureTextBuffer.AddStateChangeListener(bracerMatchingTagger);
 			clojureTextBuffer.AddStateChangeListener(tokenTagger);
 			AddUserActionListener(clojureTextBuffer);
+
+			textBuffer.Properties.AddProperty(bracerMatchingTagger.GetType(), bracerMatchingTagger);
+			textBuffer.Properties.AddProperty(tokenTagger.GetType(), tokenTagger);
+			textBuffer.Properties.AddProperty(autoIndent.GetType(), autoIndent);
+			textBuffer.Properties.AddProperty(clojureTextBuffer.GetType(), clojureTextBuffer);
+			textBuffer.Properties.AddProperty(GetType(), this);
 		}
 
-		public void OnBufferChange(object sender, TextContentChangedEventArgs e)
+		public void AddUserActionListener(IUserActionListener listener)
+		{
+			_listeners.Add(listener);
+		}
+
+		private void OnBufferChange(object sender, TextContentChangedEventArgs e)
 		{
 			var changeData = e.Changes.Select(
 				change => new TextChangeData(change.OldPosition, change.Delta, Math.Max(change.NewSpan.Length, change.OldSpan.Length))).ToList();
@@ -45,13 +53,8 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 			_textBuffer.Replace(new Span(0, _textBuffer.CurrentSnapshot.Length), newText);
 		}
 
-		public void TokensChanged(TextEditorSnapshot snapshot, BufferDiffGram diffGram)
+		public void TokensChanged(TextBufferSnapshot snapshot, BufferDiffGram diffGram)
 		{
-		}
-
-		public void AddUserActionListener(IUserActionListener listener)
-		{
-			_listeners.Add(listener);
 		}
 	}
 }

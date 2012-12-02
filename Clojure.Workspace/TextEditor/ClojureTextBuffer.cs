@@ -10,12 +10,12 @@ namespace Clojure.Workspace.TextEditor
 {
 	public class ClojureTextBuffer : IUserActionListener
 	{
-		private TextEditorSnapshot _snapshot;
+		private TextBufferSnapshot _snapshot;
 		private readonly List<IClojureTextBufferStateListener> _listeners;
 
 		public ClojureTextBuffer()
 		{
-			_snapshot = TextEditorSnapshot.Empty;
+			_snapshot = TextBufferSnapshot.Empty;
 			_listeners = new List<IClojureTextBufferStateListener>();
 		}
 
@@ -24,7 +24,7 @@ namespace Clojure.Workspace.TextEditor
 			_listeners.Add(listener);
 		}
 
-		public TextEditorSnapshot GetSnapshot()
+		public TextBufferSnapshot GetSnapshot()
 		{
 			return _snapshot;
 		}

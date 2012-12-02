@@ -9,7 +9,6 @@ using System.Text;
 using System.Windows.Forms;
 using Clojure.Code.Editing.PartialUpdate;
 using Clojure.System.IO.Compression;
-using Clojure.VisualStudio.Editor.BraceMatching;
 using Clojure.VisualStudio.Project.Configuration;
 using Clojure.VisualStudio.Project.Hierarchy;
 using Clojure.VisualStudio.Workspace.Menus;
@@ -120,7 +119,7 @@ namespace Clojure.VisualStudio
 
 		private void EnableMenuCommandsOnNewClojureBuffers()
 		{
-			var routingTextEditor = new RoutingTextEditor();
+			var routingTextEditor = new RoutingTextView();
 			_editorCollection.AddEditorChangeListener(routingTextEditor);
 
 			var menuCommandCollection = new MenuCommandCollection(MenuCommandCollection.VisibleEditorStates);
@@ -165,10 +164,8 @@ namespace Clojure.VisualStudio
 				{
 					if (!e.TextDocument.FilePath.EndsWith(".clj")) return;
 					var vsTextBuffer = e.TextDocument.TextBuffer;
-					var clojureTextBuffer = vsTextBuffer.Properties.GetOrCreateSingletonProperty(() => new ClojureTextBuffer());
-					vsTextBuffer.Properties.GetOrCreateSingletonProperty(() => new VisualStudioClojureTextBuffer(vsTextBuffer, clojureTextBuffer));
-
-					clojureTextBuffer.Edit(new List<TextChangeData>() {new TextChangeData(0, vsTextBuffer.CurrentSnapshot.Length)}, vsTextBuffer.CurrentSnapshot.GetText());
+					var vsClojureTextBuffer = new VisualStudioClojureTextBuffer(vsTextBuffer);
+					vsClojureTextBuffer.BufferChanged(vsTextBuffer.CurrentSnapshot.GetText());
 				};
 
 			editorFactoryService.TextViewCreated +=
@@ -180,7 +177,7 @@ namespace Clojure.VisualStudio
 					var clojureTextBuffer = vsTextBuffer.Properties.GetProperty<ClojureTextBuffer>(typeof (ClojureTextBuffer));
 					var braceMatchingTagger = vsTextBuffer.Properties.GetProperty<BraceMatchingTagger>(typeof (BraceMatchingTagger));
 
-					var editor = new VisualStudioClojureTextEditor(e.TextView);
+					var editor = new VisualStudioClojureTextView(e.TextView);
 					editor.AddUserActionListener(clojureTextBuffer);
 					editor.AddViewListener(braceMatchingTagger);
 					ClojureEditorCollection.Editors.Add(e.TextView, editor);

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.Composition;
 using Clojure.Code.Editing.Indenting;
 using Clojure.Workspace.TextEditor;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Clojure.VisualStudio.Workspace.TextEditor.SmartIndent
+namespace Clojure.VisualStudio.Workspace.TextEditor
 {
 	public class ClojureAutoIndent : ISmartIndent
 	{
@@ -22,7 +18,6 @@ namespace Clojure.VisualStudio.Workspace.TextEditor.SmartIndent
 
 		public void Dispose()
 		{
-			
 		}
 
 		public int? GetDesiredIndentation(ITextSnapshotLine line)
@@ -31,13 +26,13 @@ namespace Clojure.VisualStudio.Workspace.TextEditor.SmartIndent
 		}
 	}
 
-	[Export(typeof(ISmartIndentProvider))]
+	[Export(typeof (ISmartIndentProvider))]
 	[ContentType("Clojure")]
 	public class SmartIndentProvider : ISmartIndentProvider
 	{
 		public ISmartIndent CreateSmartIndent(ITextView textView)
 		{
-			return textView.TextBuffer.Properties.GetProperty<ClojureAutoIndent>(typeof(ClojureAutoIndent));
+			return textView.TextBuffer.Properties.GetProperty<ClojureAutoIndent>(typeof (ClojureAutoIndent));
 		}
 	}
 }

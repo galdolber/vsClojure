@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Clojure.VisualStudio.Editor.Intellisense
+namespace Clojure.VisualStudio.Workspace.TextEditor
 {
 	public class IntellisenseCommandFilter : IOleCommandTarget
 	{
@@ -114,15 +114,13 @@ namespace Clojure.VisualStudio.Editor.Intellisense
 		}
 	}
 
-	[Export(typeof(IVsTextViewCreationListener))]
+	[Export(typeof (IVsTextViewCreationListener))]
 	[ContentType("Clojure")]
 	[TextViewRole(PredefinedTextViewRoles.Interactive)]
 	public class IntellisenseCommandFilterFactory : IVsTextViewCreationListener
 	{
-		[Import]
-		private IVsEditorAdaptersFactoryService _adapterFactory = null;
-		[Import]
-		private ICompletionBroker _completionBroker = null;
+		[Import] private IVsEditorAdaptersFactoryService _adapterFactory = null;
+		[Import] private ICompletionBroker _completionBroker = null;
 
 		public void VsTextViewCreated(IVsTextView textViewAdapter)
 		{

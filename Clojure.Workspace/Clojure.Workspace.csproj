@@ -89,7 +89,7 @@
     <Compile Include="TextEditor\ITextEditorStateChangeListener.cs" />
     <Compile Include="TextEditor\EditorOptions.cs" />
     <Compile Include="TextEditor\IEditorOptionsChangedListener.cs" />
-    <Compile Include="TextEditor\TextEditorSnapshot.cs" />
+    <Compile Include="TextEditor\TextBufferSnapshot.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Clojure.Code\Clojure.Code.csproj">

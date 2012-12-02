@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Media;
 using Clojure.Code.Parsing;
-using Clojure.VisualStudio.Workspace.TextEditor.Tagging;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Clojure.VisualStudio.Editor.Classification
+namespace Clojure.VisualStudio.Workspace.TextEditor
 {
 	public class ClojureClassifier : ITagger<ClassificationTag>
 	{
@@ -20,8 +19,8 @@ namespace Clojure.VisualStudio.Editor.Classification
 		public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
 		public ClojureClassifier(ITextBuffer buffer,
-								   ITagAggregator<ClojureTokenTag> clojureTagAggregator,
-								   IClassificationTypeRegistryService typeService)
+		                         ITagAggregator<ClojureTokenTag> clojureTagAggregator,
+		                         IClassificationTypeRegistryService typeService)
 		{
 			_buffer = buffer;
 			_aggregator = clojureTagAggregator;
@@ -60,26 +59,18 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(IViewTaggerProvider))]
+	[Export(typeof (IViewTaggerProvider))]
 	[ContentType("Clojure")]
-	[TagType(typeof(ClassificationTag))]
+	[TagType(typeof (ClassificationTag))]
 	internal sealed class ClojureClassifierProvider : IViewTaggerProvider
 	{
-		[Export]
-		[Name("Clojure")]
-		[BaseDefinition("code")]
-		internal static ContentTypeDefinition ClojureContentType = null;
+		[Export] [Name("Clojure")] [BaseDefinition("code")] internal static ContentTypeDefinition ClojureContentType = null;
 
-		[Export]
-		[FileExtension(".clj")]
-		[ContentType("Clojure")]
-		internal static FileExtensionToContentTypeDefinition ClojureFileType = null;
+		[Export] [FileExtension(".clj")] [ContentType("Clojure")] internal static FileExtensionToContentTypeDefinition ClojureFileType = null;
 
-		[Import]
-		internal IClassificationTypeRegistryService ClassificationTypeRegistry = null;
+		[Import] internal IClassificationTypeRegistryService ClassificationTypeRegistry = null;
 
-		[Import]
-		internal IViewTagAggregatorFactoryService aggregatorFactory = null;
+		[Import] internal IViewTagAggregatorFactoryService aggregatorFactory = null;
 
 		public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
 		{
@@ -92,56 +83,32 @@ namespace Clojure.VisualStudio.Editor.Classification
 
 	internal static class OrdinaryClassificationDefinition
 	{
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureSymbol")]
-		internal static ClassificationTypeDefinition ClojureSymbol = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureSymbol")] internal static ClassificationTypeDefinition ClojureSymbol = null;
 
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureString")]
-		internal static ClassificationTypeDefinition ClojureString = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureString")] internal static ClassificationTypeDefinition ClojureString = null;
 
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureNumber")]
-		internal static ClassificationTypeDefinition ClojureNumber = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureNumber")] internal static ClassificationTypeDefinition ClojureNumber = null;
 
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureComment")]
-		internal static ClassificationTypeDefinition ClojureComment = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureComment")] internal static ClassificationTypeDefinition ClojureComment = null;
 
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureKeyword")]
-		internal static ClassificationTypeDefinition ClojureKeyword = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureKeyword")] internal static ClassificationTypeDefinition ClojureKeyword = null;
 
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureCharacter")]
-		internal static ClassificationTypeDefinition ClojureCharacter = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureCharacter")] internal static ClassificationTypeDefinition ClojureCharacter = null;
 
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureBuiltIn")]
-		internal static ClassificationTypeDefinition ClojureBuiltIn = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureBuiltIn")] internal static ClassificationTypeDefinition ClojureBuiltIn = null;
 
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureBoolean")]
-		internal static ClassificationTypeDefinition ClojureBoolean = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureBoolean")] internal static ClassificationTypeDefinition ClojureBoolean = null;
 
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureList")]
-		internal static ClassificationTypeDefinition ClojureList = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureList")] internal static ClassificationTypeDefinition ClojureList = null;
 
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureVector")]
-		internal static ClassificationTypeDefinition ClojureVector = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureVector")] internal static ClassificationTypeDefinition ClojureVector = null;
 
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureMap")]
-		internal static ClassificationTypeDefinition ClojureMap = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureMap")] internal static ClassificationTypeDefinition ClojureMap = null;
 
-		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("ClojureMetadataTypeHint")]
-		internal static ClassificationTypeDefinition ClojureMetadataTypeHint = null;
+		[Export(typeof (ClassificationTypeDefinition))] [Name("ClojureMetadataTypeHint")] internal static ClassificationTypeDefinition ClojureMetadataTypeHint = null;
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureSymbol")]
 	[Name("ClojureSymbol")]
 	[UserVisible(true)]
@@ -155,7 +122,7 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureString")]
 	[Name("ClojureString")]
 	[UserVisible(true)]
@@ -170,7 +137,7 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureNumber")]
 	[Name("ClojureNumber")]
 	[UserVisible(true)]
@@ -184,7 +151,7 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureComment")]
 	[Name("ClojureComment")]
 	[UserVisible(true)]
@@ -199,7 +166,7 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureKeyword")]
 	[Name("ClojureKeyword")]
 	[UserVisible(true)]
@@ -215,7 +182,7 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureCharacter")]
 	[Name("ClojureCharacter")]
 	[UserVisible(true)]
@@ -230,7 +197,7 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureBuiltIn")]
 	[Name("ClojureBuiltIn")]
 	[UserVisible(true)]
@@ -245,7 +212,7 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureBoolean")]
 	[Name("ClojureBoolean")]
 	[UserVisible(true)]
@@ -259,7 +226,7 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureList")]
 	[Name("ClojureList")]
 	[UserVisible(true)]
@@ -273,7 +240,7 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureVector")]
 	[Name("ClojureVector")]
 	[UserVisible(true)]
@@ -287,7 +254,7 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureMap")]
 	[Name("ClojureMap")]
 	[UserVisible(true)]
@@ -301,7 +268,7 @@ namespace Clojure.VisualStudio.Editor.Classification
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[ClassificationType(ClassificationTypeNames = "ClojureMetadataTypeHint")]
 	[Name("ClojureMetadataTypeHint")]
 	[UserVisible(true)]

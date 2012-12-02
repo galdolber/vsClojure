@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Clojure.VisualStudio.Workspace.TextEditor.View
+﻿namespace Clojure.VisualStudio.Workspace.TextEditor
 {
 	public interface IClojureViewActionListener
 	{

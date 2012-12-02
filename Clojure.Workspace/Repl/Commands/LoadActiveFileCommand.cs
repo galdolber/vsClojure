@@ -7,14 +7,14 @@ namespace Clojure.Workspace.Repl.Commands
 	public class LoadActiveFileCommand : ITextEditorStateChangeListener, IExternalClickListener
 	{
 		private readonly IRepl _repl;
-		private TextEditorSnapshot _snapshot;
+		private TextBufferSnapshot _snapshot;
 
 		public LoadActiveFileCommand(IRepl repl)
 		{
 			_repl = repl;
 		}
 
-		public void OnTextEditorStateChange(TextEditorSnapshot snapshot)
+		public void OnTextEditorStateChange(TextBufferSnapshot snapshot)
 		{
 			_snapshot = snapshot;
 		}

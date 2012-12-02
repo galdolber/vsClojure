@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Clojure.Workspace.TextEditor;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Editor;
@@ -16,7 +15,7 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		private readonly IVsEditorAdaptersFactoryService _vsEditorAdaptersFactoryService;
 		private readonly IVsTextManager _vsTextManager;
 
-		public static Dictionary<ITextView, VisualStudioClojureTextEditor> Editors = new Dictionary<ITextView, VisualStudioClojureTextEditor>();
+		public static Dictionary<ITextView, VisualStudioClojureTextView> Editors = new Dictionary<ITextView, VisualStudioClojureTextView>();
 
 		public ClojureEditorCollection(DTE2 dte, IVsEditorAdaptersFactoryService vsEditorAdaptersFactoryService, IVsTextManager vsTextManager)
 		{

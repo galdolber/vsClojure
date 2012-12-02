@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Media;
 using Clojure.Code.Editing.BraceMatching;
-using Clojure.VisualStudio.Workspace.TextEditor.View;
 using Clojure.Workspace.TextEditor;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
@@ -11,12 +10,12 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Clojure.VisualStudio.Editor.BraceMatching
+namespace Clojure.VisualStudio.Workspace.TextEditor
 {
 	public class BraceMatchingTagger : ITagger<TextMarkerTag>, IClojureTextBufferStateListener, IClojureViewActionListener
 	{
 		private readonly ITextBuffer _textBuffer;
-		private TextEditorSnapshot _snapshot = TextEditorSnapshot.Empty;
+		private TextBufferSnapshot _snapshot = TextBufferSnapshot.Empty;
 		private int _caretPosition;
 		public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
@@ -47,7 +46,7 @@ namespace Clojure.VisualStudio.Editor.BraceMatching
 			if (TagsChanged != null) TagsChanged(this, new SnapshotSpanEventArgs(new SnapshotSpan(_textBuffer.CurrentSnapshot, 0, _textBuffer.CurrentSnapshot.Length)));
 		}
 
-		public void TokensChanged(TextEditorSnapshot snapshot, BufferDiffGram diffGram)
+		public void TokensChanged(TextBufferSnapshot snapshot, BufferDiffGram diffGram)
 		{
 			_snapshot = snapshot;
 			InvalidateAllTags();
@@ -55,7 +54,6 @@ namespace Clojure.VisualStudio.Editor.BraceMatching
 
 		public void BufferChanged(string newText)
 		{
-			
 		}
 
 		public void OnCaretPositionChange(int newPosition)
@@ -65,18 +63,18 @@ namespace Clojure.VisualStudio.Editor.BraceMatching
 		}
 	}
 
-	[Export(typeof(IViewTaggerProvider))]
+	[Export(typeof (IViewTaggerProvider))]
 	[ContentType("Clojure")]
-	[TagType(typeof(TextMarkerTag))]
+	[TagType(typeof (TextMarkerTag))]
 	public class BraceMatchingTaggerProvider : IViewTaggerProvider
 	{
 		public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
 		{
-			return buffer.Properties.GetProperty(typeof(BraceMatchingTagger)) as ITagger<T>;
+			return buffer.Properties.GetProperty(typeof (BraceMatchingTagger)) as ITagger<T>;
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[Name("ClojureBraceNotFound")]
 	[UserVisible(true)]
 	internal class BraceNotFoundFormatDefinition : MarkerFormatDefinition
@@ -89,7 +87,7 @@ namespace Clojure.VisualStudio.Editor.BraceMatching
 		}
 	}
 
-	[Export(typeof(EditorFormatDefinition))]
+	[Export(typeof (EditorFormatDefinition))]
 	[Name("ClojureBraceFound")]
 	[UserVisible(true)]
 	internal class BraceFoundFormatDefinition : MarkerFormatDefinition

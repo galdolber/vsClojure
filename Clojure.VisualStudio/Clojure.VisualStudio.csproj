@@ -48,9 +48,9 @@
     <Compile Include="Workspace\TextEditor\ClojureAutoIndent.cs" />
     <Compile Include="Workspace\TextEditor\ClojureTokenTagger.cs" />
     <Compile Include="Workspace\TextEditor\IClojureViewActionListener.cs" />
-    <Compile Include="Workspace\TextEditor\RoutingTextEditor.cs" />
+    <Compile Include="Workspace\TextEditor\RoutingTextView.cs" />
     <Compile Include="Workspace\TextEditor\VisualStudioClojureTextBuffer.cs" />
-    <Compile Include="Workspace\TextEditor\VisualStudioClojureTextEditor.cs" />
+    <Compile Include="Workspace\TextEditor\VisualStudioClojureTextView.cs" />
     <Compile Include="Workspace\TextEditor\ClojureTextEditorOptions.cs" />
     <Compile Include="Workspace\SolutionExplorer\VisualStudioExplorer.cs" />
     <Compile Include="Workspace\SolutionExplorer\ProjectMenuCommand.cs" />
@@ -58,10 +58,8 @@
     <Compile Include="CommandIds.cs" />
     <Compile Include="Workspace\TextEditor\BraceMatchingTagger.cs" />
     <Compile Include="Workspace\TextEditor\ClojureClassifier.cs" />
-    <Compile Include="Workspace\TextEditor\Intellisense\HippieCompletionSource.cs" />
-    <Compile Include="Workspace\TextEditor\Intellisense\HippieCompletionSourceProvider.cs" />
-    <Compile Include="Workspace\TextEditor\Intellisense\IntellisenseCommandFilter.cs" />
-    <Compile Include="Workspace\TextEditor\Intellisense\IntellisenseCommandFilterFactory.cs" />
+    <Compile Include="Workspace\TextEditor\HippieCompletionSource.cs" />
+    <Compile Include="Workspace\TextEditor\IntellisenseCommandFilter.cs" />
     <Compile Include="Project\Hierarchy\ClojureConfigProvider.cs" />
     <Compile Include="Project\Hierarchy\ClojureProjectConfig.cs" />
     <Compile Include="Project\Hierarchy\ClojureProjectFactory.cs" />

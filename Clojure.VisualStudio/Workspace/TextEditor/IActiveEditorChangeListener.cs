@@ -1,9 +1,7 @@
-﻿using Clojure.VisualStudio.Workspace.TextEditor;
-
-namespace Clojure.Workspace.TextEditor
+﻿namespace Clojure.VisualStudio.Workspace.TextEditor
 {
 	public interface IActiveEditorChangeListener
 	{
-		void OnActiveEditorChange(VisualStudioClojureTextEditor editor);
+		void OnActiveEditorChange(VisualStudioClojureTextView view);
 	}
 }

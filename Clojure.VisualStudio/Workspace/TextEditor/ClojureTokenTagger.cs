@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
 using Clojure.Code.Parsing;
 using Clojure.Workspace.TextEditor;
 using Microsoft.VisualStudio.Text;
@@ -10,18 +9,18 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 
-namespace Clojure.VisualStudio.Workspace.TextEditor.Tagging
+namespace Clojure.VisualStudio.Workspace.TextEditor
 {
 	public class ClojureTokenTagger : ITagger<ClojureTokenTag>, IClojureTextBufferStateListener
 	{
-		private TextEditorSnapshot _snapshot;
+		private TextBufferSnapshot _snapshot;
 		private readonly ITextBuffer _textBuffer;
 		public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
 		public ClojureTokenTagger(ITextBuffer textBuffer)
 		{
 			_textBuffer = textBuffer;
-			_snapshot = TextEditorSnapshot.Empty;
+			_snapshot = TextBufferSnapshot.Empty;
 		}
 
 		public IEnumerable<ITagSpan<ClojureTokenTag>> GetTags(NormalizedSnapshotSpanCollection spans)
@@ -40,7 +39,7 @@ namespace Clojure.VisualStudio.Workspace.TextEditor.Tagging
 			return tagSpans;
 		}
 
-		public void TokensChanged(TextEditorSnapshot snapshot, BufferDiffGram diffGram)
+		public void TokensChanged(TextBufferSnapshot snapshot, BufferDiffGram diffGram)
 		{
 			_snapshot = snapshot;
 			if (TagsChanged == null) return;
@@ -55,14 +54,14 @@ namespace Clojure.VisualStudio.Workspace.TextEditor.Tagging
 		}
 	}
 
-	[Export(typeof(IViewTaggerProvider))]
+	[Export(typeof (IViewTaggerProvider))]
 	[ContentType("Clojure")]
-	[TagType(typeof(ClojureTokenTag))]
+	[TagType(typeof (ClojureTokenTag))]
 	public class ClojureTagProvider : IViewTaggerProvider
 	{
 		public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
 		{
-			return buffer.Properties.GetProperty(typeof(ClojureTokenTagger)) as ITagger<T>;
+			return buffer.Properties.GetProperty(typeof (ClojureTokenTagger)) as ITagger<T>;
 		}
 	}
 

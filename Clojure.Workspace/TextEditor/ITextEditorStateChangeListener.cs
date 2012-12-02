@@ -2,6 +2,6 @@
 {
 	public interface ITextEditorStateChangeListener
 	{
-		void OnTextEditorStateChange(TextEditorSnapshot snapshot);
+		void OnTextEditorStateChange(TextBufferSnapshot snapshot);
 	}
 }
