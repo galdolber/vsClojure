@@ -9,9 +9,9 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 {
 	public class ClojureAutoIndent : ISmartIndent
 	{
-		private readonly ClojureTextBuffer _clojureTextBuffer;
+		private readonly VisualStudioClojureTextBuffer _clojureTextBuffer;
 
-		public ClojureAutoIndent(ClojureTextBuffer clojureTextBuffer)
+		public ClojureAutoIndent(VisualStudioClojureTextBuffer clojureTextBuffer)
 		{
 			_clojureTextBuffer = clojureTextBuffer;
 		}
@@ -22,7 +22,7 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 
 		public int? GetDesiredIndentation(ITextSnapshotLine line)
 		{
-			return new ClojureSmartIndent().GetDesiredIndentation(_clojureTextBuffer.GetSnapshot().Tokens, line.Start.Position, 2);
+			return new ClojureSmartIndent().GetDesiredIndentation(_clojureTextBuffer.GetTokenSnapshot().Tokens, line.Start.Position, 2);
 		}
 	}
 
@@ -32,7 +32,8 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 	{
 		public ISmartIndent CreateSmartIndent(ITextView textView)
 		{
-			return textView.TextBuffer.Properties.GetProperty<ClojureAutoIndent>(typeof (ClojureAutoIndent));
+			var clojureTextBuffer = textView.TextBuffer.Properties.GetProperty<VisualStudioClojureTextBuffer>(typeof(VisualStudioClojureTextBuffer));
+			return new ClojureAutoIndent(clojureTextBuffer);
 		}
 	}
 }

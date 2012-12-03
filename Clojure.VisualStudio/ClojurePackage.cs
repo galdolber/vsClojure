@@ -75,7 +75,6 @@ namespace Clojure.VisualStudio
 					RegisterProjectFactory(new ClojureProjectFactory(this));
 					CreateReplMenuCommands();
 					EnableTokenizationOfNewClojureBuffers();
-					EnableMenuCommandsOnNewClojureBuffers();
 					EnableSettingOfRuntimePathForNewClojureProjects();
 					UnzipRuntimes();
 				};
@@ -115,22 +114,6 @@ namespace Clojure.VisualStudio
 			}
 		}
 
-		private void EnableMenuCommandsOnNewClojureBuffers()
-		{
-			var routingTextEditor = new RoutingTextView();
-			_editorCollection.AddEditorChangeListener(routingTextEditor);
-
-			//var menuCommandCollection = new MenuCommandCollection(MenuCommandCollection.VisibleEditorStates);
-			//menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.FormatDocument, routingTextEditor.Format));
-			//menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.BlockComment, routingTextEditor.CommentSelectedLines));
-			//menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.BlockUncomment, routingTextEditor.UncommentSelectedLines));
-			//_clojureEnvironment.AddActivationListener(menuCommandCollection);
-
-			CreateVisualStudioMenuCommand(CommandIDs.FormatDocument, routingTextEditor.Format);
-			CreateVisualStudioMenuCommand(CommandIDs.BlockComment, routingTextEditor.CommentSelectedLines);
-			CreateVisualStudioMenuCommand(CommandIDs.BlockUncomment, routingTextEditor.UncommentSelectedLines);
-		}
-
 		private IMenuCommand CreateVisualStudioMenuCommand(CommandID commandId, Action clickListener)
 		{
 			var menuCommandService = (OleMenuCommandService)GetService(typeof(IMenuCommandService));
@@ -164,9 +147,8 @@ namespace Clojure.VisualStudio
 				(o, e) =>
 				{
 					if (!e.TextDocument.FilePath.EndsWith(".clj")) return;
-					var vsTextBuffer = e.TextDocument.TextBuffer;
-					var vsClojureTextBuffer = new VisualStudioClojureTextBuffer(vsTextBuffer);
-					vsClojureTextBuffer.BufferChanged(vsTextBuffer.CurrentSnapshot.GetText());
+					var vsClojureTextBuffer = new VisualStudioClojureTextBuffer(e.TextDocument.TextBuffer);
+					vsClojureTextBuffer.InvalidateTokens();
 				};
 
 			editorFactoryService.TextViewCreated +=
@@ -175,18 +157,29 @@ namespace Clojure.VisualStudio
 					if (e.TextView.TextSnapshot.ContentType.TypeName.ToLower() != "clojure") return;
 
 					var vsTextBuffer = e.TextView.TextBuffer;
-					var clojureTextBuffer = vsTextBuffer.Properties.GetProperty<ClojureTextBuffer>(typeof (ClojureTextBuffer));
-					var braceMatchingTagger = vsTextBuffer.Properties.GetProperty<BraceMatchingTagger>(typeof (BraceMatchingTagger));
+					var clojureTextBuffer = vsTextBuffer.Properties.GetProperty<VisualStudioClojureTextBuffer>(typeof(VisualStudioClojureTextBuffer));
+					var filePath = vsTextBuffer.Properties.GetProperty<ITextDocument>(typeof (ITextDocument)).FilePath;
 
 					var editor = new VisualStudioClojureTextView(e.TextView);
 					editor.AddUserActionListener(clojureTextBuffer);
-					editor.AddViewListener(braceMatchingTagger);
-					_editorCollection.EditorAdded(vsTextBuffer.Properties.GetProperty<ITextDocument>(typeof(ITextDocument)).FilePath, editor);
+					_editorCollection.EditorAdded(filePath, editor);
 
 					IEditorOptions editorOptions = componentModel.GetService<IEditorOptionsFactoryService>().GetOptions(e.TextView);
 					editorOptions.SetOptionValue(new ConvertTabsToSpaces().Key, true);
 					editorOptions.SetOptionValue(new IndentSize().Key, 2);
 				};
+
+			var routingTextEditor = new RoutingTextView();
+			_editorCollection.AddEditorChangeListener(routingTextEditor);
+			CreateVisualStudioMenuCommand(CommandIDs.FormatDocument, routingTextEditor.Format);
+			CreateVisualStudioMenuCommand(CommandIDs.BlockComment, routingTextEditor.CommentSelectedLines);
+			CreateVisualStudioMenuCommand(CommandIDs.BlockUncomment, routingTextEditor.UncommentSelectedLines);
+
+			//var menuCommandCollection = new MenuCommandCollection(MenuCommandCollection.VisibleEditorStates);
+			//menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.FormatDocument, routingTextEditor.Format));
+			//menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.BlockComment, routingTextEditor.CommentSelectedLines));
+			//menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.BlockUncomment, routingTextEditor.UncommentSelectedLines));
+			//_clojureEnvironment.AddActivationListener(menuCommandCollection);
 		}
 
 		private void CreateReplMenuCommands()

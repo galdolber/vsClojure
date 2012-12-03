@@ -12,31 +12,31 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Clojure.VisualStudio.Workspace.TextEditor
 {
-	public class BraceMatchingTagger : ITagger<TextMarkerTag>, IClojureTextBufferStateListener, IClojureViewActionListener
+	public class BraceMatchingTagger : ITagger<TextMarkerTag>, IClojureTextBufferStateListener
 	{
-		private readonly ITextBuffer _textBuffer;
-		private TextBufferSnapshot _snapshot;
-		private int _caretPosition;
+		private readonly VisualStudioClojureTextBuffer _clojureTextBuffer;
 		public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
-		public BraceMatchingTagger(ITextBuffer textBuffer)
+		public BraceMatchingTagger(VisualStudioClojureTextBuffer clojureTextBuffer)
 		{
-			_textBuffer = textBuffer;
-			_snapshot = TextBufferSnapshot.Empty();
+			_clojureTextBuffer = clojureTextBuffer;
 		}
 
 		public IEnumerable<ITagSpan<TextMarkerTag>> GetTags(NormalizedSnapshotSpanCollection spans)
 		{
-			var bracePair = new MatchingBraceFinder().FindMatchingBraces(_snapshot.Tokens, _textBuffer.CurrentSnapshot.Length, _caretPosition);
+			var textSnapshot = _clojureTextBuffer.GetTextSnapshot();
+			var tokenSnapshot = _clojureTextBuffer.GetTokenSnapshot();
+
+			var bracePair = new MatchingBraceFinder().FindMatchingBraces(tokenSnapshot.Tokens, textSnapshot.Length, tokenSnapshot.CaretPosition);
 			var tags = new LinkedList<ITagSpan<TextMarkerTag>>();
 			if (bracePair.Start == null && bracePair.End == null) return tags;
-			if (bracePair.Start == null) tags.AddLast(new TagSpan<TextMarkerTag>(new SnapshotSpan(_textBuffer.CurrentSnapshot, bracePair.End.StartIndex, bracePair.End.Token.Length), new TextMarkerTag("ClojureBraceNotFound")));
-			if (bracePair.End == null) tags.AddLast(new TagSpan<TextMarkerTag>(new SnapshotSpan(_textBuffer.CurrentSnapshot, bracePair.Start.StartIndex, bracePair.Start.Token.Length), new TextMarkerTag("ClojureBraceNotFound")));
+			if (bracePair.Start == null) tags.AddLast(new TagSpan<TextMarkerTag>(new SnapshotSpan(textSnapshot, bracePair.End.StartIndex, bracePair.End.Token.Length), new TextMarkerTag("ClojureBraceNotFound")));
+			if (bracePair.End == null) tags.AddLast(new TagSpan<TextMarkerTag>(new SnapshotSpan(textSnapshot, bracePair.Start.StartIndex, bracePair.Start.Token.Length), new TextMarkerTag("ClojureBraceNotFound")));
 
 			if (bracePair.Start != null && bracePair.End != null)
 			{
-				tags.AddLast(new TagSpan<TextMarkerTag>(new SnapshotSpan(_textBuffer.CurrentSnapshot, bracePair.End.StartIndex, bracePair.End.Token.Length), new TextMarkerTag("ClojureBraceFound")));
-				tags.AddLast(new TagSpan<TextMarkerTag>(new SnapshotSpan(_textBuffer.CurrentSnapshot, bracePair.Start.StartIndex, bracePair.Start.Token.Length), new TextMarkerTag("ClojureBraceFound")));
+				tags.AddLast(new TagSpan<TextMarkerTag>(new SnapshotSpan(textSnapshot, bracePair.End.StartIndex, bracePair.End.Token.Length), new TextMarkerTag("ClojureBraceFound")));
+				tags.AddLast(new TagSpan<TextMarkerTag>(new SnapshotSpan(textSnapshot, bracePair.Start.StartIndex, bracePair.Start.Token.Length), new TextMarkerTag("ClojureBraceFound")));
 			}
 
 			return tags;
@@ -44,22 +44,18 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 
 		private void InvalidateAllTags()
 		{
-			if (TagsChanged != null) TagsChanged(this, new SnapshotSpanEventArgs(new SnapshotSpan(_textBuffer.CurrentSnapshot, 0, _textBuffer.CurrentSnapshot.Length)));
+			if (TagsChanged == null) return;
+			var textSnapshot = _clojureTextBuffer.GetTextSnapshot();
+			TagsChanged(this, new SnapshotSpanEventArgs(new SnapshotSpan(textSnapshot, 0, textSnapshot.Length)));
 		}
 
 		public void TokensChanged(TextBufferSnapshot snapshot, BufferDiffGram diffGram)
 		{
-			_snapshot = snapshot;
 			InvalidateAllTags();
 		}
 
-		public void BufferChanged(string newText)
+		public void CaretChanged(TextBufferSnapshot snapshot)
 		{
-		}
-
-		public void OnCaretPositionChange(int newPosition)
-		{
-			_caretPosition = newPosition;
 			InvalidateAllTags();
 		}
 	}
@@ -71,7 +67,10 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 	{
 		public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
 		{
-			return buffer.Properties.GetProperty(typeof (BraceMatchingTagger)) as ITagger<T>;
+			var clojureTextBuffer = buffer.Properties.GetProperty<VisualStudioClojureTextBuffer>(typeof (VisualStudioClojureTextBuffer));
+			var braceMatchingTagger = new BraceMatchingTagger(clojureTextBuffer);
+			clojureTextBuffer.AddStateChangeListener(braceMatchingTagger);
+			return braceMatchingTagger as ITagger<T>;
 		}
 	}
 

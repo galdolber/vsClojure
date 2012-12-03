@@ -1,61 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Clojure.Code.Editing.Formatting;
 using Clojure.Code.Editing.PartialUpdate;
 using Clojure.Workspace.TextEditor;
 using Microsoft.VisualStudio.Text;
+using Clojure.System.Collections;
 
 namespace Clojure.VisualStudio.Workspace.TextEditor
 {
-	public class VisualStudioClojureTextBuffer : IClojureTextBufferStateListener, IUserActionSource
+	public class VisualStudioClojureTextBuffer : IUserActionListener
 	{
 		private readonly ITextBuffer _textBuffer;
-		private readonly List<IUserActionListener> _listeners;
+		private readonly List<IClojureTextBufferStateListener> _stateListeners;
+		private TextBufferSnapshot _snapshot;
 
 		public VisualStudioClojureTextBuffer(ITextBuffer textBuffer)
 		{
 			_textBuffer = textBuffer;
 			_textBuffer.Changed += OnBufferChange;
-			_listeners = new List<IUserActionListener>();
-
-			var clojureTextBuffer = new ClojureTextBuffer();
-			var bracerMatchingTagger = new BraceMatchingTagger(textBuffer);
-			var tokenTagger = new ClojureTokenTagger(textBuffer);
-			var autoIndent = new ClojureAutoIndent(clojureTextBuffer);
-
-			clojureTextBuffer.AddStateChangeListener(this);
-			clojureTextBuffer.AddStateChangeListener(bracerMatchingTagger);
-			clojureTextBuffer.AddStateChangeListener(tokenTagger);
-			AddUserActionListener(clojureTextBuffer);
-
-			textBuffer.Properties.AddProperty(bracerMatchingTagger.GetType(), bracerMatchingTagger);
-			textBuffer.Properties.AddProperty(tokenTagger.GetType(), tokenTagger);
-			textBuffer.Properties.AddProperty(autoIndent.GetType(), autoIndent);
-			textBuffer.Properties.AddProperty(clojureTextBuffer.GetType(), clojureTextBuffer);
+			_snapshot = TextBufferSnapshot.Empty();
+			_stateListeners = new List<IClojureTextBufferStateListener>();
 			textBuffer.Properties.AddProperty(GetType(), this);
 		}
 
-		public void AddUserActionListener(IUserActionListener listener)
+		public ITextSnapshot GetTextSnapshot()
 		{
-			_listeners.Add(listener);
+			return _textBuffer.CurrentSnapshot;
+		}
+
+		public TextBufferSnapshot GetTokenSnapshot()
+		{
+			return _snapshot;
+		}
+
+		public void AddStateChangeListener(IClojureTextBufferStateListener listener)
+		{
+			_stateListeners.Add(listener);
+		}
+
+		public void Format()
+		{
+			_textBuffer.Replace(new Span(0, _textBuffer.CurrentSnapshot.Length), new AutoFormat().Format(_snapshot.Tokens, 2));
+		}
+
+		public void CommentLines(int startIndex, int endIndex)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UncommentLines(int startPosition, int endPosition)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void OnCaretPositionChange(int newPosition)
+		{
+			_snapshot = _snapshot.ChangeCaretPosition(newPosition);
+			FireCaretChangeEvent();
+		}
+
+		private void FireCaretChangeEvent()
+		{
+			_stateListeners.ForEach(l => l.CaretChanged(_snapshot));
 		}
 
 		private void OnBufferChange(object sender, TextContentChangedEventArgs e)
 		{
-			var changeData = e.Changes.Select(
-				change => new TextChangeData(change.OldPosition, change.Delta, Math.Max(change.NewSpan.Length, change.OldSpan.Length))).ToList();
-
-			_listeners.ForEach(l => l.Edit(changeData, _textBuffer.CurrentSnapshot.GetText()));
+			var changes = e.Changes.Select(change => new TextChangeData(change.OldPosition, change.Delta, Math.Max(change.NewSpan.Length, change.OldSpan.Length))).ToList();
+			FireTokenUpdateEvent(CreateDiffGrams(changes));
 		}
 
-		public void BufferChanged(string newText)
+		private IEnumerable<BufferDiffGram> CreateDiffGrams(List<TextChangeData> changes)
 		{
-			_textBuffer.Replace(new Span(0, _textBuffer.CurrentSnapshot.Length), newText);
+			return changes.Select(change => _snapshot.Tokens.ApplyChange(change, _textBuffer.CurrentSnapshot.GetText()));
 		}
 
-		public void TokensChanged(TextBufferSnapshot snapshot, BufferDiffGram diffGram)
+		private void FireTokenUpdateEvent(IEnumerable<BufferDiffGram> diffGrams)
 		{
+			diffGrams.ToList().ForEach(diffGram => _stateListeners.ForEach(l => l.TokensChanged(_snapshot, diffGram)));
+		}
 
+		public void InvalidateTokens()
+		{
+			FireTokenUpdateEvent(CreateDiffGrams(new TextChangeData(0, _textBuffer.CurrentSnapshot.Length).SingletonAsList()));
 		}
 	}
 }

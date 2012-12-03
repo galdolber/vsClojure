@@ -8,24 +8,17 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 	{
 		private readonly ITextView _currentWpfTextView;
 		private readonly List<IUserActionListener> _actionListeners;
-		private readonly List<IClojureViewActionListener> _viewListeners;
 
 		public VisualStudioClojureTextView(ITextView view)
 		{
 			_currentWpfTextView = view;
 			_currentWpfTextView.Caret.PositionChanged += CaretPositionChanged;
-			_viewListeners = new List<IClojureViewActionListener>();
 			_actionListeners = new List<IUserActionListener>();
 		}
 
 		private void CaretPositionChanged(object sender, CaretPositionChangedEventArgs e)
 		{
-			_viewListeners.ForEach(l => l.OnCaretPositionChange(e.NewPosition.BufferPosition.Position));
-		}
-
-		public void AddViewListener(IClojureViewActionListener listener)
-		{
-			_viewListeners.Add(listener);
+			_actionListeners.ForEach(l => l.OnCaretPositionChange(e.NewPosition.BufferPosition.Position));
 		}
 
 		public void AddUserActionListener(IUserActionListener listener)

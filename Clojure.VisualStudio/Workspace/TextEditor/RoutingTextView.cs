@@ -1,4 +1,6 @@
-﻿namespace Clojure.VisualStudio.Workspace.TextEditor
+﻿using System;
+
+namespace Clojure.VisualStudio.Workspace.TextEditor
 {
 	public class RoutingTextView : IActiveEditorChangeListener
 	{

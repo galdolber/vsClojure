@@ -47,7 +47,6 @@
     <Compile Include="Workspace\TextEditor\ClojureEditorCollection.cs" />
     <Compile Include="Workspace\TextEditor\ClojureAutoIndent.cs" />
     <Compile Include="Workspace\TextEditor\ClojureTokenTagger.cs" />
-    <Compile Include="Workspace\TextEditor\IClojureViewActionListener.cs" />
     <Compile Include="Workspace\TextEditor\RoutingTextView.cs" />
     <Compile Include="Workspace\TextEditor\VisualStudioClojureTextBuffer.cs" />
     <Compile Include="Workspace\TextEditor\VisualStudioClojureTextView.cs" />
