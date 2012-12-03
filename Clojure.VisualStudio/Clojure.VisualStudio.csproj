@@ -41,6 +41,7 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Workspace\Menus\ClojureEditorMenuCommandService.cs" />
     <Compile Include="Workspace\Menus\MenuCommandAdapterReference.cs" />
     <Compile Include="Workspace\Menus\VisualStudioClojureMenuCommandAdapter.cs" />
     <Compile Include="Workspace\TextEditor\IActiveEditorChangeListener.cs" />

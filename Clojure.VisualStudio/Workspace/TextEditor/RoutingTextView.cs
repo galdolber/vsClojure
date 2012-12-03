@@ -25,5 +25,10 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		{
 			_view = view;
 		}
+
+		public void NonClojureEditorActivated()
+		{
+			
+		}
 	}
 }

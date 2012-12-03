@@ -3,5 +3,6 @@
 	public interface IActiveEditorChangeListener
 	{
 		void OnActiveEditorChange(VisualStudioClojureTextView view);
+		void NonClojureEditorActivated();
 	}
 }

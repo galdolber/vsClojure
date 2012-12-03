@@ -52,6 +52,7 @@ namespace Clojure.VisualStudio
 		private ReplTabControl _replTabControl;
 		private ClojureEnvironment _clojureEnvironment;
 		private ClojureEditorCollection _editorCollection;
+		private ClojureEditorMenuCommandService _menuCommandService;
 
 		protected override void Initialize()
 		{
@@ -62,8 +63,13 @@ namespace Clojure.VisualStudio
 			_dteEvents.OnStartupComplete +=
 				() =>
 				{
-					_editorCollection = new ClojureEditorCollection(dte);
 					_replTabControl = new ReplTabControl();
+
+					_menuCommandService = new ClojureEditorMenuCommandService(this);
+					RegisterMenuCommandService(_menuCommandService);
+
+					_editorCollection = new ClojureEditorCollection(dte);
+					_editorCollection.AddEditorChangeListener(_menuCommandService);
 
 					var replToolWindow = (ReplToolWindow) FindToolWindow(typeof (ReplToolWindow), 0, true);
 					replToolWindow.SetControl(_replTabControl);
@@ -78,6 +84,13 @@ namespace Clojure.VisualStudio
 					EnableSettingOfRuntimePathForNewClojureProjects();
 					UnzipRuntimes();
 				};
+		}
+
+		private void RegisterMenuCommandService(OleMenuCommandService menuCommandService)
+		{
+			var commandRegistry = GetService(typeof(SVsRegisterPriorityCommandTarget)) as IVsRegisterPriorityCommandTarget;
+			uint cookie = 0;
+			commandRegistry.RegisterPriorityCommandTarget(0, menuCommandService, out cookie);
 		}
 
 		private void UnzipRuntimes()
@@ -114,15 +127,6 @@ namespace Clojure.VisualStudio
 			}
 		}
 
-		private IMenuCommand CreateVisualStudioMenuCommand(CommandID commandId, Action clickListener)
-		{
-			var menuCommandService = (OleMenuCommandService)GetService(typeof(IMenuCommandService));
-			var menuCommand = new MenuCommand((o, e) => clickListener(), commandId);
-			menuCommandService.AddCommand(menuCommand);
-			return new VisualStudioClojureMenuCommandAdapter(menuCommand);
-		}
-
-		// Factory - VS specific.  Need interface to work with non-VS specific code?
 		private IMenuCommand CreateVisualStudioMenuCommand(CommandID commandId, IExternalClickListener clickListener)
 		{
 			var menuCommandService = (OleMenuCommandService) GetService(typeof (IMenuCommandService));
@@ -171,15 +175,9 @@ namespace Clojure.VisualStudio
 
 			var routingTextEditor = new RoutingTextView();
 			_editorCollection.AddEditorChangeListener(routingTextEditor);
-			CreateVisualStudioMenuCommand(CommandIDs.FormatDocument, routingTextEditor.Format);
-			CreateVisualStudioMenuCommand(CommandIDs.BlockComment, routingTextEditor.CommentSelectedLines);
-			CreateVisualStudioMenuCommand(CommandIDs.BlockUncomment, routingTextEditor.UncommentSelectedLines);
-
-			//var menuCommandCollection = new MenuCommandCollection(MenuCommandCollection.VisibleEditorStates);
-			//menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.FormatDocument, routingTextEditor.Format));
-			//menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.BlockComment, routingTextEditor.CommentSelectedLines));
-			//menuCommandCollection.Add(CreateVisualStudioMenuCommand(CommandIDs.BlockUncomment, routingTextEditor.UncommentSelectedLines));
-			//_clojureEnvironment.AddActivationListener(menuCommandCollection);
+			_menuCommandService.Add(new MenuCommand((o, e) => routingTextEditor.Format(), CommandIDs.FormatDocument));
+			_menuCommandService.Add(new MenuCommand((o, e) => routingTextEditor.CommentSelectedLines(), CommandIDs.BlockComment));
+			_menuCommandService.Add(new MenuCommand((o, e) => routingTextEditor.UncommentSelectedLines(), CommandIDs.BlockUncomment));
 		}
 
 		private void CreateReplMenuCommands()

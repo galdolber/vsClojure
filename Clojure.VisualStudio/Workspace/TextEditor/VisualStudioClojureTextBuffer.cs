@@ -71,7 +71,7 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 			FireTokenUpdateEvent(CreateDiffGrams(changes));
 		}
 
-		private IEnumerable<BufferDiffGram> CreateDiffGrams(List<TextChangeData> changes)
+		private IEnumerable<BufferDiffGram> CreateDiffGrams(IEnumerable<TextChangeData> changes)
 		{
 			return changes.Select(change => _snapshot.Tokens.ApplyChange(change, _textBuffer.CurrentSnapshot.GetText()));
 		}
