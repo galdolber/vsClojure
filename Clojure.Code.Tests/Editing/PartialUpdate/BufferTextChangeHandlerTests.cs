@@ -5,7 +5,7 @@ using Clojure.Code.Editing.TextBuffer;
 using Clojure.Code.Parsing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
-using Clojure.System.State;
+using Clojure.Base.State;
 
 namespace Clojure.Code.Tests.Editing.PartialUpdate
 {

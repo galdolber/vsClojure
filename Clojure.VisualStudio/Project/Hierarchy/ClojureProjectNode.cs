@@ -124,7 +124,7 @@ namespace Clojure.VisualStudio.Project.Hierarchy
 
         public override bool IsCodeFile(string fileName)
         {
-            return fileName.ToLower().EndsWith(".clj");
+            return fileName.ToLower().EndsWith(".clj") || fileName.ToLower().EndsWith(".cljs");
         }
 
         /// <summary>

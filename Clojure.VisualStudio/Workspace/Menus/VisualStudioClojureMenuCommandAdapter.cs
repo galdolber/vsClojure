@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Linq;
+using Clojure.VisualStudio.Workspace.TextEditor;
 using Clojure.Workspace.Menus;
+using Clojure.Workspace.TextEditor;
+using Microsoft.VisualStudio.Text;
 
 namespace Clojure.VisualStudio.Workspace.Menus
 {

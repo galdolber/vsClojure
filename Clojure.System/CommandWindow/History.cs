@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Clojure.System.CommandWindow
+namespace Clojure.Base.CommandWindow
 {
 	public class History : IHistoryCommandListener, ISubmitCommandListener
 	{

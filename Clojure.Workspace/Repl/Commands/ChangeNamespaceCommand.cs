@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using Clojure.Code.Parsing;
 using Clojure.Workspace.Menus;
 using Clojure.Workspace.Repl.Presentation;
 using Clojure.Workspace.TextEditor;
 
 namespace Clojure.Workspace.Repl.Commands
 {
-	public class ChangeNamespaceCommand : ITextEditorStateChangeListener, IExternalClickListener
+    public class ChangeNamespaceCommand : IExternalClickListener, ITextEditorStateChangeListener
 	{
 		private readonly IRepl _repl;
 		private TextBufferSnapshot _snapshot;
@@ -15,14 +17,19 @@ namespace Clojure.Workspace.Repl.Commands
 			_repl = repl;
 		}
 
-		public void OnTextEditorStateChange(TextBufferSnapshot snapshot)
-		{
-			_snapshot = snapshot;
-		}
-
 		public void OnExternalClick()
 		{
+            if (_snapshot == null)
+            {
+                return;
+		}
+
 			_repl.ChangeNamespace(_snapshot.Tokens);
 		}
+
+        public void OnTextEditorStatusChange(TextBufferSnapshot snapshot)
+        {
+            _snapshot = snapshot;
+        }
 	}
 }

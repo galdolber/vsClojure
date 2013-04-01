@@ -1,10 +1,10 @@
-﻿using Clojure.System.Collections;
+﻿using Clojure.Base.Collections;
 using Clojure.Workspace.Menus;
 using Clojure.Workspace.TextEditor;
 
 namespace Clojure.Workspace.Repl.Commands
 {
-	public class LoadActiveFileCommand : ITextEditorStateChangeListener, IExternalClickListener
+    public class LoadActiveFileCommand : IExternalClickListener, ITextEditorStateChangeListener
 	{
 		private readonly IRepl _repl;
 		private TextBufferSnapshot _snapshot;
@@ -14,14 +14,19 @@ namespace Clojure.Workspace.Repl.Commands
 			_repl = repl;
 		}
 
-		public void OnTextEditorStateChange(TextBufferSnapshot snapshot)
-		{
-			_snapshot = snapshot;
-		}
-
 		public void OnExternalClick()
 		{
+            if (_snapshot == null)
+            {
+                return;
+		}
+
 			_repl.LoadFiles(_snapshot.FilePath.SingletonAsList());
 		}
+
+        public void OnTextEditorStatusChange(TextBufferSnapshot snapshot)
+        {        
+            _snapshot = snapshot;
+        }
 	}
 }

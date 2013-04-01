@@ -12,7 +12,6 @@ namespace Clojure.VisualStudio.Workspace.SolutionExplorer
 	{
 		private readonly UIHierarchy _solutionExplorer;
 		private readonly IProjectMenuCommandListener _projectMenuCommandListener;
-		public static CommandID LaunchReplCommandId = new CommandID(Guids.GuidClojureExtensionCmdSet, 10);
 
 		public ProjectMenuCommand(UIHierarchy solutionExplorer, IProjectMenuCommandListener projectMenuCommandListener)
 		{

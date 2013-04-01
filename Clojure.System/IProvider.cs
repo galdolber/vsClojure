@@ -1,4 +1,4 @@
-﻿namespace Clojure.System
+﻿namespace Clojure.Base
 {
 	public interface IProvider<T>
 	{

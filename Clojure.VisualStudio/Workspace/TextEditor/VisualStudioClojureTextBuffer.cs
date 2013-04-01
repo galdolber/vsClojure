@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Clojure.Code.Editing.Formatting;
 using Clojure.Code.Editing.PartialUpdate;
+using Clojure.Code.Parsing;
 using Clojure.Workspace.TextEditor;
 using Microsoft.VisualStudio.Text;
-using Clojure.System.Collections;
+using Clojure.Base.Collections;
 
 namespace Clojure.VisualStudio.Workspace.TextEditor
 {
@@ -44,14 +46,34 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 			_textBuffer.Replace(new Span(0, _textBuffer.CurrentSnapshot.Length), new AutoFormat().Format(_snapshot.Tokens, 2));
 		}
 
-		public void CommentLines(int startIndex, int endIndex)
+		public void CommentLines(int startPosition, int endPosition)
 		{
-			throw new NotImplementedException();
+            int startLine = _textBuffer.CurrentSnapshot.GetLineNumberFromPosition(startPosition);
+            int endLine = _textBuffer.CurrentSnapshot.GetLineNumberFromPosition(endPosition);
+            List<string> lines = _textBuffer.CurrentSnapshot.Lines.Where(x => x.LineNumber >= startLine && x.LineNumber <= endLine).Select(x => x.GetTextIncludingLineBreak()).ToList();
+		    List<string> commentedLines = lines.Select(x => ";" + x).ToList();
+
+            _textBuffer.Replace(new Span(startPosition, endPosition - startPosition), commentedLines.Aggregate((x, y) => x + y));
 		}
 
 		public void UncommentLines(int startPosition, int endPosition)
 		{
-			throw new NotImplementedException();
+		    int startLine = _textBuffer.CurrentSnapshot.GetLineNumberFromPosition(startPosition);
+		    int endLine = _textBuffer.CurrentSnapshot.GetLineNumberFromPosition(endPosition);
+		    List<string>  lines = _textBuffer.CurrentSnapshot.Lines.Where(x => x.LineNumber >= startLine && x.LineNumber <= endLine).Select(x => x.GetTextIncludingLineBreak()).ToList();
+            List<string> uncommentedLines = new List<string>();
+
+            foreach (string line in lines)
+            {
+                Lexer lexer = new Lexer(new PushBackCharacterStream(new StringReader(line)));
+                Token currentToken = lexer.Next();
+                while (currentToken != null && currentToken.Type == TokenType.Whitespace) currentToken = lexer.Next();
+                if (currentToken == null) uncommentedLines.Add(line);
+                else if (currentToken.Type != TokenType.Comment) uncommentedLines.Add(line);
+                else uncommentedLines.Add(line.Remove(currentToken.StartIndex, 1));
+            }
+
+		    _textBuffer.Replace(new Span(startPosition, endPosition - startPosition), uncommentedLines.Aggregate((x, y) => x + y));
 		}
 
 		public void OnCaretPositionChange(int newPosition)

@@ -32,7 +32,10 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		private void ActiveDocumentChanged()
 		{
 			var activeEditorPath = _dte.ActiveDocument == null ? "" : _dte.ActiveDocument.FullName;
-			if (!activeEditorPath.ToLower().EndsWith(".clj")) _listeners.ForEach(l => l.NonClojureEditorActivated());
+			if (!activeEditorPath.ToLower().EndsWith(".clj") && !activeEditorPath.ToLower().EndsWith(".cljs"))
+			{
+			    _listeners.ForEach(l => l.NonClojureEditorActivated());
+			}
 			else _listeners.ForEach(l => l.OnActiveEditorChange(_editors[activeEditorPath]));
 		}
 	}

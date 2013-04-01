@@ -1,8 +1,8 @@
-﻿using Clojure.System.CommandWindow;
+﻿using Clojure.Base.CommandWindow;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
 
-namespace Clojure.System.Tests.CommandWindow
+namespace Clojure.Base.Tests.CommandWindow
 {
 	[TestClass]
 	public class HistoryTests

@@ -61,9 +61,9 @@
       <Project>{7D8A24DE-8AC0-4ACC-8F29-C48F7061CCB0}</Project>
       <Name>Clojure.Code</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Clojure.System\Clojure.System.csproj">
+    <ProjectReference Include="..\Clojure.System\Clojure.Base.csproj">
       <Project>{FF930F13-4053-42BC-AB5B-D38D76723068}</Project>
-      <Name>Clojure.System</Name>
+      <Name>Clojure.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

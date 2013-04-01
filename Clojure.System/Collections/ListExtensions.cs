@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Clojure.System.Collections
+namespace Clojure.Base.Collections
 {
 	public static class ListExtensions
 	{

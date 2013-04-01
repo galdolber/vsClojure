@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using Clojure.System.IO.Streams;
+using Clojure.Base.IO.Streams;
 
-namespace Clojure.System.IO.FileSystem
+namespace Clojure.Base.IO.FileSystem
 {
 	public class RelativePathFileSystemWriter : IFileSystemWriter
 	{

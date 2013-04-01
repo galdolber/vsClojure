@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace Clojure.System.CommandWindow
+namespace Clojure.Base.CommandWindow
 {
 	public class CommandWindowUserEvent
 	{

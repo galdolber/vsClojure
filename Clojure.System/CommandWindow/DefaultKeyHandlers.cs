@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Clojure.System.CommandWindow.EventHandlers;
+using Clojure.Base.CommandWindow.EventHandlers;
 
-namespace Clojure.System.CommandWindow
+namespace Clojure.Base.CommandWindow
 {
 	public static class DefaultKeyHandlers
 	{

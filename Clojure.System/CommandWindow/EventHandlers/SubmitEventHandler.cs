@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace Clojure.System.CommandWindow.EventHandlers
+namespace Clojure.Base.CommandWindow.EventHandlers
 {
 	public class SubmitEventHandler : IKeyEventHandler
 	{

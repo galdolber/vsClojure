@@ -84,7 +84,10 @@ namespace Clojure.Workspace
 
 		public void OnActiveDocumentChange(string newDocumentPath)
 		{
-			if (!newDocumentPath.ToLower().EndsWith(".clj")) HandleNonClojureDocument();
+            if (!newDocumentPath.ToLower().EndsWith(".clj") && !newDocumentPath.ToLower().EndsWith(".cljs"))
+			{
+			    HandleNonClojureDocument();
+			}
 			else HandleClojureDocument();
 		}
 

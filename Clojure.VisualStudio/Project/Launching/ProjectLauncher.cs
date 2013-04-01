@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Runtime.InteropServices;
-using Clojure.System;
+using Clojure.Base;
 using Microsoft.VisualStudio.Project;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -52,7 +52,7 @@ namespace Clojure.VisualStudio.Project.Launching
 			info.grfLaunch = (uint) __VSDBGLAUNCHFLAGS2.DBGLAUNCH_MergeEnv;
 			info.bstrArg = launchParameters.StartupArguments;
 			info.bstrRemoteMachine = launchParameters.RemoteDebugMachine;
-			info.bstrEnv = "clojure.load.path=" + launchParameters.FrameworkPath + ";" + launchParameters.ClojureLoadPath + "\0";
+            info.bstrEnv = "clojure_load_path=" + launchParameters.FrameworkPath + "\0";
 			info.clsidCustom = launchParameters.DebugType;
 			return info;
 		}

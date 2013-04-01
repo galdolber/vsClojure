@@ -1,6 +1,6 @@
 using System;
 
-namespace Clojure.System.Diagnostics
+namespace Clojure.Base.Diagnostics
 {
 	public interface IProcess
 	{

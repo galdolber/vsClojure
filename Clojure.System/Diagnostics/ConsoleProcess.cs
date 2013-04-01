@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Clojure.System.IO.Streams;
+using Clojure.Base.IO.Streams;
 
-namespace Clojure.System.Diagnostics
+namespace Clojure.Base.Diagnostics
 {
 	public class ConsoleProcess : IProcess
 	{

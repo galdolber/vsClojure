@@ -21,7 +21,7 @@ namespace Clojure.Workspace.Repl
 
 		public static IEnumerable<string> FindAllClojureFiles(this List<string> fileList)
 		{
-			return fileList.Where(p => p.ToLower().EndsWith(".clj"));
+            return fileList.Where(p => p.ToLower().EndsWith(".clj") || p.ToLower().EndsWith(".cljs"));
 		}
 
 		private static string ConvertToClojureNamespaceExpression(this string namespaceName)

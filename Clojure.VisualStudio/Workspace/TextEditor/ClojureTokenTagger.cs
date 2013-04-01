@@ -48,6 +48,8 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 		}
 
 		public void CaretChanged(TextBufferSnapshot snapshot) { }
+	    public void SelectionChanged(TextBufferSnapshot snapshot) { }
+	    public void FilePathChanged(TextBufferSnapshot snapshot) { }
 	}
 
 	[Export(typeof (IViewTaggerProvider))]
@@ -57,6 +59,11 @@ namespace Clojure.VisualStudio.Workspace.TextEditor
 	{
 		public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
 		{
+            if (!buffer.Properties.ContainsProperty(typeof (VisualStudioClojureTextBuffer)))
+            {
+                return null;
+            }
+
 			var clojureTextBuffer = buffer.Properties.GetProperty<VisualStudioClojureTextBuffer>(typeof(VisualStudioClojureTextBuffer));
 			var tokenTagger = new ClojureTokenTagger(clojureTextBuffer);
 			clojureTextBuffer.AddStateChangeListener(tokenTagger);

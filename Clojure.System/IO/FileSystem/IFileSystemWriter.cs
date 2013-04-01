@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Clojure.System.IO.FileSystem
+namespace Clojure.Base.IO.FileSystem
 {
 	public interface IFileSystemWriter
 	{

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Clojure.System.IO.FileSystem;
+using Clojure.Base.IO.FileSystem;
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace Clojure.System.IO.Compression
+namespace Clojure.Base.IO.Compression
 {
 	public static class CompressionExtensions
 	{

@@ -37,6 +37,9 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.Project">
+      <HintPath>..\Dependencies\Microsoft.VisualStudio.Project.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -68,24 +71,29 @@
     <Compile Include="Repl\Commands\LoadSelectedFilesCommand.cs" />
     <Compile Include="Repl\Commands\LoadSelectedProjectCommand.cs" />
     <Compile Include="Repl\Commands\LoadSelectionCommand.cs" />
+    <Compile Include="Repl\Presentation\ICloseListener.cs" />
+    <Compile Include="Repl\Presentation\IReplActivationListener.cs" />
+    <Compile Include="Repl\Presentation\ReplTabControl.xaml.cs">
+      <DependentUpon>ReplTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Repl\Presentation\ReplTab.xaml.cs">
+      <DependentUpon>ReplTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Repl\Process\ExternalProcessRepl.cs" />
     <Compile Include="Repl\IRepl.cs" />
     <Compile Include="Repl\IReplOutputListener.cs" />
     <Compile Include="Repl\IReplWriteCompleteListener.cs" />
     <Compile Include="Repl\IReplWriteRequestListener.cs" />
-    <Compile Include="Repl\Presentation\ICloseListener.cs" />
-    <Compile Include="Repl\Presentation\IReplActivationListener.cs" />
-    <Compile Include="Repl\Presentation\ReplTab.cs" />
-    <Compile Include="Repl\Presentation\ReplTabControl.cs" />
     <Compile Include="Repl\ReplCommandRouter.cs" />
     <Compile Include="Repl\ReplExtensions.cs" />
     <Compile Include="Repl\ReplLauncher.cs" />
     <Compile Include="Repl\ReplPortfolio.cs" />
     <Compile Include="TextEditor\IClojureTextBufferStateListener.cs" />
+    <Compile Include="TextEditor\ITextEditor.cs" />
+    <Compile Include="TextEditor\ITextEditorStateChangeListener.cs" />
     <Compile Include="TextEditor\IUserActionSource.cs" />
     <Compile Include="TextEditor\IUserActionListener.cs" />
     <Compile Include="Menus\MenuCommandCollection.cs" />
-    <Compile Include="TextEditor\ITextEditorStateChangeListener.cs" />
     <Compile Include="TextEditor\EditorOptions.cs" />
     <Compile Include="TextEditor\IEditorOptionsChangedListener.cs" />
     <Compile Include="TextEditor\TextBufferSnapshot.cs" />
@@ -95,13 +103,23 @@
       <Project>{7D8A24DE-8AC0-4ACC-8F29-C48F7061CCB0}</Project>
       <Name>Clojure.Code</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Clojure.System\Clojure.System.csproj">
+    <ProjectReference Include="..\Clojure.System\Clojure.Base.csproj">
       <Project>{FF930F13-4053-42BC-AB5B-D38D76723068}</Project>
-      <Name>Clojure.System</Name>
+      <Name>Clojure.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Repl\Presentation\ReplTabControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Repl\Presentation\ReplTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

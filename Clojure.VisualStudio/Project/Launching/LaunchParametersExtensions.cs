@@ -8,8 +8,7 @@ namespace Clojure.VisualStudio.Project.Launching
     {
         public static LaunchParameters CreateLaunchParameters(this ProjectNode project)
         {
-            string clojureLoadPath = project.GetProjectProperty("ClojureLoadPath");
-            string frameworkPath = project.GetProjectProperty("ClojureRuntimesDirectory") + "\\" + project.GetProjectProperty("ClojureVersion", true);
+            string frameworkPath = project.GetProjectProperty("ClojureRuntimesDirectory");
             string applicationPath = project.GetProjectProperty("ProjectDir", false) + project.GetProjectProperty("OutputPath", false);
             string targetFile = project.GetProjectProperty("StartupFile");
             string remoteMachineDebug = project.GetProjectProperty("RemoteDebugMachine", false);
@@ -28,6 +27,7 @@ namespace Clojure.VisualStudio.Project.Launching
             var startupFileType = StartupFileType.Unknown;
             if (targetFile.ToLower().EndsWith(".exe")) startupFileType = StartupFileType.Executable;
             if (targetFile.ToLower().EndsWith(".clj")) startupFileType = StartupFileType.Clojure;
+            if (targetFile.ToLower().EndsWith(".cljs")) startupFileType = StartupFileType.ClojureScript;
 
             return new LaunchParameters(
                 runnerPath,
@@ -38,8 +38,7 @@ namespace Clojure.VisualStudio.Project.Launching
                 unmanagedDebugging,
                 debugType,
                 startupArguments,
-                startupFileType,
-                clojureLoadPath);
+                startupFileType);
         }
 
         public static void Validate(this LaunchParameters launchParameters)

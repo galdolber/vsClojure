@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Clojure.System.Diagnostics;
+using Clojure.Base.Diagnostics;
 
 namespace Clojure.Workspace.Repl.Process
 {

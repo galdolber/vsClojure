@@ -1,4 +1,4 @@
-﻿namespace Clojure.System.CommandWindow
+﻿namespace Clojure.Base.CommandWindow
 {
 	public interface ISubmitCommandListener
 	{

@@ -3,9 +3,9 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Clojure.System.IO.Keyboard;
+using Clojure.Base.IO.Keyboard;
 
-namespace Clojure.System.CommandWindow.Presentation
+namespace Clojure.Base.CommandWindow.Presentation
 {
 	public class CommandTextBox : ICommandWindow, ITextCommandListener, IHistoryEventListener, ISubmitCommandListener
 	{

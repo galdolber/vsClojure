@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace Clojure.System.IO.Keyboard
+namespace Clojure.Base.IO.Keyboard
 {
 	public class KeyboardExaminer
 	{

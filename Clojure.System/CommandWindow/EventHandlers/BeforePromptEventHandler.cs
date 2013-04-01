@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
-using Clojure.System.IO.Keyboard;
+using Clojure.Base.IO.Keyboard;
 
-namespace Clojure.System.CommandWindow.EventHandlers
+namespace Clojure.Base.CommandWindow.EventHandlers
 {
 	public class BeforePromptEventHandler : IKeyEventHandler
 	{

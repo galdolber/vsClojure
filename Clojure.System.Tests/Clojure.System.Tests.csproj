@@ -48,9 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Clojure.System\Clojure.System.csproj">
+    <ProjectReference Include="..\Clojure.System\Clojure.Base.csproj">
       <Project>{FF930F13-4053-42BC-AB5B-D38D76723068}</Project>
-      <Name>Clojure.System</Name>
+      <Name>Clojure.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

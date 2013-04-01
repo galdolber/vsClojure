@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace Clojure.System.CommandWindow.EventHandlers
+namespace Clojure.Base.CommandWindow.EventHandlers
 {
 	public class HistoryPreviousEventHandler : IKeyEventHandler
 	{
@@ -14,7 +14,7 @@ namespace Clojure.System.CommandWindow.EventHandlers
 
 		public bool CanHandle(CommandWindowUserEvent commandWindowUserEvent)
 		{
-			return commandWindowUserEvent.IsCursortAtOrAfterPrompt() && commandWindowUserEvent.KeyPressed == Key.Down && commandWindowUserEvent.ControlDown;
+			return commandWindowUserEvent.IsCursortAtOrAfterPrompt() && commandWindowUserEvent.KeyPressed == Key.Down;
 		}
 
 		public void Handle(CommandWindowUserEvent commandWindowUserEvent)

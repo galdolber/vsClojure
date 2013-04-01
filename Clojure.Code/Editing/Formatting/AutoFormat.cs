@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using Clojure.Code.Parsing;
-using Clojure.System.String;
+using Clojure.Base.String;
 
 namespace Clojure.Code.Editing.Formatting
 {
