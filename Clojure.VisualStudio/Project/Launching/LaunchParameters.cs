@@ -14,7 +14,7 @@ namespace Clojure.VisualStudio.Project.Launching
 		private readonly string _startupArguments;
 		private readonly StartupFileType _startupFileType;
 
-		public LaunchParameters(string runnerPath, string frameworkPath, string applicationPath, string startupFile, string remoteDebugMachine, string enableUnmanagedDebugging, Guid debugType, string startupArguments, StartupFileType startupFileType, string clojureLoadPath)
+		public LaunchParameters(string runnerPath, string frameworkPath, string applicationPath, string startupFile, string remoteDebugMachine, string enableUnmanagedDebugging, Guid debugType, string startupArguments, StartupFileType startupFileType)
 		{
 			_runnerPath = runnerPath;
 			_frameworkPath = frameworkPath;
